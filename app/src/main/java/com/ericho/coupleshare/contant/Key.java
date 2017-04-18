@@ -8,4 +8,5 @@ package com.ericho.coupleshare.contant;
 
 public class Key {
     public static final String server_address = "server_address";
+    public static final String pref_name = "pref";
 }

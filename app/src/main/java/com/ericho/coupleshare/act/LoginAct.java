@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -32,7 +34,7 @@ import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class LoginAct extends RxLifecycleAct implements View.OnClickListener{
-    private static final String tag = "LoginConsumerActivity";
+    private static final String tag = "LoginAct";
     public static final String RESULT_AUTHENTICATE = "RESULT_AUTHENTICATE";
     @BindView(R.id.btn_login)
     Button btn_login;
@@ -67,6 +69,12 @@ public class LoginAct extends RxLifecycleAct implements View.OnClickListener{
         userService = retrofit.create(UserService.class);
 
         btn_login.setOnClickListener(this);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.change_server_address,menu);
+        return true;
     }
 
     private void setObservable() {
@@ -119,6 +127,16 @@ public class LoginAct extends RxLifecycleAct implements View.OnClickListener{
         finish();
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.change_server_address:
+                startActivity(new Intent(this,ChangeServerDialog.class));
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
 
     @Override
     public void onClick(View v) {
