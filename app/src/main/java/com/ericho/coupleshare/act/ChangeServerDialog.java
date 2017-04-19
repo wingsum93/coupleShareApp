@@ -6,7 +6,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
-import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.GridView;
 
@@ -160,11 +159,9 @@ public class ChangeServerDialog extends RxLifecycleAct implements View.OnClickLi
     private List<ServerBean> prepareUrlObject() {
         List<ServerBean> res = new ArrayList<>();
 
-        res.add(new ServerBean("227", ServerAddress.s_com_pc, R.drawable.mountain_64));
-        res.add(new ServerBean("local", ServerAddress.s_com_pc, R.drawable.fire_orange_64));
-        if (BuildConfig.FLAVOR.equalsIgnoreCase("eric")) {
+        res.add(new ServerBean("Ho", ServerAddress.s_home_pc, R.drawable.mountain_64));
+        res.add(new ServerBean("com", ServerAddress.s_com_pc, R.drawable.fire_orange_64));
 
-        }
         return res;
     }
 
