@@ -13,10 +13,8 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.ericho.coupleshare.R;
-import com.ericho.coupleshare.http.Client;
-import com.ericho.coupleshare.http.Login;
-import com.ericho.coupleshare.http.retrofit2.UserService;
-import com.ericho.coupleshare.util.ServerAddressUtil;
+import com.ericho.coupleshare.R2;
+import com.ericho.coupleshare.http.ApiManager;
 import com.jakewharton.rxbinding2.view.RxView;
 import com.jakewharton.rxbinding2.widget.RxTextView;
 
@@ -29,25 +27,21 @@ import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
-import retrofit2.Retrofit;
-import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 public class LoginAct extends RxLifecycleAct implements View.OnClickListener{
     private static final String tag = "LoginAct";
     public static final String RESULT_AUTHENTICATE = "RESULT_AUTHENTICATE";
-    @BindView(R.id.btn_login)
+    @BindView(R2.id.btn_login)
     Button btn_login;
-    @BindView(R.id.btn_register)
+    @BindView(R2.id.btn_register)
     Button btn_register;
-    @BindView(R.id.edt_username)
+    @BindView(R2.id.edt_username)
     EditText edt_username;
-    @BindView(R.id.edt_password)
+    @BindView(R2.id.edt_password)
     EditText edt_pw;
-    @BindView(R.id.progressBar)
+    @BindView(R2.id.progressBar)
     ProgressBar progressBar;
 
-    private UserService userService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,13 +54,6 @@ public class LoginAct extends RxLifecycleAct implements View.OnClickListener{
     }
 
     private void init() {
-        Retrofit retrofit = new Retrofit.Builder()
-                .addConverterFactory(GsonConverterFactory.create())
-                .addCallAdapterFactory(RxJava2CallAdapterFactory.createAsync())
-                .client(Client.getClient())
-                .baseUrl(ServerAddressUtil.getServerAddress(this))
-                .build();
-        userService = retrofit.create(UserService.class);
 
         btn_login.setOnClickListener(this);
     }
@@ -143,7 +130,7 @@ public class LoginAct extends RxLifecycleAct implements View.OnClickListener{
         //login api
         String us_name = edt_username.getText().toString();
         String pw = edt_pw.getText().toString();
-        userService.login(us_name, pw)
+        ApiManager.getInstance().login(us_name, pw)
                 .doOnNext(o -> {
                     lockScreen(true);
                 })

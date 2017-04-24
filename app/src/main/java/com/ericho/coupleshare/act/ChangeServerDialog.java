@@ -13,6 +13,7 @@ import com.ericho.coupleshare.BuildConfig;
 import com.ericho.coupleshare.R;
 import com.ericho.coupleshare.ServerUrlAdapter;
 import com.ericho.coupleshare.contant.Key;
+import com.ericho.coupleshare.http.ApiManager;
 import com.ericho.coupleshare.setting.ServerAddress;
 import com.ericho.coupleshare.setting.model.ServerBean;
 
@@ -114,6 +115,7 @@ public class ChangeServerDialog extends RxLifecycleAct implements View.OnClickLi
 
         //set data
         editor.putString(Key.server_address, dataUrl);
+        ApiManager.getInstance().changeBaseUrl(dataUrl);
         //set redownload location
         editor.apply();
         finish();
