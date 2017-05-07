@@ -61,6 +61,7 @@ public class LoginAct extends RxLifecycleAct implements View.OnClickListener{
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.change_server_address,menu);
+        getMenuInflater().inflate(R.menu.more,menu);
         return true;
     }
 
@@ -119,6 +120,9 @@ public class LoginAct extends RxLifecycleAct implements View.OnClickListener{
         switch (item.getItemId()){
             case R.id.change_server_address:
                 startActivity(new Intent(this,ChangeServerDialog.class));
+                return true;
+            case R.id.more:
+                startActivity(new Intent(this,TestMainAct.class));
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

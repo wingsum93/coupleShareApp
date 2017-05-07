@@ -8,7 +8,7 @@ import android.widget.Toast;
 
 import com.ericho.coupleshare.act.LoginAct;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity3 extends AppCompatActivity {
     private static final int REQ_LOGIN = 111;
 
     @Override
@@ -18,6 +18,7 @@ public class MainActivity extends AppCompatActivity {
 
         boolean isLogined = getUserLogined();
         if(!isLogined){
+//            Intent intent = new Intent(this,LoginAct.class);
             Intent intent = new Intent(this,LoginAct.class);
             startActivityForResult(intent,REQ_LOGIN);
         }
