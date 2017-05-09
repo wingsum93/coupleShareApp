@@ -54,6 +54,14 @@
         <activity
             android:name=".act.TestAppBarAct"
             android:label="@string/title_act_test_home"/>
+        <activity
+            android:name=".act.TestBiliBiliAppBarAct"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:label="@string/title_act_test_home"/>
+        <activity
+            android:name=".act.TestCollapseToolbarLayoutAndTabLayoutAct"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:label="@string/title_act_test_home"/>
     </application>
 
 </manifest>

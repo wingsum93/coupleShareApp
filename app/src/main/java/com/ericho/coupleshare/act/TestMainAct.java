@@ -95,6 +95,8 @@ public class TestMainAct extends RxLifecycleAct {
 //        res.add(AppTestBo.create(TestQuerySCCAct.CODE, "SCC", "search scc"));
         res.add(AppTestBo.create(TestSelectPhotoAct.hint, "TE", "search Photo"));
         res.add(AppTestBo.create(TestAppBarAct.FLAG, "TE", "AppBar"));
+        res.add(AppTestBo.create(TestBiliBiliAppBarAct.FLAG, "TE", "Bili AppBar"));
+        res.add(AppTestBo.create(TestCollapseToolbarLayoutAndTabLayoutAct.FLAG, "TE", "Bar vs TabLayout"));
         return res;
     }
 
@@ -105,6 +107,12 @@ public class TestMainAct extends RxLifecycleAct {
                 break;
             case TestAppBarAct.FLAG:
                 startActivity(new Intent(this, TestAppBarAct.class));
+                break;
+            case TestBiliBiliAppBarAct.FLAG:
+                startActivity(new Intent(this, TestBiliBiliAppBarAct.class));
+                break;
+            case TestCollapseToolbarLayoutAndTabLayoutAct.FLAG:
+                startActivity(new Intent(this, TestCollapseToolbarLayoutAndTabLayoutAct.class));
                 break;
 
             default:
