@@ -12,9 +12,12 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.ericho.coupleshare.Injection;
 import com.ericho.coupleshare.R;
 import com.ericho.coupleshare.R2;
 import com.ericho.coupleshare.http.ApiManager;
+import com.ericho.coupleshare.mvp.LoginContract;
+import com.ericho.coupleshare.mvp.presenter.LoginPresenter;
 import com.jakewharton.rxbinding2.view.RxView;
 import com.jakewharton.rxbinding2.widget.RxTextView;
 
@@ -27,10 +30,12 @@ import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
+import timber.log.Timber;
 
-public class LoginAct extends RxLifecycleAct implements View.OnClickListener{
+public class LoginAct extends RxLifecycleAct implements View.OnClickListener,LoginContract.View{
     private static final String tag = "LoginAct";
     public static final String RESULT_AUTHENTICATE = "RESULT_AUTHENTICATE";
+
     @BindView(R2.id.btn_login)
     Button btn_login;
     @BindView(R2.id.btn_register)
@@ -42,6 +47,7 @@ public class LoginAct extends RxLifecycleAct implements View.OnClickListener{
     @BindView(R2.id.progressBar)
     ProgressBar progressBar;
 
+    private LoginContract.Presenter mLoginPresenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,13 +55,18 @@ public class LoginAct extends RxLifecycleAct implements View.OnClickListener{
         setContentView(R.layout.act_login);
         ButterKnife.bind(this);
         init();
-        setObservable();
 
     }
 
     private void init() {
 
+        Timber.d("init");
+        mLoginPresenter = new LoginPresenter(Injection.provideLoginRepository(this),this);
+        mLoginPresenter.start();
+        mLoginPresenter.registerOnTextChangeListener(edt_username,edt_pw);
+
         btn_login.setOnClickListener(this);
+        btn_register.setOnClickListener(v -> mLoginPresenter.requestRegisterPage());
     }
 
     @Override
@@ -65,64 +76,18 @@ public class LoginAct extends RxLifecycleAct implements View.OnClickListener{
         return true;
     }
 
-    private void setObservable() {
-        Observable<String> usernameObservable =
-                RxTextView.afterTextChangeEvents(edt_username).map(ev -> ev.editable().toString());
-        Observable<String> passwordObservable =
-                RxTextView.afterTextChangeEvents(edt_pw).map(ev -> ev.editable().toString());
-
-        Observable.zip(usernameObservable, passwordObservable,
-                (user, pw) -> user.length() > 0 && pw.length() > 0)
-                .compose(this.bindToLifeCycle())
-                .subscribe(new Observer<Boolean>() {
-                    @Override
-                    public void onSubscribe(Disposable d) {
-                    }
-
-                    @Override
-                    public void onNext(Boolean aBoolean) {
-                        btn_login.setEnabled(aBoolean);
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        Toast.makeText(LoginAct.this, e.getMessage(), Toast.LENGTH_SHORT).show();
-                    }
-
-                    @Override
-                    public void onComplete() {
-                        Log.d(tag, "cc complete");
-                    }
-                });
 
 
-        //for register page
-        RxView.clicks(btn_register)
-                .debounce(300, TimeUnit.MILLISECONDS)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(AndroidSchedulers.mainThread())
-                .compose(this.bindToLifeCycle())
-                .subscribe(o -> {
-                    startActivity(new Intent( this,RegisterAct.class));
-                });
-    }
 
-    private void LoginInSuccess() {
-        Toast.makeText(this,"Login Success",Toast.LENGTH_SHORT).show();
-        Intent intent = new Intent();
-        intent.putExtra(RESULT_AUTHENTICATE,true);
-        setResult(Activity.RESULT_OK,intent);
-        finish();
-    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
             case R.id.change_server_address:
-                startActivity(new Intent(this,ChangeServerDialog.class));
+                mLoginPresenter.displayChangeServerAddressUi();
                 return true;
             case R.id.more:
-                startActivity(new Intent(this,TestMainAct.class));
+                mLoginPresenter.displayMoreUi();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -134,36 +99,68 @@ public class LoginAct extends RxLifecycleAct implements View.OnClickListener{
         //login api
         String us_name = edt_username.getText().toString();
         String pw = edt_pw.getText().toString();
-        ApiManager.getInstance().login(us_name, pw)
-                .doOnNext(o -> {
-                    lockScreen(true);
-                })
 
-                .subscribeOn(Schedulers.io())
-                .compose(this.bindToLifeCycle())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(baseSingleResponse -> {
-                    lockScreen(false);
-                    if (baseSingleResponse.isStatus()) {
-                        LoginInSuccess();
-                    } else {
-                        Toast.makeText(this, "you password is wrong", Toast.LENGTH_LONG).show();
-                    }
-                }, err -> {
-                    lockScreen(false);
-                    Log.d(tag, "error"+err.getMessage());
-                });
+
+        mLoginPresenter.login(us_name,pw);
     }
 
-    private void lockScreen(boolean processing) {
-        runOnUiThread(() -> {
-            if (processing) {
-                progressBar.setVisibility(View.VISIBLE);
-            } else {
-                progressBar.setVisibility(View.INVISIBLE);
-            }
-            btn_register.setEnabled(!processing);
-        });
+
+
+    @Override
+    public void setPresenter(LoginContract.Presenter presenter) {
+        mLoginPresenter = presenter;
+    }
+
+    @Override
+    public void showLoadingIndicator(boolean active) {
+        progressBar.setVisibility(active?View.VISIBLE:View.INVISIBLE);
+    }
+
+    @Override
+    public void showLoginSuccess() {
+        Toast.makeText(this,"Login Success",Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent();
+        intent.putExtra(RESULT_AUTHENTICATE,true);
+        setResult(Activity.RESULT_OK,intent);
+        finish();
+    }
+
+    @Override
+    public void showLoginFailure(String errorMessage) {
+        Timber.w("fail "+errorMessage);
+        Toast.makeText(this, "you password is wrong", Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void showRegisterPage() {
+        startActivity(new Intent( this,RegisterAct.class));
+    }
+
+    @Override
+    public void showChangeServerAddressUi() {
+        startActivity(new Intent(this,ChangeServerDialog.class));
+    }
+
+    @Override
+    public void showMoreUi() {
+        startActivity(new Intent(this,TestMainAct.class));
+    }
+
+    @Override
+    public void showLoginButtonState(boolean enable) {
+        btn_login.setEnabled(enable);
+    }
+
+    @Override
+    public void resetLoginField() {
+        edt_username.setText(null);
+        edt_pw.setText(null);
+    }
+
+    @Override
+    protected void onDestroy() {
+        mLoginPresenter.destroy();
+        super.onDestroy();
     }
 }
 

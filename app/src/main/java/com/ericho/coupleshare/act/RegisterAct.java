@@ -10,6 +10,7 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.ericho.coupleshare.Injection;
 import com.ericho.coupleshare.R;
 import com.ericho.coupleshare.http.Client;
 import com.ericho.coupleshare.http.GsonUtil;
@@ -18,6 +19,9 @@ import com.ericho.coupleshare.http.OkHttpImpl;
 import com.ericho.coupleshare.http.model.BaseResponse;
 import com.ericho.coupleshare.http.model.BaseSingleResponse;
 import com.ericho.coupleshare.http.retrofit2.UserService;
+import com.ericho.coupleshare.mvp.LoginContract;
+import com.ericho.coupleshare.mvp.RegisterContract;
+import com.ericho.coupleshare.mvp.presenter.RegisterPresenter;
 import com.ericho.coupleshare.util.ServerAddressUtil;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -44,8 +48,9 @@ import retrofit2.converter.gson.GsonConverterFactory;
  * package name com.ericho.coupleshare.act
  */
 
-public class RegisterAct extends RxLifecycleAct implements View.OnClickListener {
+public class RegisterAct extends RxLifecycleAct implements RegisterContract.View,View.OnClickListener {
     private static final String tag = "RegisterAct";
+
     @BindView(R.id.btn_action)
     Button btn_register;
     @BindView(R.id.edt_username)
@@ -54,9 +59,10 @@ public class RegisterAct extends RxLifecycleAct implements View.OnClickListener 
     EditText edt_pw;
     @BindView(R.id.progressBar)
     ProgressBar progressBar;
-    private Gson gson = new Gson();
-    private boolean processing = false;
+
     private UserService userService;
+
+    private RegisterContract.Presenter mPresenter;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -64,7 +70,6 @@ public class RegisterAct extends RxLifecycleAct implements View.OnClickListener 
         setContentView(R.layout.act_register);
         ButterKnife.bind(this);
         init();
-        setObservable();
 
     }
 
@@ -77,122 +82,48 @@ public class RegisterAct extends RxLifecycleAct implements View.OnClickListener 
                 .build();
         userService = retrofit.create(UserService.class);
 
+        mPresenter = new RegisterPresenter(Injection.provideLoginRepository(this),this);
+
         btn_register.setOnClickListener(this);
-    }
-
-    private void setObservable() {
-        Observable<String> usernameObservable =
-                RxTextView.afterTextChangeEvents(edt_username).map(ev -> ev.editable().toString());
-        Observable<String> passwordObservable =
-                RxTextView.afterTextChangeEvents(edt_pw).map(ev -> ev.editable().toString());
-
-        Observable.zip(usernameObservable, passwordObservable,
-                (user, pw) -> user.length() > 0 && pw.length() > 0)
-                .compose(this.bindToLifeCycle())
-                .subscribe(new Observer<Boolean>() {
-                    @Override
-                    public void onSubscribe(Disposable d) {
-                    }
-
-                    @Override
-                    public void onNext(Boolean aBoolean) {
-                        btn_register.setEnabled(aBoolean);
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        Toast.makeText(RegisterAct.this, e.getMessage(), Toast.LENGTH_SHORT).show();
-                    }
-
-                    @Override
-                    public void onComplete() {
-                        Log.d(tag, "cc complete");
-                    }
-                });
-
-        //register api
 
 
-    }
-
-    private void onRegisterSuccess() {
-        runOnUiThread(() -> {
-            Toast.makeText(this, "register success.", Toast.LENGTH_SHORT).show();
-        });
     }
 
     @Override
     public void onClick(View v) {
-        if (v.getId() != R.id.btn_action) return;
-
-        lockScreen(false);
-
-
-        Observable<Response<BaseSingleResponse>> observable2 = Observable.fromCallable(()->{
-            Call<BaseSingleResponse> call = userService.register2(edt_username.getText().toString(), edt_pw.getText().toString());
-            Response<BaseSingleResponse> responseResponse = call.execute();
-            return responseResponse;
-        });
-        Observable<BaseSingleResponse> observable3 = Observable.fromCallable(()->{
-            String res = OkHttpImpl.getInstance().registerUser(RegisterAct.this,edt_username.getText().toString(), edt_pw.getText().toString());
-            Log.d(tag,"XXAE "+res);
-            Type type = new TypeToken<BaseSingleResponse>(){}.getType();
-            BaseSingleResponse baseSingleResponse = GsonUtil.getGson().fromJson(res,type);
-            return baseSingleResponse;
-        });
-
-        Observable<Response<BaseSingleResponse>> observable = userService.register(edt_username.getText().toString(), edt_pw.getText().toString());
-        observable3
-                .compose(this.bindToLifeCycle())
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<BaseSingleResponse>() {
-                    @Override
-                    public void onSubscribe(Disposable d) {
-                    }
-
-                    @Override
-                    public void onNext(BaseSingleResponse res1) {
-                        Log.d(tag, " next in main? " + Looper.getMainLooper().equals(Looper.myLooper()));
-                        BaseSingleResponse res= res1;
-                        Log.d(tag, "ggg " + GsonUtil.getGson().toJson(res));
-                        lockScreen(false);
-                        if (res.isStatus()) {
-                            onRegisterSuccess();
-                        } else {
-                            showErrorMessage(res.getErrorMessage());
-                        }
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        lockScreen(false);
-                        Log.d(tag, "error " + e.getMessage());
-                        Log.d(tag, "error In Main " + Looper.getMainLooper().equals(Looper.myLooper()));
-                    }
-
-                    @Override
-                    public void onComplete() {
-
-                    }
-                });
+        mPresenter.register(edt_username.getText().toString(),edt_pw.getText().toString());
     }
 
-    private void showErrorMessage(final String err) {
-        runOnUiThread(() -> {
-            Toast.makeText(RegisterAct.this, err, Toast.LENGTH_SHORT).show();//backgroundd thread
-        });
-
+    @Override
+    public void setPresenter(RegisterContract.Presenter presenter) {
+        mPresenter = presenter;
     }
 
-    private void lockScreen(boolean processing) {
+    @Override
+    public void showLoadingIndicator(boolean active) {
         runOnUiThread(() -> {
-            if (processing) {
-                progressBar.setVisibility(View.VISIBLE);
-            } else {
-                progressBar.setVisibility(View.INVISIBLE);
-            }
-            btn_register.setEnabled(!processing);
+            progressBar.setVisibility(active?View.VISIBLE:View.INVISIBLE);
+        });
+    }
+
+    @Override
+    public void showRegisterSuccess() {
+        runOnUiThread(() -> {
+            Toast.makeText(this,"rgister Success",Toast.LENGTH_LONG).show();
+        });
+    }
+
+    @Override
+    public void showRegisterFailure(String errorMessage) {
+        runOnUiThread(() -> {
+            Toast.makeText(this,errorMessage,Toast.LENGTH_LONG).show();
+        });
+    }
+
+    @Override
+    public void showRegisterButtonState(boolean enable) {
+        runOnUiThread(() -> {
+            btn_register.setEnabled(enable);
         });
     }
 }
