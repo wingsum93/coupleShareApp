@@ -47,7 +47,8 @@ public class LoginPresenter implements LoginContract.Presenter {
 
     @Override
     public void login(String username, String password) {
-
+        mUsernameEditText.setError(null);
+        mPasswordEditText.setError(null);
         mLoginView.showLoadingIndicator(true);
         mUsernameEditText.setEnabled(false);
         mPasswordEditText.setEnabled(false);

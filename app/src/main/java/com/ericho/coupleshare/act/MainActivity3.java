@@ -1,4 +1,4 @@
-package com.ericho.coupleshare;
+package com.ericho.coupleshare.act;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.Toast;
 
+import com.ericho.coupleshare.R;
 import com.ericho.coupleshare.act.LoginAct;
 
 public class MainActivity3 extends AppCompatActivity {

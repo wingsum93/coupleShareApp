@@ -5,6 +5,7 @@ import android.os.Looper;
 import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
@@ -74,19 +75,20 @@ public class RegisterAct extends RxLifecycleAct implements RegisterContract.View
     }
 
     private void init() {
-        Retrofit retrofit = new Retrofit.Builder()
-                .addConverterFactory(GsonConverterFactory.create())
-                .addCallAdapterFactory(RxJava2CallAdapterFactory.createAsync())
-                .client(Client.getClient())
-                .baseUrl(ServerAddressUtil.getServerAddress(this))
-                .build();
-        userService = retrofit.create(UserService.class);
 
         mPresenter = new RegisterPresenter(Injection.provideLoginRepository(this),this);
 
         btn_register.setOnClickListener(this);
 
-
+        edt_pw.setOnEditorActionListener((v, actionId, event) -> {
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                String us_name = edt_username.getText().toString();
+                String pw = edt_pw.getText().toString();
+                mPresenter.register(us_name,pw);
+                return true;
+            }
+            return false;
+        });
     }
 
     @Override

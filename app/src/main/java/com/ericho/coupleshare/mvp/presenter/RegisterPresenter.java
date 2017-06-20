@@ -52,24 +52,27 @@ public class RegisterPresenter implements RegisterContract.Presenter {
     public void register(String username, String password) {
         mView.showRegisterButtonState(false);
         mView.showLoadingIndicator(true);
+        mUsernameEditText.setEnabled(false);
+        mPasswordEditText.setEnabled(false);
 
         loginRepository.register(username, password, new LoginDataSource.RegisterCallback() {
             @Override
             public void onRegisterSuccess() {
-
-                    mView.showRegisterButtonState(true);
-                    mView.showLoadingIndicator(false);
-
-                    mView.showRegisterSuccess();
-
+                mView.showRegisterButtonState(true);
+                mView.showLoadingIndicator(false);
+                mUsernameEditText.setEnabled(true);
+                mPasswordEditText.setEnabled(true);
+                //
+                mView.showRegisterSuccess();
             }
 
             @Override
             public void onRegisterFailure(Throwable t) {
-
                 mView.showRegisterButtonState(true);
                 mView.showLoadingIndicator(false);
-
+                mUsernameEditText.setEnabled(true);
+                mPasswordEditText.setEnabled(true);
+                //
                 mView.showRegisterFailure(t.getMessage());
 
             }

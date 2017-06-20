@@ -17,7 +17,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity3">
+        <activity android:name=".act.MainActivity3">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
@@ -33,11 +33,6 @@
         <activity
             android:name=".act.ChangeServerDialog"
             android:screenOrientation="portrait"/>
-        <activity
-            android:name=".act.Main2Activity"
-            android:label="@string/title_activity_main2"
-            android:theme="@style/AppTheme.NoActionBar">
-        </activity>
 
         <activity
             android:name=".act.TestMainAct"

@@ -31,6 +31,8 @@ public class FakeLoginRemoteDataSource implements LoginDataSource {
         mHandler = new Handler(Looper.getMainLooper());
         //pre-define password
         userMap.put("peter","12345");
+        userMap.put("cc","cc");
+        userMap.put("eric","eric");
     }
 
     public static FakeLoginRemoteDataSource getInstance(){

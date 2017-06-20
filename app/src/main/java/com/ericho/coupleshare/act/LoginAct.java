@@ -7,9 +7,11 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ericho.coupleshare.Injection;
@@ -67,6 +69,15 @@ public class LoginAct extends RxLifecycleAct implements View.OnClickListener,Log
 
         btn_login.setOnClickListener(this);
         btn_register.setOnClickListener(v -> mLoginPresenter.requestRegisterPage());
+        edt_pw.setOnEditorActionListener((v, actionId, event) -> {
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                String us_name = edt_username.getText().toString();
+                String pw = edt_pw.getText().toString();
+                mLoginPresenter.login(us_name,pw);
+                return true;
+            }
+            return false;
+        });
     }
 
     @Override
@@ -99,8 +110,6 @@ public class LoginAct extends RxLifecycleAct implements View.OnClickListener,Log
         //login api
         String us_name = edt_username.getText().toString();
         String pw = edt_pw.getText().toString();
-
-
         mLoginPresenter.login(us_name,pw);
     }
 
@@ -113,48 +122,64 @@ public class LoginAct extends RxLifecycleAct implements View.OnClickListener,Log
 
     @Override
     public void showLoadingIndicator(boolean active) {
-        progressBar.setVisibility(active?View.VISIBLE:View.INVISIBLE);
+        runOnUiThread(() -> {
+            progressBar.setVisibility(active?View.VISIBLE:View.INVISIBLE);
+        });
     }
 
     @Override
     public void showLoginSuccess() {
-        Toast.makeText(this,"Login Success",Toast.LENGTH_SHORT).show();
-        Intent intent = new Intent();
-        intent.putExtra(RESULT_AUTHENTICATE,true);
-        setResult(Activity.RESULT_OK,intent);
-        finish();
+        runOnUiThread(() -> {
+            Toast.makeText(this,"Login Success",Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent();
+            intent.putExtra(RESULT_AUTHENTICATE,true);
+            setResult(Activity.RESULT_OK,intent);
+            finish();
+        });
     }
 
     @Override
     public void showLoginFailure(String errorMessage) {
-        Timber.w("fail "+errorMessage);
-        Toast.makeText(this, "you password is wrong", Toast.LENGTH_LONG).show();
+        runOnUiThread(() -> {
+            Timber.w("fail "+errorMessage);
+            Toast.makeText(this, "you password is wrong", Toast.LENGTH_LONG).show();
+        });
     }
 
     @Override
     public void showRegisterPage() {
-        startActivity(new Intent( this,RegisterAct.class));
+        runOnUiThread(() -> {
+            startActivity(new Intent( this,RegisterAct.class));
+        });
     }
 
     @Override
     public void showChangeServerAddressUi() {
-        startActivity(new Intent(this,ChangeServerDialog.class));
+        runOnUiThread(() -> {
+            startActivity(new Intent(this,ChangeServerDialog.class));
+        });
     }
 
     @Override
     public void showMoreUi() {
-        startActivity(new Intent(this,TestMainAct.class));
+        runOnUiThread(() -> {
+            startActivity(new Intent(this,TestMainAct.class));
+        });
     }
 
     @Override
     public void showLoginButtonState(boolean enable) {
-        btn_login.setEnabled(enable);
+        runOnUiThread(() -> {
+            btn_login.setEnabled(enable);
+        });
     }
 
     @Override
     public void resetLoginField() {
-        edt_username.setText(null);
-        edt_pw.setText(null);
+        runOnUiThread(() -> {
+            edt_username.setText(null);
+            edt_pw.setText(null);
+        });
     }
 
     @Override
