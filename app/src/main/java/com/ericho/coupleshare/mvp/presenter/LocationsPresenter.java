@@ -4,6 +4,7 @@ import android.support.annotation.NonNull;
 
 import com.ericho.coupleshare.mvp.Location;
 import com.ericho.coupleshare.mvp.LocationsContract;
+import com.ericho.coupleshare.mvp.LocationsRepository;
 
 /**
  * Created by steve_000 on 12/6/2017.
@@ -11,7 +12,10 @@ import com.ericho.coupleshare.mvp.LocationsContract;
  * package name com.ericho.coupleshare.mvp.presenter
  */
 
-public class TasksPresenter implements LocationsContract.Presenter {
+public class LocationsPresenter implements LocationsContract.Presenter {
+
+    private LocationsRepository locationsRepository;
+
     @Override
     public void start() {
 

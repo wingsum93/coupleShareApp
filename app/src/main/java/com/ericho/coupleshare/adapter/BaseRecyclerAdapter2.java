@@ -12,11 +12,14 @@ import io.reactivex.subjects.PublishSubject;
  * for project CoupleShare
  * package name com.ericho.coupleshare.adapter
  */
-public abstract class BaseRecyclerAdapter<T, VH extends RecyclerView.ViewHolder> extends RecyclerView.Adapter<VH> {
+public abstract class BaseRecyclerAdapter2<T, VH extends RecyclerView.ViewHolder> extends RecyclerView.Adapter<VH> {
     protected List<T> items;
     private Context context;
 
-    public BaseRecyclerAdapter(Context context, List<T> items) {
+    protected final PublishSubject<T> onClickSubject = PublishSubject.create();
+
+
+    public BaseRecyclerAdapter2(Context context, List<T> items) {
         this.items = items;
         this.context = context;
     }
@@ -34,9 +37,4 @@ public abstract class BaseRecyclerAdapter<T, VH extends RecyclerView.ViewHolder>
         return context;
     }
 
-    public List<T> update(List<T> list){
-        this.items = list;
-        this.notifyDataSetChanged();
-        return this.items ;
-    }
 }
