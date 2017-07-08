@@ -12,7 +12,7 @@ import timber.log.Timber
  * for project CoupleShare
  * package name com.ericho.coupleshare
  */
-class Application:Application() {
+class App :Application() {
 
 
     override fun onCreate() {
@@ -30,7 +30,6 @@ class Application:Application() {
     }
     companion object {
         var context: Context? = null
-        get
 
     }
 }

@@ -1,7 +1,7 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'me.tatarka.retrolambda'
-apply plugin: 'com.jakewharton.butterknife'
+apply plugin: 'kotlin-android-extensions'
 android {
     compileSdkVersion 25
     buildToolsVersion "25.0.2"
@@ -110,7 +110,6 @@ dependencies {
     compile 'com.trello.rxlifecycle2:rxlifecycle-android:2.0.1'
     compile 'com.jakewharton.rxbinding2:rxbinding:2.0.0'
 
-
     compile 'org.xutils:xutils:3.3.36'
     compile 'com.jakewharton.timber:timber:4.5.1'
     compile 'com.google.guava:guava:22.0-android'
@@ -120,7 +119,7 @@ dependencies {
     compile 'com.afollestad.material-dialogs:core:0.9.4.4'
     testCompile 'junit:junit:4.12'
     androidTestCompile 'com.google.code.findbugs:jsr305:3.0.1'
-    annotationProcessor 'com.jakewharton:butterknife-compiler:8.4.0'
+
 
     // Dependencies for local unit tests
     testCompile "junit:junit:$junitVersion"

@@ -48,22 +48,26 @@ class RegisterPresenter : RegisterContract.Presenter {
 
         loginRepository.register(username, password, object : LoginDataSource.RegisterCallback {
             override fun onRegisterSuccess() {
-                mView.showRegisterButtonState(true)
-                mView.showLoadingIndicator(false)
-                mUsernameEditText!!.isEnabled = true
-                mPasswordEditText!!.isEnabled = true
-                //
-                mView.showRegisterSuccess()
+                mHandler.post {
+                    mView.showRegisterButtonState(true)
+                    mView.showLoadingIndicator(false)
+                    mUsernameEditText?.isEnabled = true
+                    mPasswordEditText?.isEnabled = true
+                    //
+                    mView.showRegisterSuccess()
+                }
+
             }
 
             override fun onRegisterFailure(t: Throwable) {
-                mView.showRegisterButtonState(true)
-                mView.showLoadingIndicator(false)
-                mUsernameEditText!!.isEnabled = true
-                mPasswordEditText!!.isEnabled = true
-                //
-                mView.showRegisterFailure(t.message)
-
+                mHandler.post{
+                    mView.showRegisterButtonState(true)
+                    mView.showLoadingIndicator(false)
+                    mUsernameEditText?.isEnabled = true
+                    mPasswordEditText?.isEnabled = true
+                    //
+                    mView.showRegisterFailure(t.message)
+                }
             }
         })
     }

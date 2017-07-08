@@ -1,6 +1,6 @@
 package com.ericho.coupleshare.http;
 
-import com.ericho.coupleshare.Application;
+import com.ericho.coupleshare.App;
 import com.ericho.coupleshare.http.model.BaseSingleResponse;
 import com.ericho.coupleshare.http.retrofit2.UserService;
 import com.ericho.coupleshare.util.ServerAddressUtil;
@@ -40,7 +40,7 @@ public class ApiManager implements UserService{
                 .addConverterFactory(GsonConverterFactory.create())
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.createAsync())
                 .client(okHttpClient)
-                .baseUrl(ServerAddressUtil.getServerAddress(Application.Companion.getContext()))
+                .baseUrl(ServerAddressUtil.getServerAddress(App.Companion.getContext()))
                 .build();
 
 

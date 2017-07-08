@@ -3,7 +3,6 @@ package com.ericho.coupleshare.http;
 import android.content.Context;
 import android.util.Log;
 
-import com.ericho.coupleshare.Application;
 import com.ericho.coupleshare.contant.WebAddress;
 import com.ericho.coupleshare.util.ServerAddressUtil;
 
