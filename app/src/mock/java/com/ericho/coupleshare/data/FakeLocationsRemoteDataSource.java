@@ -3,8 +3,8 @@ package com.ericho.coupleshare.data;
 import android.support.annotation.NonNull;
 import android.support.annotation.VisibleForTesting;
 
-import com.ericho.coupleshare.mvp.Location;
 import com.ericho.coupleshare.mvp.data.LocationDataSource;
+import com.ericho.coupleshare.mvp.Location;
 import com.google.common.collect.Lists;
 
 import java.util.LinkedHashMap;
@@ -39,8 +39,10 @@ public class FakeLocationsRemoteDataSource implements LocationDataSource {
         callback.onLocationsLoaded(Lists.newArrayList(LOCATIONS_SERVICE_DATA.values()));
     }
 
+
+
     @Override
-    public void getLocation(@NonNull Integer locationId, @NonNull GetLocationCallback callback) {
+    public void getLocation(int locationId, LocationDataSource.GetLocationCallback callback) {
         Location location = LOCATIONS_SERVICE_DATA.get(locationId);
         callback.onLocationLoaded(location);
     }
@@ -57,7 +59,7 @@ public class FakeLocationsRemoteDataSource implements LocationDataSource {
     }
 
     @Override
-    public void deleteLocation(@NonNull Integer locationId) {
+    public void deleteLocation(int locationId) {
         LOCATIONS_SERVICE_DATA.remove(locationId);
     }
 

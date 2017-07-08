@@ -10,7 +10,6 @@ import com.ericho.coupleshare.mvp.data.LocationDataSource;
 import com.ericho.coupleshare.util.NetworkUtil;
 
 import okhttp3.OkHttpClient;
-import okhttp3.Request;
 
 /**
  * Created by steve_000 on 14/6/2017.
@@ -50,10 +49,7 @@ public class LocationRemoteDataSource implements LocationDataSource {
 
     }
 
-    @Override
-    public void getLocation(@NonNull Integer locationId, @NonNull GetLocationCallback callback) {
 
-    }
 
     @Override
     public void saveLocation(@NonNull Location location, SaveLocationCallback callback) {
@@ -66,7 +62,12 @@ public class LocationRemoteDataSource implements LocationDataSource {
     }
 
     @Override
-    public void deleteLocation(@NonNull Integer locationId) {
+    public void getLocation(int locationId, LocationDataSource.GetLocationCallback callback) {
+
+    }
+
+    @Override
+    public void deleteLocation(int locationId) {
 
     }
 }

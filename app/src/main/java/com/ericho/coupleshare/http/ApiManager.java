@@ -40,7 +40,7 @@ public class ApiManager implements UserService{
                 .addConverterFactory(GsonConverterFactory.create())
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.createAsync())
                 .client(okHttpClient)
-                .baseUrl(ServerAddressUtil.getServerAddress(Application.getContext()))
+                .baseUrl(ServerAddressUtil.getServerAddress(Application.Companion.getContext()))
                 .build();
 
 

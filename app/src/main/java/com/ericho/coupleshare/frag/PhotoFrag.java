@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 
 import com.ericho.coupleshare.R;
 import com.ericho.coupleshare.adapter.PhotoAdapter;
+import com.ericho.coupleshare.interf.FabListener;
 import com.ericho.coupleshare.mvp.Photo;
 import com.ericho.coupleshare.mvp.PhotosContract;
 import com.ericho.coupleshare.mvp.presenter.PhotoPresenter;
@@ -28,12 +29,11 @@ import timber.log.Timber;
  * package name com.ericho.coupleshare.frag
  */
 
-public class PhotoFrag extends BaseFrag implements PhotosContract.View{
+public class PhotoFrag extends BaseFrag implements PhotosContract.View,FabListener {
 
     @BindView(R.id.recyclerView)
     protected RecyclerView recyclerView;
-    @BindView(R.id.fab)
-    protected FloatingActionButton floatingActionButton;
+
 
     private PhotoAdapter adapter;
 
@@ -67,13 +67,14 @@ public class PhotoFrag extends BaseFrag implements PhotosContract.View{
         //listener
         recyclerView.setLayoutManager(new GridLayoutManager(getActivity(),3));
         recyclerView.setAdapter(adapter);
-        floatingActionButton.setOnClickListener(v -> Timber.d("fab click"));
+
 
         list = new ArrayList<>();
         adapter = new PhotoAdapter(getActivity(),list);
 
         presenter = new PhotoPresenter(this);
         presenter.start();
+
     }
 
 
@@ -97,6 +98,12 @@ public class PhotoFrag extends BaseFrag implements PhotosContract.View{
 
     @Override
     public void showPhotoList(List<Photo> photos) {
+        Timber.d("showPhotoList");
         adapter.update(photos);
+    }
+
+    @Override
+    public void onAttachFloatingActionListener(FloatingActionButton floatingActionButton) {
+        floatingActionButton.setOnClickListener(v -> Timber.d("fab photo click"));
     }
 }

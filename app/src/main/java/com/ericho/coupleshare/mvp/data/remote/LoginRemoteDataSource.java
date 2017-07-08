@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Handler;
 import android.os.HandlerThread;
 
+import com.ericho.coupleshare.http.BaseUiCallback;
 import com.ericho.coupleshare.http.GsonUtil;
 import com.ericho.coupleshare.http.model.BaseSingleResponse;
 import com.ericho.coupleshare.mvp.data.LoginDataSource;
@@ -66,7 +67,7 @@ public class LoginRemoteDataSource implements LoginDataSource {
                 Timber.d(res);
                 Type type = new TypeToken<BaseSingleResponse<String>>(){}.getType();
                 BaseSingleResponse<String> baseSingleResponse = GsonUtil.getGson().fromJson(res,type);
-                if (baseSingleResponse.isStatus()) {
+                if (baseSingleResponse.getStatus()) {
                     callback.onLoginSuccess();
                 }else {
                     callback.onLoginFailure(new IOException(baseSingleResponse.getErrorMessage()));
@@ -78,6 +79,8 @@ public class LoginRemoteDataSource implements LoginDataSource {
                 callback.onLoginFailure(e);
             }
         });
+
+
     }
 
     @Override
@@ -91,7 +94,7 @@ public class LoginRemoteDataSource implements LoginDataSource {
 
                 Type type = new TypeToken<BaseSingleResponse<String>>(){}.getType();
                 BaseSingleResponse<String> baseSingleResponse = GsonUtil.getGson().fromJson(res,type);
-                if (baseSingleResponse.isStatus()) {
+                if (baseSingleResponse.getStatus()) {
                     callback.onRegisterSuccess();
                 }else {
                     callback.onRegisterFailure(new IOException(baseSingleResponse.getErrorMessage()));

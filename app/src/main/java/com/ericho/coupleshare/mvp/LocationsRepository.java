@@ -143,9 +143,10 @@ public class LocationsRepository implements LocationDataSource {
     }
 
 
-    @Override
-    public void getLocation(@NonNull final Integer locationId, @NonNull final GetLocationCallback callback) {
 
+
+    @Override
+    public void getLocation(int locationId, LocationDataSource.GetLocationCallback callback) {
         Location cachedTask = getLocationWithId(locationId);
 
         // Respond immediately with cache if available
@@ -190,7 +191,6 @@ public class LocationsRepository implements LocationDataSource {
         });
     }
 
-
     @Override
     public void deleteAllLocations() {
         mLocationsRemoteDataSource.deleteAllLocations();
@@ -202,12 +202,13 @@ public class LocationsRepository implements LocationDataSource {
         mCachedTasks.clear();
     }
 
-    @Override
-    public void deleteLocation(@NonNull Integer locationID) {
-        mLocationsRemoteDataSource.deleteLocation(locationID);
-        mLocationsLocalDataSource.deleteLocation(locationID);
 
-        mCachedTasks.remove(locationID);
+    @Override
+    public void deleteLocation(int locationId) {
+        mLocationsRemoteDataSource.deleteLocation(locationId);
+        mLocationsLocalDataSource.deleteLocation(locationId);
+
+        mCachedTasks.remove(locationId);
     }
 
     private void getLocatinosFromRemoteDataSource(@NonNull final LoadLocationsCallback callback) {

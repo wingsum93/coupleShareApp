@@ -1,11 +1,14 @@
 package com.ericho.coupleshare.frag;
 
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.View;
 
 import com.ericho.coupleshare.R;
 import com.ericho.coupleshare.contant.LatLong;
+import com.ericho.coupleshare.interf.FabListener;
 import com.ericho.coupleshare.mvp.Location;
 import com.ericho.coupleshare.mvp.LocationsContract;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -23,7 +26,7 @@ import java.util.List;
  * package name com.ericho.coupleshare.frag
  */
 
-public class LocationShowFrag extends SupportMapFragment implements OnMapReadyCallback ,LocationsContract.View{
+public class LocationShowFrag extends SupportMapFragment implements OnMapReadyCallback ,LocationsContract.View,FabListener{
 
     private LocationsContract.Presenter presenter;
 
@@ -87,5 +90,10 @@ public class LocationShowFrag extends SupportMapFragment implements OnMapReadyCa
     @Override
     public void showFilteringPopUpMenu() {
 
+    }
+
+    @Override
+    public void onAttachFloatingActionListener(FloatingActionButton floatingActionButton) {
+        floatingActionButton.setVisibility(View.GONE);
     }
 }

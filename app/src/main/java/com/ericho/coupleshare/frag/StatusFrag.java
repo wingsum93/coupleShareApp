@@ -11,18 +11,15 @@ import android.view.ViewGroup;
 
 import com.ericho.coupleshare.R;
 import com.ericho.coupleshare.adapter.PhotoAdapter;
-import com.ericho.coupleshare.mvp.Photo;
-import com.ericho.coupleshare.mvp.PhotosContract;
+import com.ericho.coupleshare.interf.FabListener;
 import com.ericho.coupleshare.mvp.StatusBo;
 import com.ericho.coupleshare.mvp.StatusContract;
-import com.ericho.coupleshare.mvp.presenter.PhotoPresenter;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import timber.log.Timber;
 
 /**
  * Created by steve_000 on 22/6/2017.
@@ -30,12 +27,11 @@ import timber.log.Timber;
  * package name com.ericho.coupleshare.frag
  */
 
-public class StatusFrag extends BaseFrag implements StatusContract.View{
+public class StatusFrag extends BaseFrag implements StatusContract.View,FabListener{
 
     @BindView(R.id.recyclerView)
     protected RecyclerView recyclerView;
-    @BindView(R.id.fab)
-    protected FloatingActionButton floatingActionButton;
+
 
     private PhotoAdapter adapter;
 
@@ -75,7 +71,6 @@ public class StatusFrag extends BaseFrag implements StatusContract.View{
         //listener
         recyclerView.setLayoutManager(new GridLayoutManager(getActivity(),3));
         recyclerView.setAdapter(adapter);
-        floatingActionButton.setOnClickListener(v -> Timber.d("fab click"));
 
         list = new ArrayList<>();
         adapter = new PhotoAdapter(getActivity(),list);
@@ -89,5 +84,10 @@ public class StatusFrag extends BaseFrag implements StatusContract.View{
     @Override
     public void setPresenter(StatusContract.Presenter presenter) {
         this.presenter = presenter;
+    }
+
+    @Override
+    public void onAttachFloatingActionListener(FloatingActionButton floatingActionButton) {
+        floatingActionButton.setVisibility(View.GONE);
     }
 }

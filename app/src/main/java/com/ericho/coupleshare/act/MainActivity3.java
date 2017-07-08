@@ -3,18 +3,25 @@ package com.ericho.coupleshare.act;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
+import android.view.View;
 import android.widget.Toast;
 
 import com.ericho.coupleshare.R;
 import com.ericho.coupleshare.adapter.HomePageAdapter;
+import com.ericho.coupleshare.frag.BaseFrag;
+import com.ericho.coupleshare.interf.FabListener;
+import com.ericho.coupleshare.util.ThreadUtil;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import timber.log.Timber;
 
 public class MainActivity3 extends AppCompatActivity implements ViewPager.OnPageChangeListener {
     private static final int REQ_LOGIN = 111;
@@ -26,6 +33,8 @@ public class MainActivity3 extends AppCompatActivity implements ViewPager.OnPage
     protected TabLayout tabLayout;
     @BindView(R.id.viewPager)
     protected ViewPager viewPager;
+    @BindView(R.id.fab)
+    protected FloatingActionButton floatingActionButton;
 
     private HomePageAdapter homePageAdapter;
 
@@ -45,15 +54,12 @@ public class MainActivity3 extends AppCompatActivity implements ViewPager.OnPage
     private void init() {
         ButterKnife.bind(this);
 
-//        toolbar = (Toolbar) findViewById(R.id.toolbar);
-//        tabLayout = (TabLayout) findViewById(R.id.tabLayout);
-//        viewPager = (ViewPager) findViewById(R.id.viewPager);
         setSupportActionBar(toolbar);
         homePageAdapter = new HomePageAdapter(getSupportFragmentManager(),this);
         viewPager.setAdapter(homePageAdapter);
         tabLayout.setupWithViewPager(viewPager);
-
-
+        viewPager.addOnPageChangeListener(this);
+        this.onPageSelected(0);
     }
 
     @Override
@@ -93,6 +99,15 @@ public class MainActivity3 extends AppCompatActivity implements ViewPager.OnPage
     @Override
     public void onPageSelected(int position) {
         invalidateOptionsMenu();
+        Timber.d("onPageSelected pos $d",position);
+        Fragment fragment = homePageAdapter.getItem(position);
+        if(fragment instanceof FabListener){
+            //// TODO: 3/7/2017
+            FabListener lis = (FabListener) fragment;
+            floatingActionButton.setVisibility(View.VISIBLE);
+            floatingActionButton.setOnClickListener(null);
+            lis.onAttachFloatingActionListener(floatingActionButton);
+        }
     }
 
     @Override

@@ -3,7 +3,6 @@ package com.ericho.coupleshare.act;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -11,27 +10,16 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ericho.coupleshare.Injection;
 import com.ericho.coupleshare.R;
 import com.ericho.coupleshare.R2;
-import com.ericho.coupleshare.http.ApiManager;
 import com.ericho.coupleshare.mvp.LoginContract;
 import com.ericho.coupleshare.mvp.presenter.LoginPresenter;
-import com.jakewharton.rxbinding2.view.RxView;
-import com.jakewharton.rxbinding2.widget.RxTextView;
-
-import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import io.reactivex.Observable;
-import io.reactivex.Observer;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.Disposable;
-import io.reactivex.schedulers.Schedulers;
 import timber.log.Timber;
 
 public class LoginAct extends RxLifecycleAct implements View.OnClickListener,LoginContract.View{

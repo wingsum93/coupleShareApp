@@ -1,6 +1,5 @@
 package com.ericho.coupleshare.mvp.data.local;
 
-import android.content.Context;
 import android.support.annotation.NonNull;
 
 import com.ericho.coupleshare.mvp.Location;
@@ -70,20 +69,10 @@ public class LocationsLocalDataSource implements LocationDataSource {
         }
     }
 
-    @Override
-    public void getLocation(@NonNull Integer locationId, @NonNull GetLocationCallback callback) {
-        try {
-            Location location = dbManager.findById(Location.class,locationId);
-            if(NullUtil.isNull(location)) throw new IOException("location not exists");
 
-            callback.onLocationLoaded(location);
-        }catch (IOException e){
-            callback.onDataNotAvailable(e);
-        }
-    }
 
     @Override
-    public void saveLocation(@NonNull Location location,SaveLocationCallback callback) {
+    public void saveLocation(@NonNull Location location, SaveLocationCallback callback) {
         try {
             dbManager.save(location);
             callback.onLocationSave();
@@ -101,8 +90,22 @@ public class LocationsLocalDataSource implements LocationDataSource {
         }
     }
 
+
+
     @Override
-    public void deleteLocation(@NonNull Integer locationId) {
+    public void getLocation(int locationId, LocationDataSource.GetLocationCallback callback) {
+        try {
+            Location location = dbManager.findById(Location.class,locationId);
+            if(NullUtil.isNull(location)) throw new IOException("location not exists");
+
+            callback.onLocationLoaded(location);
+        }catch (IOException e){
+            callback.onDataNotAvailable(e);
+        }
+    }
+
+    @Override
+    public void deleteLocation(int locationId) {
         try {
             dbManager.deleteById(Location.class,locationId);
         }catch (IOException e){
