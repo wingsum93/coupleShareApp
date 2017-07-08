@@ -45,7 +45,7 @@ class AlertDialogFrag : DialogFragment(){
         val FLAG_TITLE:String = "AAA"
         val FLAG_MESSAGE:String = "BBB"
         @JvmStatic
-        fun newInstance(title:String,message:String):AlertDialogFrag{
+        fun newInstance(title:String,message:String?):AlertDialogFrag{
             val frag = AlertDialogFrag()
             val args: Bundle = Bundle()
             args.putString(FLAG_TITLE,title)

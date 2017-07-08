@@ -79,7 +79,7 @@ class TestMainAct:RxLifecycleAct() {
         return res
     }
 
-    private fun startCorrespondAct(internalCode: String) {
+    private fun startCorrespondAct(internalCode: String?) {
         when (internalCode) {
             TestSelectPhotoAct.hint -> startActivity(Intent(this, TestSelectPhotoAct::class.java))
             TestAppBarAct.FLAG -> startActivity(Intent(this, TestAppBarAct::class.java))

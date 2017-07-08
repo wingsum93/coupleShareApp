@@ -23,7 +23,7 @@ import com.google.android.gms.maps.model.MarkerOptions
  * package name com.ericho.coupleshare.frag
  */
 class LocationShowFrag: SupportMapFragment(), OnMapReadyCallback, LocationsContract.View, FabListener {
-
+    override var isActive: Boolean = false
 
     lateinit var mPresenter: LocationsContract.Presenter
 
@@ -35,6 +35,7 @@ class LocationShowFrag: SupportMapFragment(), OnMapReadyCallback, LocationsContr
     override fun onMapReady(googleMap: GoogleMap) {
         googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(LatLng(LatLong.HK_C_LAT, LatLong.HK_C_LONG), 10f))
         googleMap.addMarker(MarkerOptions().position(LatLng(22.309111, 114.174993)).title("HK"))
+        isActive = true
     }
 
     override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
@@ -58,9 +59,7 @@ class LocationShowFrag: SupportMapFragment(), OnMapReadyCallback, LocationsContr
 
     }
 
-    override fun isActive(): Boolean {
-        return activity != null
-    }
+
 
     override fun showNoLocations() {
 

@@ -9,6 +9,7 @@ import android.support.v4.view.ViewPager
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
 import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
 import butterknife.ButterKnife
@@ -64,6 +65,18 @@ class MainActivity3: AppCompatActivity(), ViewPager.OnPageChangeListener  {
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.more, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        when (item?.itemId){
+            R.id.more -> openSettingAct()
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
+    private fun openSettingAct() :Boolean{
+        startActivity(Intent(this,SettingsActivity::class.java))
         return true
     }
 

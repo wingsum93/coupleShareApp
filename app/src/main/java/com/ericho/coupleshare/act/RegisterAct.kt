@@ -73,7 +73,7 @@ open class RegisterAct:RxLifecycleAct(), RegisterContract.View, View.OnClickList
         runOnUiThread { Toast.makeText(this, "rgister Success", Toast.LENGTH_LONG).show() }
     }
 
-    override fun showRegisterFailure(errorMessage: String) {
+    override fun showRegisterFailure(errorMessage: String?) {
         runOnUiThread {
             val dialog: AlertDialogFrag = AlertDialogFrag.newInstance("Error",errorMessage)
             dialog.show(supportFragmentManager,"error")

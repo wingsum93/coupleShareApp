@@ -14,6 +14,7 @@ android {
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
         buildConfigField 'String', 'default_address', '"http://192.168.0.100:8080/"'
+        vectorDrawables.useSupportLibrary = true
     }
     productFlavors {
         mock {
@@ -39,7 +40,7 @@ android {
     }
     // Remove mockRelease as it's not needed.
     android.variantFilter { variant ->
-        if(variant.buildType.name.equals('release')
+        if (variant.buildType.name.equals('release')
                 && variant.getFlavors().get(0).name.equals('mock')) {
             variant.setIgnore(true);
         }
@@ -91,35 +92,6 @@ dependencies {
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-    compile 'com.android.support:appcompat-v7:25.3.1'
-    compile 'com.android.support.constraint:constraint-layout:1.0.2'
-    compile 'com.android.support:support-v4:25.3.1'
-    compile 'com.android.support:design:25.3.1'
-    compile 'com.jakewharton:butterknife:8.4.0'
-    compile 'com.github.bumptech.glide:glide:3.7.0'
-    compile 'com.google.code.gson:gson:2.7'
-    compile 'com.facebook.stetho:stetho:1.4.2'
-    compile 'com.facebook.stetho:stetho-okhttp3:1.4.2'
-    compile 'com.squareup.okhttp3:okhttp:3.6.0'
-    compile 'com.squareup.retrofit2:retrofit:2.2.0'
-    compile 'com.squareup.retrofit2:converter-gson:2.2.0'
-    compile 'com.squareup.retrofit2:adapter-rxjava2:2.2.0'
-    compile 'io.reactivex.rxjava2:rxjava:2.0.8'
-    compile 'io.reactivex.rxjava2:rxandroid:2.0.1'
-    compile 'com.trello.rxlifecycle2:rxlifecycle:2.0.1'
-    compile 'com.trello.rxlifecycle2:rxlifecycle-android:2.0.1'
-    compile 'com.jakewharton.rxbinding2:rxbinding:2.0.0'
-
-    compile 'org.xutils:xutils:3.3.36'
-    compile 'com.jakewharton.timber:timber:4.5.1'
-    compile 'com.google.guava:guava:22.0-android'
-    compile 'com.google.android.gms:play-services-maps:10.2.0'
-
-    testCompile 'com.netflix.rxjava:rxjava-core:0.16.0'
-    compile 'com.afollestad.material-dialogs:core:0.9.4.4'
-    testCompile 'junit:junit:4.12'
-    androidTestCompile 'com.google.code.findbugs:jsr305:3.0.1'
-
 
     // Dependencies for local unit tests
     testCompile "junit:junit:$junitVersion"
@@ -144,6 +116,33 @@ dependencies {
     androidTestCompile "com.android.support:recyclerview-v7:$supportLibraryVersion"
     androidTestCompile "com.android.support:appcompat-v7:$supportLibraryVersion"
     androidTestCompile "com.android.support:design:$supportLibraryVersion"
+    compile 'com.android.support:appcompat-v7:25.3.1'
+    compile 'com.android.support.constraint:constraint-layout:1.0.2'
+    compile 'com.android.support:support-v4:25.3.1'
+    compile 'com.android.support:design:25.3.1'
+    compile 'com.jakewharton:butterknife:8.4.0'
+    compile 'com.github.bumptech.glide:glide:3.7.0'
+    compile 'com.google.code.gson:gson:2.7'
+    compile 'com.facebook.stetho:stetho:1.4.2'
+    compile 'com.facebook.stetho:stetho-okhttp3:1.4.2'
+    compile 'com.squareup.okhttp3:okhttp:3.6.0'
+    compile 'com.squareup.retrofit2:retrofit:2.2.0'
+    compile 'com.squareup.retrofit2:converter-gson:2.2.0'
+    compile 'com.squareup.retrofit2:adapter-rxjava2:2.2.0'
+    compile 'io.reactivex.rxjava2:rxjava:2.0.8'
+    compile 'io.reactivex.rxjava2:rxandroid:2.0.1'
+    compile 'com.trello.rxlifecycle2:rxlifecycle:2.0.1'
+    compile 'com.trello.rxlifecycle2:rxlifecycle-android:2.0.1'
+    compile 'com.jakewharton.rxbinding2:rxbinding:2.0.0'
+    compile 'org.xutils:xutils:3.3.36'
+    compile 'com.jakewharton.timber:timber:4.5.1'
+    compile 'com.google.guava:guava:22.0-android'
+    compile 'com.google.android.gms:play-services-maps:10.2.0'
+    compile 'com.afollestad.material-dialogs:core:0.9.4.4'
+    compile 'com.android.support:support-vector-drawable:25.3.1'
+    testCompile 'com.netflix.rxjava:rxjava-core:0.16.0'
+    testCompile 'junit:junit:4.12'
+    androidTestCompile 'com.google.code.findbugs:jsr305:3.0.1'
 }
 
 

@@ -17,7 +17,6 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
@@ -26,8 +25,9 @@
             android:name=".act.MainActivity3"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
-                <category android:name="android.intent.category.LAUNCHER"/>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
@@ -35,32 +35,42 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".act.RegisterAct"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".act.ChangeServerDialog"
-            android:screenOrientation="portrait"/>
-
+            android:screenOrientation="portrait" />
         <activity
             android:name=".act.TestMainAct"
             android:label="@string/title_act_test_home">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
+                <action android:name="android.intent.action.MAIN" />
             </intent-filter>
         </activity>
         <activity
             android:name=".act.TestSelectPhotoAct"
-            android:label="@string/title_act_test_home"/>
+            android:label="@string/title_act_test_home" />
         <activity
             android:name=".act.TestAppBarAct"
-            android:label="@string/title_act_test_home"/>
+            android:label="@string/title_act_test_home" />
         <activity
             android:name=".act.TestBiliBiliAppBarAct"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:label="@string/title_act_test_home"/>
+            android:label="@string/title_act_test_home"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".act.TestCollapseToolbarLayoutAndTabLayoutAct"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:label="@string/title_act_test_home"/>
+            android:label="@string/title_act_test_home"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".act.SettingsActivity"
+            android:label="@string/title_activity_settings"
+            android:parentActivityName=".act.MainActivity3">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.ericho.coupleshare.act.MainActivity3" />
+        </activity>
+        <activity
+            android:name=".act.PersonSettingAct"
+            android:theme="@style/AppTheme.NoActionBar"/>
     </application>
 
 </manifest>

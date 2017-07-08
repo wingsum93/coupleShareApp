@@ -115,7 +115,7 @@ class LoginAct:RxLifecycleAct(), View.OnClickListener, LoginContract.View{
         }
     }
 
-    override fun showLoginFailure(errorMessage: String) {
+    override fun showLoginFailure(errorMessage: String?) {
         runOnUiThread {
             Timber.w("fail " + errorMessage)
             val dialog: AlertDialogFrag = AlertDialogFrag.newInstance("Error",errorMessage)

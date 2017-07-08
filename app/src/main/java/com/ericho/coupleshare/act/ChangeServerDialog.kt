@@ -102,7 +102,7 @@ class ChangeServerDialog:RxLifecycleAct(),View.OnClickListener,
     }
 
     //-------------------------------  target --------------------------------------------**//
-    private fun setTragetText(s: String) {
+    private fun setTragetText(s: String?) {
         if (targentEditText == null) return
         targentEditText!!.setText(s)
     }
