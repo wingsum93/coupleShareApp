@@ -18,7 +18,9 @@ import com.ericho.coupleshare.Injection
 import com.ericho.coupleshare.R
 import com.ericho.coupleshare.adapter.HomePageAdapter
 import com.ericho.coupleshare.interf.FabListener
+import com.ericho.coupleshare.interf.PermissionListener
 import com.ericho.coupleshare.mvp.data.LoginRepository
+import kotlinx.android.synthetic.main.act_test_app_bar.*
 import timber.log.Timber
 
 
@@ -27,7 +29,7 @@ import timber.log.Timber
  * for project CoupleShare
  * package name com.ericho.coupleshare.act
  */
-class MainActivity3: AppCompatActivity(), ViewPager.OnPageChangeListener  {
+class MainActivity3: BasePermissionActivity(), ViewPager.OnPageChangeListener  {
 
 
 
@@ -49,7 +51,24 @@ class MainActivity3: AppCompatActivity(), ViewPager.OnPageChangeListener  {
         if (!isLogined) {
             val intent = Intent(this, LoginAct::class.java)
             startActivityForResult(intent, REQ_LOGIN)
+        }else{
+            doNormalWork()
         }
+
+    }
+
+    private fun doNormalWork() {
+        this.checkSelfPermission(REQ_LOCATION_UPDATE,android.Manifest.permission.ACCESS_COARSE_LOCATION.toList(),
+                listener = object : PermissionListener{
+            override fun onGranted() {
+                Toast.makeText(baseContext,"granted ",Toast.LENGTH_SHORT).show()
+            }
+
+            override fun onDenied(deniedPermission: List<String>) {
+                val dialog = com.ericho.coupleshare.frag.AlertDialogFrag.newInstance("Error","the following permission deny:\n" + "$deniedPermission")
+                dialog.show(supportFragmentManager,"error")
+            }
+        })
 
     }
 
@@ -123,6 +142,7 @@ class MainActivity3: AppCompatActivity(), ViewPager.OnPageChangeListener  {
 
     companion object {
         private val REQ_LOGIN = 111
+        private val REQ_LOCATION_UPDATE = 3333
 
     }
 }
