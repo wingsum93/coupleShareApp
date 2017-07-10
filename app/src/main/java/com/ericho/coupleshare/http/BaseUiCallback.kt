@@ -14,7 +14,7 @@ import java.lang.ref.WeakReference
  * for project CoupleShare
  * package name com.ericho.coupleshare.http
  */
-open abstract class BaseUiCallback: UiCallBack,Callback{
+abstract class BaseUiCallback: UiCallBack,Callback{
 
     //主线程Handler
     private val mHandler = MyHandler(Looper.getMainLooper(), this)

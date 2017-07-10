@@ -2,13 +2,8 @@ package com.ericho.coupleshare.act
 
 import android.os.Bundle
 import android.support.design.widget.CollapsingToolbarLayout
-import android.support.design.widget.TabLayout
 import android.support.v4.app.FragmentPagerAdapter
-import android.support.v4.view.ViewPager
-import android.support.v7.widget.Toolbar
-import android.widget.ImageView
-import butterknife.BindView
-import butterknife.ButterKnife
+import butterknife.bindView
 import com.ericho.coupleshare.R
 import com.ericho.coupleshare.adapter.MyFragPageAdapter
 import kotlinx.android.synthetic.main.act_test_collapsing_toolbar_tablayout.*
@@ -21,8 +16,7 @@ import kotlinx.android.synthetic.main.act_test_collapsing_toolbar_tablayout.*
 class TestCollapseToolbarLayoutAndTabLayoutAct:RxLifecycleAct() {
 
 
-    @BindView(R.id.toolbar_layout)
-    internal var collapsingToolbarLayout: CollapsingToolbarLayout? = toolbar_layout
+    val collapsingToolbarLayout: CollapsingToolbarLayout by bindView(R.id.toolbar_layout)
 
 
 

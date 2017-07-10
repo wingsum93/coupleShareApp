@@ -1,7 +1,6 @@
 package com.ericho.coupleshare.frag
 
 import android.content.Intent
-import android.graphics.drawable.Icon
 import android.os.Bundle
 import android.support.design.widget.FloatingActionButton
 import android.support.v4.content.res.ResourcesCompat
@@ -10,7 +9,6 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import butterknife.ButterKnife
 import butterknife.bindView
 import com.ericho.coupleshare.App
 import com.ericho.coupleshare.R
@@ -21,7 +19,7 @@ import com.ericho.coupleshare.mvp.Photo
 import com.ericho.coupleshare.mvp.PhotosContract
 import com.ericho.coupleshare.mvp.presenter.PhotoPresenter
 import timber.log.Timber
-import java.util.ArrayList
+import java.util.*
 
 /**
  * Created by steve_000 on 8/7/2017.

@@ -1,12 +1,18 @@
 package com.ericho.coupleshare.mvp.data.remote
 
 import android.content.Context
-import android.os.Handler
-import android.os.HandlerThread
+import com.ericho.coupleshare.App
+import com.ericho.coupleshare.http.BaseUiCallback
+import com.ericho.coupleshare.http.model.BaseResponse
 import com.ericho.coupleshare.mvp.Location
 import com.ericho.coupleshare.mvp.data.LocationDataSource
 import com.ericho.coupleshare.util.NetworkUtil
+import com.google.gson.reflect.TypeToken
+import okhttp3.Call
 import okhttp3.OkHttpClient
+import okhttp3.Response
+import timber.log.Timber
+import java.io.IOException
 
 /**
  * Created by steve_000 on 8/7/2017.
@@ -16,21 +22,37 @@ import okhttp3.OkHttpClient
 class LocationRemoteDataSource constructor(val context: Context) :LocationDataSource {
 
 
-    private val mHandlerThread: HandlerThread
-
-    private val mHandler: Handler
 
     private val client: OkHttpClient
 
 
     init {
-        mHandlerThread = HandlerThread("loc-remote")
-        mHandler = Handler(mHandlerThread.looper)
         client = NetworkUtil.getOkhttpClient()
     }
 
     override fun getLocations(callback: LocationDataSource.LoadLocationsCallback) {
+        val request = NetworkUtil.getLocationList()
+        val call = NetworkUtil.execute(client, request)
+        call.enqueue(object :BaseUiCallback(){
+            override fun onUiFailure(okCall: Call?, e: IOException?) {
+                callback.onDataNotAvailable(e!!)
+            }
 
+            override fun onUiResponse(okhttpCall: Call?, response: Response?) {
+                if(!response!!.isSuccessful){
+                    return callback.onDataNotAvailable(IOException(response.message()))
+                }
+                val res = response.body().string()
+                Timber.d(res)
+                val type = object : TypeToken<BaseResponse<Location>>() {}.type
+                val baseResponse = App.gson.fromJson<BaseResponse<Location>>(res, type)
+                if (baseResponse.status) {
+                    callback.onLocationsLoaded(baseResponse.extra!!)
+                } else {
+                    callback.onDataNotAvailable(IOException(baseResponse.errorMessage))
+                }
+            }
+        })
     }
 
 

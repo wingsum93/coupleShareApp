@@ -23,7 +23,7 @@ class StatusAdapter constructor(context: Context, items:List<StatusBo>?) : BaseR
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.imageView?.setImageResource(R.drawable.ic_menu_manage)
+        holder.imageView.setImageResource(R.drawable.ic_menu_manage)
 
     }
 

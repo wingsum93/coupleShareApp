@@ -10,6 +10,6 @@ import java.io.IOException
  * package name com.ericho.coupleshare.http
  */
 interface UiCallBack{
-    fun onUiFailure(call: Call?, e: IOException?)
-    fun onUiResponse(call: Call?, response: Response?)
+    fun onUiFailure(okCall: Call?, e: IOException?)
+    fun onUiResponse(okhttpCall: Call?, response: Response?)
 }

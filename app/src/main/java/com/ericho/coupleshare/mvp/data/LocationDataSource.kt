@@ -19,7 +19,7 @@ interface LocationDataSource {
 
         fun onLocationLoaded(location: Location)
 
-        fun onDataNotAvailable(t: Throwable)
+        fun onDataNotAvailable(throwable: Throwable)
     }
 
     interface SaveLocationCallback {

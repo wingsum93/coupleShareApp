@@ -21,6 +21,8 @@ interface LocationsContract {
 
         fun showNoLocations()
 
+        fun showErrorMessage(error:String)
+
         fun showFilteringPopUpMenu()
 
     }

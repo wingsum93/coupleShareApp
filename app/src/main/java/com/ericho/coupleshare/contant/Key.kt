@@ -12,5 +12,6 @@ object Key {
     val pref_name = "pref"
     val login: String = "mLogin"
     val loginName: String = "mLoginName"
+    val userToken: String = "mUserToken"
 
 }

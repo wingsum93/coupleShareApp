@@ -5,7 +5,6 @@ import android.support.design.widget.CollapsingToolbarLayout
 import android.support.design.widget.FloatingActionButton
 import android.support.v7.app.AppCompatActivity
 import android.widget.TextView
-import butterknife.ButterKnife
 import com.ericho.coupleshare.R
 import kotlinx.android.synthetic.main.act_test_app_bar.*
 

@@ -4,12 +4,8 @@ import android.os.Bundle
 import android.support.design.widget.AppBarLayout
 import android.support.design.widget.CollapsingToolbarLayout
 import android.support.design.widget.FloatingActionButton
-import android.support.v7.widget.ButtonBarLayout
-import android.support.v7.widget.Toolbar
 import android.view.View
 import android.widget.TextView
-import butterknife.BindView
-import butterknife.ButterKnife
 import com.ericho.coupleshare.CollapsingToolbarLayoutState
 import com.ericho.coupleshare.R
 import kotlinx.android.synthetic.main.act_test_bilibili_app_bar.*

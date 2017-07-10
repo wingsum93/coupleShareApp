@@ -9,13 +9,13 @@ import com.google.gson.annotations.SerializedName
  */
 class BaseResponse<T> {
     @SerializedName("status")
-    private var status: Boolean = false
+    var status: Boolean = false
     @SerializedName("extra")
-    private var extra: List<T>? = null
+    var extra: List<T>? = null
 
     @SerializedName("error_message")
-    private var errorMessage: String? = null
+    var errorMessage: String? = null
     @SerializedName("other_message")
-    private var otherMessage: String? = null//use when success;
+    var otherMessage: String? = null//use when success;
 
 }

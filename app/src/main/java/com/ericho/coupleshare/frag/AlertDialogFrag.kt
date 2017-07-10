@@ -31,7 +31,7 @@ class AlertDialogFrag : DialogFragment(){
         val builder = AlertDialog.Builder(activity)
         builder.setTitle(title)
         builder.setMessage(message)
-                .setPositiveButton(android.R.string.ok, DialogInterface.OnClickListener { dialog, which ->
+                .setPositiveButton(android.R.string.ok, { _, _ ->
 
                 })
 

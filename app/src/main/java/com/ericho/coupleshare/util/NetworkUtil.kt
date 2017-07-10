@@ -1,8 +1,13 @@
 package com.ericho.coupleshare.util
 
 import android.content.Context
+import com.ericho.coupleshare.App
 import com.ericho.coupleshare.contant.WebAddress
+import com.ericho.coupleshare.http.LoggingInterceptor
+import com.ericho.coupleshare.http.UserInfoInterceptor
+import com.ericho.coupleshare.inputmodel.UploadLocationInputModel
 import okhttp3.*
+import timber.log.Timber
 import java.io.IOException
 import java.util.concurrent.TimeUnit
 
@@ -15,6 +20,7 @@ object NetworkUtil{
 
     private var okhttpClient: OkHttpClient? = null
 
+    private val json = MediaType.parse("application/json; charset=utf-8")
     fun getOkhttpClient(): OkHttpClient {
 
         if (okhttpClient == null) {
@@ -22,6 +28,8 @@ object NetworkUtil{
                     .readTimeout(10, TimeUnit.SECONDS)
                     .writeTimeout(10, TimeUnit.SECONDS)
                     .connectTimeout(10, TimeUnit.SECONDS)
+                    .addNetworkInterceptor(UserInfoInterceptor())
+                    .addNetworkInterceptor (LoggingInterceptor())
                     .build()
         }
 
@@ -84,4 +92,18 @@ object NetworkUtil{
         b.url(HttpUrl.parse(getUrl(context, WebAddress.API_LOGIN)))
         return b.build()
     }
+
+    fun getLocationList() : Request {
+
+        val model = UploadLocationInputModel.sample
+        Timber.v(App.gson.toJson(model))
+        val requestBody = RequestBody.create(json,App.gson.toJson(model))
+
+        val b = Request.Builder()
+        b.post(requestBody)
+        b.url(HttpUrl.parse(getUrl(App.context!!, WebAddress.API_LOC_GET)))
+        return b.build()
+    }
+
+
 }

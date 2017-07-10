@@ -1,28 +1,26 @@
 package com.ericho.coupleshare.act
 
 import android.app.Activity
-import android.app.Fragment
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.FloatingActionButton
 import android.support.design.widget.TabLayout
 import android.support.v4.view.ViewPager
-import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
-import butterknife.ButterKnife
 import butterknife.bindView
 import com.ericho.coupleshare.Injection
 import com.ericho.coupleshare.R
 import com.ericho.coupleshare.adapter.HomePageAdapter
+import com.ericho.coupleshare.frag.LocationShowFrag
 import com.ericho.coupleshare.interf.FabListener
 import com.ericho.coupleshare.interf.PermissionListener
 import com.ericho.coupleshare.mvp.data.LoginRepository
-import kotlinx.android.synthetic.main.act_test_app_bar.*
+import com.ericho.coupleshare.mvp.presenter.LocationsPresenter
+import com.ericho.coupleshare.mvp.presenter.PhotoPresenter
 import timber.log.Timber
 
 
@@ -41,6 +39,10 @@ class MainActivity3: BasePermissionActivity(), ViewPager.OnPageChangeListener  {
     val floatingActionButton: FloatingActionButton by bindView(R.id.fab)
 
     val loginRepository:LoginRepository by lazy{Injection.provideLoginRepository(this)}
+
+    lateinit var mLocationPresenter:LocationsPresenter
+    lateinit var mPhotoPresenter:PhotoPresenter
+    lateinit var mPhotoPresenter1:PhotoPresenter
 
     private var homePageAdapter: HomePageAdapter? = null
 
@@ -83,6 +85,10 @@ class MainActivity3: BasePermissionActivity(), ViewPager.OnPageChangeListener  {
         viewPager.addOnPageChangeListener(this)
         this.onPageSelected(0)
 
+
+        //for presneter
+        mLocationPresenter = LocationsPresenter(homePageAdapter!!.getItem(2) as LocationShowFrag)
+        mLocationPresenter.start()
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -128,7 +134,7 @@ class MainActivity3: BasePermissionActivity(), ViewPager.OnPageChangeListener  {
 
     override fun onPageSelected(position: Int) {
         invalidateOptionsMenu()
-        Timber.d("onPageSelected pos \$d", position)
+        Timber.d("onPageSelected pos $position")
         val fragment = homePageAdapter?.getItem(position)
         if (fragment is FabListener) {
             //// TODO: 3/7/2017

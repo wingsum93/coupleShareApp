@@ -52,7 +52,7 @@ class LocationsLocalDataSource: LocationDataSource {
 
     override fun saveLocation(location: Location, callback: LocationDataSource.SaveLocationCallback) {
         try {
-            dbManager.save(location)
+            dbManager.saveOrUpdate(location)
             callback.onLocationSave()
         } catch (e: IOException) {
             callback.onLocationSaveFailure(e)

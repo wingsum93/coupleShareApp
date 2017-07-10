@@ -6,14 +6,13 @@ import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.util.Log
-import butterknife.ButterKnife
 import butterknife.bindView
 import com.ericho.coupleshare.R
 import com.ericho.coupleshare.adapter.TestMainRecyclerAdapter
 import com.ericho.coupleshare.setting.model.AppTestBo
 import io.reactivex.Observer
 import io.reactivex.disposables.Disposable
-import java.util.ArrayList
+import java.util.*
 import java.util.concurrent.TimeUnit
 
 /**

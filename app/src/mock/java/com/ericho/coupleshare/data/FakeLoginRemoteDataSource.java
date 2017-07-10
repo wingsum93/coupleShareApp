@@ -8,8 +8,6 @@ import com.ericho.coupleshare.util.StringUtil;
 
 import java.util.HashMap;
 
-import static com.google.common.base.Preconditions.checkNotNull;
-
 /**
  * Created by steve_000 on 12/6/2017.
  * for project CoupleShare

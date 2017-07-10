@@ -4,7 +4,7 @@ import android.content.Context
 import android.os.Handler
 import android.os.HandlerThread
 import android.os.Looper
-import com.ericho.coupleshare.http.GsonUtil
+import com.ericho.coupleshare.App
 import com.ericho.coupleshare.http.model.BaseSingleResponse
 import com.ericho.coupleshare.mvp.data.LoginDataSource
 import com.ericho.coupleshare.util.NetworkUtil
@@ -46,7 +46,7 @@ class LoginRemoteDataSource private constructor(var context: Context):LoginDataS
                 val res = NetworkUtil.parseResponseToString(response)
                 Timber.d(res)
                 val type = object : TypeToken<BaseSingleResponse<String>>() {}.type
-                val baseSingleResponse = GsonUtil.getGson().fromJson<BaseSingleResponse<String>>(res, type)
+                val baseSingleResponse = App.gson.fromJson<BaseSingleResponse<String>>(res, type)
                 if (baseSingleResponse.status) {
                     callback.onLoginSuccess()
                 } else {
@@ -70,7 +70,7 @@ class LoginRemoteDataSource private constructor(var context: Context):LoginDataS
                 val res = NetworkUtil.parseResponseToString(response)
 
                 val type = object : TypeToken<BaseSingleResponse<String>>() {}.type
-                val baseSingleResponse = GsonUtil.getGson().fromJson<BaseSingleResponse<String>>(res, type)
+                val baseSingleResponse = App.gson.fromJson<BaseSingleResponse<String>>(res, type)
                 if (baseSingleResponse.status) {
                     callback.onRegisterSuccess()
                 } else {

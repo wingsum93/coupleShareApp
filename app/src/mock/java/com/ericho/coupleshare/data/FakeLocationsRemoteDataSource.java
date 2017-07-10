@@ -3,10 +3,10 @@ package com.ericho.coupleshare.data;
 import android.support.annotation.NonNull;
 import android.support.annotation.VisibleForTesting;
 
-import com.ericho.coupleshare.mvp.data.LocationDataSource;
 import com.ericho.coupleshare.mvp.Location;
-import com.google.common.collect.Lists;
+import com.ericho.coupleshare.mvp.data.LocationDataSource;
 
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -36,7 +36,7 @@ public class FakeLocationsRemoteDataSource implements LocationDataSource {
 
     @Override
     public void getLocations(@NonNull LoadLocationsCallback callback) {
-        callback.onLocationsLoaded(Lists.newArrayList(LOCATIONS_SERVICE_DATA.values()));
+        callback.onLocationsLoaded(new ArrayList(LOCATIONS_SERVICE_DATA.values()));
     }
 
 

@@ -5,10 +5,7 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import android.widget.TextView
-import butterknife.BindView
-import butterknife.ButterKnife
 import com.ericho.coupleshare.R
 import com.ericho.coupleshare.setting.model.AppTestBo
 import io.reactivex.Observable
@@ -32,8 +29,8 @@ class TestMainRecyclerAdapter constructor(context: Context,items:List<AppTestBo>
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val o = items!![position]
-        holder.imageView.setOnClickListener { v -> onClickSubject.onNext(o) }
-        holder.textView.setOnClickListener { v -> onClickSubject.onNext(o) }
+        holder.imageView.setOnClickListener { _ -> onClickSubject.onNext(o) }
+        holder.textView.setOnClickListener { _ -> onClickSubject.onNext(o) }
         holder.textView.text = o.displayName
 
     }
