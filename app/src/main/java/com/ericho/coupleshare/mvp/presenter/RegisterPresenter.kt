@@ -5,11 +5,8 @@ import android.widget.EditText
 import com.ericho.coupleshare.mvp.RegisterContract
 import com.ericho.coupleshare.mvp.data.LoginDataSource
 import com.ericho.coupleshare.mvp.data.LoginRepository
-import com.jakewharton.rxbinding2.widget.RxTextView
 import io.reactivex.Observable
 import io.reactivex.disposables.Disposable
-import io.reactivex.functions.BiFunction
-import timber.log.Timber
 
 /**
  * Created by steve_000 on 7/7/2017.
@@ -80,19 +77,7 @@ class RegisterPresenter : RegisterContract.Presenter {
         mUsernameEditText = checkNotNull(usernameEditText)
         mPasswordEditText = checkNotNull(passwordEditText)
 
-        val usernameObservable = RxTextView.afterTextChangeEvents(mUsernameEditText!!).map { ev -> ev.editable()!!.toString() }
-        val passwordObservable = RxTextView.afterTextChangeEvents(mPasswordEditText!!).map { ev -> ev.editable()!!.toString() }
-        observable = Observable.zip<String, String, Boolean>(usernameObservable, passwordObservable,
-                BiFunction<String, String, Boolean> { user, pw -> user.isNotEmpty() && pw.isNotEmpty() })
-        disposable = observable!!
-                .subscribe(
-                        { aBoolean ->
-                            Timber.d("login X btn should be " + aBoolean)
-                            mView.showRegisterButtonState(aBoolean)
-                        },
-                        { throwable -> Timber.w(throwable) }
-
-                ) { Timber.d("onComplete") }
+       //todo after text change listener
     }
 
     override fun destroy() {

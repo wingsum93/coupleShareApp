@@ -3,6 +3,7 @@ package com.ericho.coupleshare.act
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.util.Log
@@ -20,7 +21,7 @@ import java.util.concurrent.TimeUnit
  * for project CoupleShare
  * package name com.ericho.coupleshare.act
  */
-class TestMainAct:RxLifecycleAct() {
+class TestMainAct: AppCompatActivity() {
 
     val recyclerView: RecyclerView by bindView<RecyclerView>(R.id.recyclerView)
     var testMainRecyclerAdapter: TestMainRecyclerAdapter? = null
@@ -43,10 +44,7 @@ class TestMainAct:RxLifecycleAct() {
         recyclerView.adapter = testMainRecyclerAdapter
 
         //
-        testMainRecyclerAdapter?.getPositionClicks()
-                ?.debounce(300, TimeUnit.MILLISECONDS)
-                ?.compose(this.bindToLifeCycle<AppTestBo>())
-                ?.subscribe(getObserver())
+
     }
 
     private fun getObserver(): Observer<AppTestBo> {

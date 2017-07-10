@@ -3,6 +3,7 @@ package com.ericho.coupleshare.act
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.support.v7.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -24,7 +25,7 @@ import timber.log.Timber
  * for project CoupleShare
  * package name com.ericho.coupleshare.act
  */
-class LoginAct:RxLifecycleAct(), View.OnClickListener, LoginContract.View{
+class LoginAct:AppCompatActivity(), View.OnClickListener, LoginContract.View{
 
 
     val btn_login: Button by bindView(R.id.btn_login)

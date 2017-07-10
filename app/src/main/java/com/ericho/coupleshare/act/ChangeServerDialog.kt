@@ -21,7 +21,7 @@ import java.util.*
  * for project CoupleShare
  * package name com.ericho.coupleshare.act
  */
-class ChangeServerDialog:RxLifecycleAct(),View.OnClickListener,
+class ChangeServerDialog:BasePermissionActivity(),View.OnClickListener,
         View.OnFocusChangeListener, AdapterView.OnItemClickListener {
 
 

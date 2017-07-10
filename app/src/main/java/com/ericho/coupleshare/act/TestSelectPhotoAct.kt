@@ -3,6 +3,7 @@ package com.ericho.coupleshare.act
 import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.FloatingActionButton
+import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.RecyclerView
 import android.widget.Adapter
 import butterknife.bindView
@@ -13,7 +14,7 @@ import com.ericho.coupleshare.R
  * for project CoupleShare
  * package name com.ericho.coupleshare.act
  */
-class TestSelectPhotoAct: RxLifecycleAct() {
+class TestSelectPhotoAct: AppCompatActivity() {
     val recyclerView: RecyclerView by bindView<RecyclerView>(R.id.recyclerView)
     val fab: FloatingActionButton by bindView<FloatingActionButton>(R.id.fab)
     private val items: List<*>? = null

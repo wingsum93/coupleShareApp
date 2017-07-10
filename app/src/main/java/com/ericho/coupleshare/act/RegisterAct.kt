@@ -1,6 +1,7 @@
 package com.ericho.coupleshare.act
 
 import android.os.Bundle
+import android.support.v7.app.AppCompatActivity
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.Button
@@ -20,7 +21,7 @@ import com.ericho.coupleshare.mvp.presenter.RegisterPresenter
  * for project CoupleShare
  * package name com.ericho.coupleshare.act
  */
-open class RegisterAct:RxLifecycleAct(), RegisterContract.View, View.OnClickListener {
+open class RegisterAct: AppCompatActivity(), RegisterContract.View, View.OnClickListener {
     private val tag = "RegisterAct"
 
     val edt_username: EditText by bindView(R.id.edt_username)

@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.support.design.widget.AppBarLayout
 import android.support.design.widget.CollapsingToolbarLayout
 import android.support.design.widget.FloatingActionButton
+import android.support.v7.app.AppCompatActivity
 import android.view.View
 import android.widget.TextView
 import com.ericho.coupleshare.CollapsingToolbarLayoutState
@@ -15,7 +16,7 @@ import kotlinx.android.synthetic.main.act_test_bilibili_app_bar.*
  * for project CoupleShare
  * package name com.ericho.coupleshare.act
  */
-class TestBiliBiliAppBarAct:RxLifecycleAct() {
+class TestBiliBiliAppBarAct: AppCompatActivity() {
 
 
 
