@@ -1,6 +1,5 @@
 package com.ericho.coupleshare.json;
 
-import com.ericho.coupleshare.http.GsonUtil;
 import com.ericho.coupleshare.http.model.BaseSingleResponse;
 import com.google.gson.reflect.TypeToken;
 
@@ -16,12 +15,9 @@ import java.lang.reflect.Type;
  * package name com.ericho.coupleshare.json
  */
 @RunWith(JUnit4.class)
-public class GsonTest {
+public class ReflectionTest {
     @Test
     public void testPaseJson(){
-        String res = "{\"status\":false,\"extra\":null,\"errorMessage\":\"account already register\",\"otherMessage\":null}";
-        Type type = new TypeToken<BaseSingleResponse>(){}.getType();
-        BaseSingleResponse baseSingleResponse = GsonUtil.getGson().fromJson(res,type);
 
     }
 }

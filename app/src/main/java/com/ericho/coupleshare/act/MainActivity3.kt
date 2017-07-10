@@ -1,6 +1,8 @@
 package com.ericho.coupleshare.act
 
 import android.app.Activity
+import android.app.Fragment
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.FloatingActionButton
@@ -80,6 +82,7 @@ class MainActivity3: BasePermissionActivity(), ViewPager.OnPageChangeListener  {
         tabLayout.setupWithViewPager(viewPager)
         viewPager.addOnPageChangeListener(this)
         this.onPageSelected(0)
+
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -102,6 +105,7 @@ class MainActivity3: BasePermissionActivity(), ViewPager.OnPageChangeListener  {
     private fun getUserLogined(): Boolean {
         return loginRepository.isLogin(this)
     }
+
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent) {
         when (requestCode) {

@@ -2,12 +2,14 @@ package com.ericho.coupleshare.frag
 
 import android.os.Bundle
 import android.support.design.widget.FloatingActionButton
+import android.support.v4.content.res.ResourcesCompat
 import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import butterknife.bindView
+import com.ericho.coupleshare.App
 import com.ericho.coupleshare.R
 import com.ericho.coupleshare.adapter.StatusAdapter
 import com.ericho.coupleshare.interf.FabListener
@@ -63,7 +65,10 @@ class StatusFrag:BaseFrag(), StatusContract.View, FabListener {
     }
 
     override fun onAttachFloatingActionListener(floatingActionButton: FloatingActionButton) {
-        floatingActionButton.visibility = View.GONE
+        floatingActionButton.setImageDrawable(ResourcesCompat.getDrawable(App.context!!.resources, R.drawable.ic_add_white_24dp, null))
+        floatingActionButton.setOnClickListener {
+            println("fab click")
+        }
     }
 
     companion object {

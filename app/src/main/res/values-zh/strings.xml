@@ -2,4 +2,5 @@
 <resources>
     <string name="status">動態</string>
     <string name="photo">照片</string>
+    <string name="loading">Loading</string>
 </resources>

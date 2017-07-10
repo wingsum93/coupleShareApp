@@ -6,10 +6,7 @@ import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentPagerAdapter
 import com.ericho.coupleshare.R
-import com.ericho.coupleshare.frag.DummyFrag
-import com.ericho.coupleshare.frag.LocationShowFrag
-import com.ericho.coupleshare.frag.PhotoFrag
-import com.ericho.coupleshare.frag.StatusFrag
+import com.ericho.coupleshare.frag.*
 
 /**
  * Created by steve_000 on 8/7/2017.
@@ -20,15 +17,18 @@ class HomePageAdapter constructor(fm:FragmentManager,context: Context):FragmentP
 
     private var context:Context
 
+    private val f1:BaseFrag = PhotoFrag.newInstance();
+    private val f2:BaseFrag = StatusFrag.newInstance();
+    private val f3:LocationShowFrag = LocationShowFrag.newInstance();
     init {
         this.context = context
     }
 
     override fun getItem(position: Int): Fragment? {
         when (position) {
-            0 -> return PhotoFrag.newInstance()
-            1 -> return StatusFrag.newInstance()
-            2 -> return LocationShowFrag.newInstance()
+            0 -> return f1
+            1 -> return f2
+            2 -> return f3
 
             else -> return LocationShowFrag.newInstance()
         }
