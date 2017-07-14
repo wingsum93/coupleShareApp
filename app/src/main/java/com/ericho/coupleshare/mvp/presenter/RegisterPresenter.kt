@@ -1,6 +1,9 @@
 package com.ericho.coupleshare.mvp.presenter
 
 import android.os.Handler
+import android.text.Editable
+import android.text.TextWatcher
+import android.widget.Button
 import android.widget.EditText
 import com.ericho.coupleshare.mvp.RegisterContract
 import com.ericho.coupleshare.mvp.data.LoginDataSource
@@ -19,9 +22,9 @@ class RegisterPresenter : RegisterContract.Presenter {
 
     private var mView: RegisterContract.View
 
-    private var mUsernameEditText: EditText? = null
-    private var mPasswordEditText: EditText? = null
-    private var observable: Observable<Boolean>? = null
+    private lateinit var mUsernameEditText: EditText
+    private lateinit var mPasswordEditText: EditText
+    private lateinit var loginButton: Button
     private var disposable: Disposable? = null
     private var mHandler: Handler
 
@@ -40,16 +43,16 @@ class RegisterPresenter : RegisterContract.Presenter {
     override fun register(username: String, password: String) {
         mView.showRegisterButtonState(false)
         mView.showLoadingIndicator(true)
-        mUsernameEditText?.isEnabled = false
-        mPasswordEditText?.isEnabled = false
+        mUsernameEditText.isEnabled = false
+        mPasswordEditText.isEnabled = false
 
         loginRepository.register(username, password, object : LoginDataSource.RegisterCallback {
             override fun onRegisterSuccess() {
                 mHandler.post {
                     mView.showRegisterButtonState(true)
                     mView.showLoadingIndicator(false)
-                    mUsernameEditText?.isEnabled = true
-                    mPasswordEditText?.isEnabled = true
+                    mUsernameEditText.isEnabled = true
+                    mPasswordEditText.isEnabled = true
                     //
                     mView.showRegisterSuccess()
                 }
@@ -60,8 +63,8 @@ class RegisterPresenter : RegisterContract.Presenter {
                 mHandler.post{
                     mView.showRegisterButtonState(true)
                     mView.showLoadingIndicator(false)
-                    mUsernameEditText?.isEnabled = true
-                    mPasswordEditText?.isEnabled = true
+                    mUsernameEditText.isEnabled = true
+                    mPasswordEditText.isEnabled = true
                     //
                     mView.showRegisterFailure(t.message)
                 }
@@ -73,11 +76,33 @@ class RegisterPresenter : RegisterContract.Presenter {
 
     }
 
-    override fun assignOnTextChangeListener(usernameEditText: EditText, passwordEditText: EditText) {
+    override fun assignOnTextChangeListener(usernameEditText: EditText, passwordEditText: EditText, loginButton: Button) {
         mUsernameEditText = checkNotNull(usernameEditText)
         mPasswordEditText = checkNotNull(passwordEditText)
+        this.loginButton = loginButton
 
-       //todo after text change listener
+        val textWatcher = object :TextWatcher{
+            override fun afterTextChanged(s: Editable?) {
+            }
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+                checkShouldEnableLogin()
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+            }
+        }
+        mUsernameEditText.addTextChangedListener(textWatcher)
+        mPasswordEditText.addTextChangedListener(textWatcher)
+    }
+
+
+    fun checkShouldEnableLogin(){
+        val enableBtn =
+        mUsernameEditText.text.isNotBlank() &&
+        mPasswordEditText.text.isNotBlank()
+
+        loginButton.isEnabled = enableBtn
     }
 
     override fun destroy() {

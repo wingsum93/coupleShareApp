@@ -15,6 +15,7 @@ import com.ericho.coupleshare.frag.AlertDialogFrag
 import com.ericho.coupleshare.http.retrofit2.UserService
 import com.ericho.coupleshare.mvp.RegisterContract
 import com.ericho.coupleshare.mvp.presenter.RegisterPresenter
+import kotlinx.android.synthetic.main.act_login.*
 
 /**
  * Created by steve_000 on 8/7/2017.
@@ -44,7 +45,7 @@ open class RegisterAct: AppCompatActivity(), RegisterContract.View, View.OnClick
     private fun init() {
 
         mPresenter = RegisterPresenter(Injection.provideLoginRepository(this), this)
-        mPresenter!!.assignOnTextChangeListener(edt_username,edt_pw)
+        mPresenter!!.assignOnTextChangeListener(edt_username,edt_pw,btn_login)
         btn_action.setOnClickListener(this)
 
         edt_pw.setOnEditorActionListener { v, actionId, event ->

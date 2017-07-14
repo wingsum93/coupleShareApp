@@ -8,3 +8,6 @@ package com.ericho.coupleshare.mvp
 fun Photo.isSis():Boolean{
     return false
 }
+
+val Any?.isNull :Boolean
+        get()= this==null

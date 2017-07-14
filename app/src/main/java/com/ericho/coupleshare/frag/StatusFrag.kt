@@ -1,5 +1,6 @@
 package com.ericho.coupleshare.frag
 
+import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.FloatingActionButton
 import android.support.v4.content.res.ResourcesCompat
@@ -11,6 +12,7 @@ import android.view.ViewGroup
 import butterknife.bindView
 import com.ericho.coupleshare.App
 import com.ericho.coupleshare.R
+import com.ericho.coupleshare.act.StatusAddAct
 import com.ericho.coupleshare.adapter.StatusAdapter
 import com.ericho.coupleshare.interf.FabListener
 import com.ericho.coupleshare.mvp.StatusBo
@@ -67,7 +69,7 @@ class StatusFrag:BaseFrag(), StatusContract.View, FabListener {
     override fun onAttachFloatingActionListener(floatingActionButton: FloatingActionButton) {
         floatingActionButton.setImageDrawable(ResourcesCompat.getDrawable(App.context!!.resources, R.drawable.ic_add_white_24dp, null))
         floatingActionButton.setOnClickListener {
-            println("fab click")
+            startActivity(Intent(activity, StatusAddAct::class.java))
         }
     }
 

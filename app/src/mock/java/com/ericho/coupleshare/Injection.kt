@@ -4,7 +4,9 @@ import android.content.Context
 import com.ericho.coupleshare.data.FakeLocationsRemoteDataSource
 import com.ericho.coupleshare.data.FakeLoginRemoteDataSource
 import com.ericho.coupleshare.mvp.LocationsRepository
+import com.ericho.coupleshare.mvp.data.FakePhotoDataSource
 import com.ericho.coupleshare.mvp.data.LoginRepository
+import com.ericho.coupleshare.mvp.data.PhotoRepository
 import com.ericho.coupleshare.mvp.data.local.LocationsLocalDataSource
 
 /**
@@ -20,7 +22,11 @@ object Injection {
     }
     @JvmStatic
     fun provideLocationsRepository(context: Context): LocationsRepository {
-        return LocationsRepository.getInstance(FakeLocationsRemoteDataSource.getInstance(),
+        return LocationsRepository.getInstance(FakeLocationsRemoteDataSource.getInstance(),eri
                 LocationsLocalDataSource.getInstance())
+    }
+    @JvmStatic
+    fun providePhotoRepository(context: Context): PhotoRepository {
+        return PhotoRepository.getInstance(FakePhotoDataSource())
     }
 }

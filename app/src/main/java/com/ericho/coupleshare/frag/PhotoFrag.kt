@@ -12,7 +12,7 @@ import android.view.ViewGroup
 import butterknife.bindView
 import com.ericho.coupleshare.App
 import com.ericho.coupleshare.R
-import com.ericho.coupleshare.act.UpdateStatusAct
+import com.ericho.coupleshare.act.PhotoAddAct
 import com.ericho.coupleshare.adapter.PhotoAdapter
 import com.ericho.coupleshare.interf.FabListener
 import com.ericho.coupleshare.mvp.Photo
@@ -87,7 +87,7 @@ class PhotoFrag:BaseFrag(), PhotosContract.View, FabListener {
         floatingActionButton.setImageDrawable(ResourcesCompat.getDrawable(App.context!!.resources, R.drawable.ic_add_white_24dp, null))
         floatingActionButton.setOnClickListener {
             v -> Timber.d("fab photo click")
-            startActivity(Intent(activity,UpdateStatusAct::class.java))
+            startActivity(Intent(activity, PhotoAddAct::class.java))
         }
     }
 

@@ -1,5 +1,6 @@
 package com.ericho.coupleshare.mvp
 
+import android.widget.Button
 import android.widget.EditText
 
 /**
@@ -36,7 +37,8 @@ interface LoginContract {
         fun requestRegisterPage()
 
         fun registerOnTextChangeListener(usernameEditText: EditText,
-                                         passwordEditText: EditText)
+                                         passwordEditText: EditText,
+                                        loginBtn:Button)
 
         fun displayChangeServerAddressUi()
 

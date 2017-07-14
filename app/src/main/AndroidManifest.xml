@@ -76,7 +76,13 @@
         <activity
             android:name=".act.PersonSettingAct"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".act.UpdateStatusAct"></activity>
+        <activity android:name=".act.PhotoAddAct"
+            android:screenOrientation="portrait"
+            /><activity android:name=".act.StatusAddAct"
+            android:screenOrientation="portrait"
+            />
+
+        <service android:name=".service.LocationMonitorSer"/>
     </application>
 
 </manifest>

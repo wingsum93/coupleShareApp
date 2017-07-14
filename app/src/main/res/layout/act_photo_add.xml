@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.ericho.coupleshare.act.UpdateStatusAct">
+    tools:context="com.ericho.coupleshare.act.PhotoAddAct">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -28,6 +28,15 @@
             android:layout_height="match_parent"
             android:id="@+id/recyclerView"
             />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/btn_action"
+                android:text="@string/upload"/>
+        </LinearLayout>
     </LinearLayout>
 
     <android.support.design.widget.FloatingActionButton

@@ -1,5 +1,6 @@
 package com.ericho.coupleshare.inputmodel
 
+import com.ericho.coupleshare.mvp.Location
 import com.google.gson.annotations.SerializedName
 import java.util.*
 import kotlin.collections.ArrayList
@@ -12,15 +13,7 @@ import kotlin.collections.ArrayList
 class UploadLocationInputModel:BaseAuthModel(){
     @SerializedName("locations") var locations:ArrayList<Location> = ArrayList()
 
-    class Location {
-        var username: String? = null
-        var latitude: Double? = null
 
-        var longitude: Double? = null
-        var accuracy: Double? = null
-        var date: Date? = null
-
-    }
 
     companion object {
         val sample :UploadLocationInputModel

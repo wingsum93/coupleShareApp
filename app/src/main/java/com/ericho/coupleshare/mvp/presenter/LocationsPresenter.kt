@@ -6,6 +6,8 @@ import com.ericho.coupleshare.mvp.Location
 import com.ericho.coupleshare.mvp.LocationsContract
 import com.ericho.coupleshare.mvp.LocationsRepository
 import com.ericho.coupleshare.mvp.data.LocationDataSource
+import timber.log.Timber
+import java.util.*
 
 /**
  * Created by steve_000 on 8/7/2017.
@@ -19,7 +21,9 @@ class LocationsPresenter constructor(val mView:LocationsContract.View): Location
 
     override fun start() {
         locationsRepository = Injection.provideLocationsRepository(App.context!!)
-        loadLocations(true)
+//        loadLocations(true)
+
+
     }
 
     override fun result(requestCode: Int, resultCode: Int) {
@@ -45,6 +49,7 @@ class LocationsPresenter constructor(val mView:LocationsContract.View): Location
     override fun openLocationDetails(requestedLocation: Location) {
 
     }
+
 
 
 }

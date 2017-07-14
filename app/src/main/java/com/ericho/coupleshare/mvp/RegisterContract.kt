@@ -1,5 +1,6 @@
 package com.ericho.coupleshare.mvp
 
+import android.widget.Button
 import android.widget.EditText
 
 /**
@@ -27,7 +28,8 @@ interface RegisterContract {
         fun reset()
 
         fun assignOnTextChangeListener(usernameEditText: EditText,
-                                       passwordEditText: EditText)
+                                       passwordEditText: EditText,
+                                        loginButton:Button)
 
         fun destroy()
     }

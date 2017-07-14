@@ -1,6 +1,9 @@
 package com.ericho.coupleshare.mvp.presenter
 
 import android.os.Handler
+import android.text.Editable
+import android.text.TextWatcher
+import android.widget.Button
 import android.widget.EditText
 import com.ericho.coupleshare.mvp.LoginContract
 import com.ericho.coupleshare.mvp.data.LoginDataSource
@@ -19,8 +22,9 @@ class LoginPresenter: LoginContract.Presenter {
 
     private var mLoginView: LoginContract.View
 
-    private var mUsernameEditText: EditText? = null
-    private var mPasswordEditText: EditText? = null
+    private lateinit var mUsernameEditText: EditText
+    private lateinit var mPasswordEditText: EditText
+    private lateinit var mLoginBtn: Button
     private var observable: Observable<Boolean>? = null
     private var disposable: Disposable? = null
     private var mHandler: Handler
@@ -74,13 +78,32 @@ class LoginPresenter: LoginContract.Presenter {
         mLoginView.showRegisterPage()
     }
 
-    override fun registerOnTextChangeListener(usernameEditText: EditText, passwordEditText: EditText) {
-        mUsernameEditText = checkNotNull(usernameEditText)
-        mPasswordEditText = checkNotNull(passwordEditText)
+    override fun registerOnTextChangeListener(usernameEditText: EditText, passwordEditText: EditText, loginBtn: Button) {
+        mUsernameEditText = usernameEditText
+        mPasswordEditText = passwordEditText
+        mLoginBtn = loginBtn
 
+        val textWatcher = object : TextWatcher {
+            override fun afterTextChanged(s: Editable?) {
+            }
 
-       //todo
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+                checkShouldEnableLogin()
+            }
 
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+            }
+        }
+        mUsernameEditText.addTextChangedListener(textWatcher)
+        mPasswordEditText.addTextChangedListener(textWatcher)
+    }
+
+    fun checkShouldEnableLogin(){
+        val enableBtn =
+                mUsernameEditText.text.isNotBlank() &&
+                        mPasswordEditText.text.isNotBlank()
+
+        mLoginBtn.isEnabled = enableBtn
     }
 
     override fun displayChangeServerAddressUi() {

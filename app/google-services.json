@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "406836927095",
+    "firebase_url": "https://coupleshareapp.firebaseio.com",
+    "project_id": "coupleshareapp",
+    "storage_bucket": "coupleshareapp.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:406836927095:android:a3797fa5735d4733",
+        "android_client_info": {
+          "package_name": "com.ericho.coupleshare"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "406836927095-jq5nmg49e93i3h2gvmue4ldpgbomchj4.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.ericho.coupleshare",
+            "certificate_hash": "e220db548868d9b2c65fe3c3548c65b40fa8838b"
+          }
+        },
+        {
+          "client_id": "406836927095-ns5mninntelqto4k8bpt3t1ph8rj1rdm.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDYBU3aT7hrrVIMWPGA9-V-gD574iNCXVk"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "406836927095-ns5mninntelqto4k8bpt3t1ph8rj1rdm.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

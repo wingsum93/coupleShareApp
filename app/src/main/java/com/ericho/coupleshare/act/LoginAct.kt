@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import android.text.TextWatcher
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -54,7 +55,7 @@ class LoginAct:AppCompatActivity(), View.OnClickListener, LoginContract.View{
         Timber.d("init")
         mLoginPresenter = LoginPresenter(Injection.provideLoginRepository(this), this)
         mLoginPresenter?.start()
-        mLoginPresenter?.registerOnTextChangeListener(edt_username, edt_pw)
+        mLoginPresenter?.registerOnTextChangeListener(edt_username, edt_pw,btn_login)
 
         btn_login.setOnClickListener(this)
         btn_register.setOnClickListener { v -> mLoginPresenter?.requestRegisterPage() }
@@ -67,7 +68,9 @@ class LoginAct:AppCompatActivity(), View.OnClickListener, LoginContract.View{
             }
             false
         }
+
     }
+
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.change_server_address, menu)

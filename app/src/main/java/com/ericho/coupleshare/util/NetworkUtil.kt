@@ -6,6 +6,7 @@ import com.ericho.coupleshare.contant.WebAddress
 import com.ericho.coupleshare.http.LoggingInterceptor
 import com.ericho.coupleshare.http.UserInfoInterceptor
 import com.ericho.coupleshare.inputmodel.UploadLocationInputModel
+import com.ericho.coupleshare.mvp.Location
 import okhttp3.*
 import timber.log.Timber
 import java.io.IOException
@@ -93,7 +94,7 @@ object NetworkUtil{
         return b.build()
     }
 
-    fun getLocationList() : Request {
+    fun getLocationList() : Call {
 
         val model = UploadLocationInputModel.sample
         Timber.v(App.gson.toJson(model))
@@ -102,8 +103,21 @@ object NetworkUtil{
         val b = Request.Builder()
         b.post(requestBody)
         b.url(HttpUrl.parse(getUrl(App.context!!, WebAddress.API_LOC_GET)))
+
+        return execute(getOkhttpClient(),b.build())
+    }
+    fun saveLocation(location: Location) : Request {
+
+        val model = UploadLocationInputModel()
+        model.locations.add(location)
+
+        Timber.d(App.gson.toJson(model))
+        val requestBody = RequestBody.create(json,App.gson.toJson(model))
+
+        val b = Request.Builder()
+        b.post(requestBody)
+        b.url(HttpUrl.parse(getUrl(App.context!!, WebAddress.API_LOC_UPLOAD)))
         return b.build()
     }
-
 
 }

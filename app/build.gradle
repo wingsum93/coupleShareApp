@@ -2,7 +2,7 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 //apply plugin: 'me.tatarka.retrolambda'
 apply plugin: 'kotlin-android-extensions'
-apply plugin: 'com.getkeepsafe.dexcount'
+//apply plugin: 'com.getkeepsafe.dexcount'
 android {
     compileSdkVersion 25
     buildToolsVersion "25.0.3"
@@ -16,6 +16,16 @@ android {
 
         buildConfigField 'String', 'default_address', '"http://192.168.0.100:8080/"'
         vectorDrawables.useSupportLibrary = true
+        // Enabling multidex support.
+        multiDexEnabled true
+    }
+    signingConfigs{
+        beta{
+            storeFile file(OS_KEYSTORE_FILE)
+            storePassword OS_KEYSTORE_PASSWORD
+            keyAlias OS_KEY_ALIAS
+            keyPassword OS_KEY_PASSWORD
+        }
     }
     productFlavors {
         mock {
@@ -24,19 +34,22 @@ android {
         prod {
         }
     }
+
     buildTypes {
         debug {
             minifyEnabled true
             // Uses new built-in shrinker http://tools.android.com/tech-docs/new-build-system/built-in-shrinker
-            useProguard false
+            shrinkResources false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             testProguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguardTest-rules.pro'
+            signingConfig signingConfigs.beta
         }
         release {
-            minifyEnabled false
-            useProguard true
+            minifyEnabled true
+            shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             testProguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguardTest-rules.pro'
+            signingConfig signingConfigs.beta
         }
     }
     // Remove mockRelease as it's not needed.
@@ -90,6 +103,29 @@ dependencies {
     compile "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
     compile "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
 
+    compile 'org.jetbrains.kotlinx:kotlinx-coroutines-core:0.16'
+    compile 'com.android.support.constraint:constraint-layout:1.0.2'
+    compile 'com.android.support:multidex:1.0.1'
+    compile 'com.github.bumptech.glide:glide:3.7.0'
+    compile 'com.github.satyan:sugar:1.5'
+    compile 'com.google.code.gson:gson:2.8.1'
+    compile 'com.google.android.gms:play-services-location:11.0.2'
+    compile 'com.google.android.gms:play-services-maps:11.0.2'
+    compile 'com.facebook.stetho:stetho:1.4.2'
+    compile 'com.facebook.stetho:stetho-okhttp3:1.4.2'
+    compile 'com.squareup.okhttp3:okhttp:3.6.0'
+    compile 'com.squareup.retrofit2:retrofit:2.2.0'
+    compile 'com.squareup.retrofit2:converter-gson:2.2.0'
+    compile 'com.squareup.retrofit2:adapter-rxjava2:2.2.0'
+    compile 'org.xutils:xutils:3.5.0'
+    compile 'org.greenrobot:eventbus:3.0.0'
+    compile 'com.jakewharton.timber:timber:4.5.1'
+
+    testCompile 'com.netflix.rxjava:rxjava-core:0.16.0'
+    testCompile 'junit:junit:4.12'
+    androidTestCompile 'com.google.code.findbugs:jsr305:2.0.1'
+
+
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
@@ -99,8 +135,6 @@ dependencies {
     testCompile "org.mockito:mockito-all:$mockitoVersion"
     testCompile "org.hamcrest:hamcrest-all:$hamcrestVersion"
 
-    testCompile 'com.netflix.rxjava:rxjava-core:0.16.0'
-    testCompile 'junit:junit:4.12'
     // Android Testing Support Library's runner and rules
     androidTestCompile "com.android.support.test:runner:$runnerVersion"
     androidTestCompile "com.android.support.test:rules:$runnerVersion"
@@ -120,31 +154,19 @@ dependencies {
     androidTestCompile "com.android.support:appcompat-v7:$supportLibraryVersion"
     androidTestCompile "com.android.support:design:$supportLibraryVersion"
     //other
-    androidTestCompile 'com.google.code.findbugs:jsr305:2.0.1'
+    
 
     compile "com.android.support:appcompat-v7:$project.ext.supportLibraryVersion"
     compile "com.android.support:support-v4:$project.ext.supportLibraryVersion"
     compile "com.android.support:design:$project.ext.supportLibraryVersion"
     compile "com.android.support:support-vector-drawable:$project.ext.supportLibraryVersion"
-    compile 'com.android.support.constraint:constraint-layout:1.0.2'
-    compile 'com.github.bumptech.glide:glide:3.7.0'
-    compile 'com.github.satyan:sugar:1.5'
-    compile 'com.google.code.gson:gson:2.8.1'
-    compile 'com.facebook.stetho:stetho:1.4.2'
-    compile 'com.facebook.stetho:stetho-okhttp3:1.4.2'
-    compile 'com.squareup.okhttp3:okhttp:3.6.0'
-    compile 'com.squareup.retrofit2:retrofit:2.2.0'
-    compile 'com.squareup.retrofit2:converter-gson:2.2.0'
-    compile 'com.squareup.retrofit2:adapter-rxjava2:2.2.0'
-//    compile 'io.reactivex.rxjava2:rxjava:2.0.8'
+    //    compile 'io.reactivex.rxjava2:rxjava:2.0.8'
 //    compile 'io.reactivex.rxjava2:rxandroid:2.0.1'
 //    compile 'com.trello.rxlifecycle2:rxlifecycle:2.0.1'
 //    compile 'com.trello.rxlifecycle2:rxlifecycle-android:2.0.1'
 //    compile 'com.jakewharton.rxbinding2:rxbinding:2.0.0'
-    compile 'org.xutils:xutils:3.5.0'
-    compile 'com.jakewharton.timber:timber:4.5.1'
-    compile 'com.google.android.gms:play-services-maps:11.0.2'
-//    compile 'com.afollestad.material-dialogs:core:0.9.4.4'
+    //    compile 'com.afollestad.material-dialogs:core:0.9.4.4'
+
 
 
 
@@ -152,3 +174,5 @@ dependencies {
 }
 
 
+
+apply plugin: 'com.google.gms.google-services'

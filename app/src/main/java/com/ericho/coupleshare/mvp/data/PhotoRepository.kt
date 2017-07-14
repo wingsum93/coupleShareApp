@@ -8,7 +8,7 @@ import com.ericho.coupleshare.mvp.Photo
  * package name com.ericho.coupleshare.mvp.data
  */
 class PhotoRepository
-private constructor(dataSource:PhotoDataSource):PhotoDataSource{
+constructor(dataSource:PhotoDataSource):PhotoDataSource{
 
 
     private val mRemoteDataSource:PhotoDataSource
@@ -20,8 +20,8 @@ private constructor(dataSource:PhotoDataSource):PhotoDataSource{
         return mRemoteDataSource.getPhotos(callback)
     }
 
-    override fun addPhoto(callback: PhotoDataSource.AddPhotoCallback) {
-        return mRemoteDataSource.addPhoto(callback)
+    override fun addPhoto(photos: List<Photo>, callback: PhotoDataSource.AddPhotoCallback) {
+        return mRemoteDataSource.addPhoto(photos, callback)
     }
 
     override fun deletePhoto(callback: PhotoDataSource.DeletePhotoCallback) {

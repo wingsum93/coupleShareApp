@@ -24,7 +24,7 @@ interface PhotoDataSource {
 
     fun getPhotos(callback: LoadPhotoCallback):List<Photo>
 
-    fun addPhoto(callback: AddPhotoCallback)
+    fun addPhoto(photos:List<Photo>,callback: AddPhotoCallback)
 
     fun deletePhoto(callback: DeletePhotoCallback)
 

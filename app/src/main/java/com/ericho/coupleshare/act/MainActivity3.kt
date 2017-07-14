@@ -21,6 +21,7 @@ import com.ericho.coupleshare.interf.PermissionListener
 import com.ericho.coupleshare.mvp.data.LoginRepository
 import com.ericho.coupleshare.mvp.presenter.LocationsPresenter
 import com.ericho.coupleshare.mvp.presenter.PhotoPresenter
+import com.ericho.coupleshare.service.LocationMonitorSer
 import timber.log.Timber
 
 
@@ -66,6 +67,7 @@ class MainActivity3: BasePermissionActivity(), ViewPager.OnPageChangeListener  {
                 listener = object : PermissionListener{
             override fun onGranted() {
                 Toast.makeText(baseContext,"granted ",Toast.LENGTH_SHORT).show()
+                startService(Intent(this@MainActivity3,LocationMonitorSer::class.java))
             }
 
             override fun onDenied(deniedPermission: List<String>) {
@@ -73,6 +75,7 @@ class MainActivity3: BasePermissionActivity(), ViewPager.OnPageChangeListener  {
                 dialog.show(supportFragmentManager,"error")
             }
         })
+
 
     }
 

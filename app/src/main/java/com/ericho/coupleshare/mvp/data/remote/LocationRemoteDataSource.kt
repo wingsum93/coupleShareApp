@@ -23,7 +23,7 @@ class LocationRemoteDataSource constructor(val context: Context) :LocationDataSo
 
 
 
-    private val client: OkHttpClient
+    private val client: OkHttpClient//can be ignore
 
 
     init {
@@ -31,8 +31,7 @@ class LocationRemoteDataSource constructor(val context: Context) :LocationDataSo
     }
 
     override fun getLocations(callback: LocationDataSource.LoadLocationsCallback) {
-        val request = NetworkUtil.getLocationList()
-        val call = NetworkUtil.execute(client, request)
+        val call = NetworkUtil.getLocationList()
         call.enqueue(object :BaseUiCallback(){
             override fun onUiFailure(okCall: Call?, e: IOException?) {
                 callback.onDataNotAvailable(e!!)
@@ -57,7 +56,28 @@ class LocationRemoteDataSource constructor(val context: Context) :LocationDataSo
 
 
     override fun saveLocation(location: Location, callback: LocationDataSource.SaveLocationCallback) {
+        val request = NetworkUtil.saveLocation(location)
+        val call = NetworkUtil.execute(client, request)
+        call.enqueue(object :BaseUiCallback(){
+            override fun onUiFailure(okCall: Call?, e: IOException?) {
+                callback.onLocationSaveFailure(e!!)
+            }
 
+            override fun onUiResponse(okhttpCall: Call?, response: Response?) {
+                if(!response!!.isSuccessful){
+                    return callback.onLocationSaveFailure(IOException(response.message()))
+                }
+                val res = response.body().string()
+                Timber.d(res)
+                val type = object : TypeToken<BaseResponse<Location>>() {}.type
+                val baseResponse = App.gson.fromJson<BaseResponse<Location>>(res, type)
+                if (baseResponse.status) {
+                    callback.onLocationSave()
+                } else {
+                    callback.onLocationSaveFailure(IOException(baseResponse.errorMessage))
+                }
+            }
+        })
     }
 
     override fun deleteAllLocations() {

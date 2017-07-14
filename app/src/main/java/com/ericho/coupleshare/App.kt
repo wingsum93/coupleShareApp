@@ -24,6 +24,7 @@ class App :Application() {
         context = applicationContext
         Stetho.initializeWithDefaults(this)// browser debug
         x.Ext.init(this)
+        x.Ext.setDebug(BuildConfig.DEBUG)
         Timber.plant(Timber.DebugTree())
     }
 
