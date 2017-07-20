@@ -33,7 +33,7 @@ class LocationMonitorSer : Service(){
             for (location in locationResult!!.locations) {
                 // Update UI with location data
                 // ...
-                EventBus.getDefault().post(location.toLocation)
+                EventBus.getDefault().post(location.toLocationTo)
             }
         }
     }
@@ -44,10 +44,15 @@ class LocationMonitorSer : Service(){
         return Binder()
     }
 
+    override fun onCreate() {
+        super.onCreate()
+        EventBus.getDefault().register(this)
+    }
+
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
 
-
-        if (mRequestingLocationUpdates) {
+        Timber.d("service running!!")
+        if (!mRequestingLocationUpdates) {
             val mLocationRequest = LocationRequest()
             mLocationRequest.priority = LocationRequest.PRIORITY_HIGH_ACCURACY
             mLocationRequest.interval = 10 * 1000
@@ -57,11 +62,12 @@ class LocationMonitorSer : Service(){
         }
 
 
-        return START_STICKY
+        return START_NOT_STICKY
     }
 
     override fun onDestroy() {
         stopLocationUpdates()
+        EventBus.getDefault().unregister(this)
         super.onDestroy()
     }
 
@@ -74,6 +80,7 @@ class LocationMonitorSer : Service(){
     }
 
     private fun stopLocationUpdates() {
+        mRequestingLocationUpdates = false
         mFusedLocationClient.removeLocationUpdates(mLocationCallback)
     }
 

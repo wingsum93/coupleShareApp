@@ -113,4 +113,6 @@
     <string name="content">Content</string>
     <string name="label_content">Content:</string>
     <string name="label_title">Title:</string>
+    <string name="success">Success</string>
+    <string name="upload_success">Upload Success</string>
 </resources>

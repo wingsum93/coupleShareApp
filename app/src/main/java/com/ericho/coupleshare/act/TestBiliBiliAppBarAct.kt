@@ -7,6 +7,7 @@ import android.support.design.widget.FloatingActionButton
 import android.support.v7.app.AppCompatActivity
 import android.view.View
 import android.widget.TextView
+import butterknife.bindView
 import com.ericho.coupleshare.CollapsingToolbarLayoutState
 import com.ericho.coupleshare.R
 import kotlinx.android.synthetic.main.act_test_bilibili_app_bar.*
@@ -20,9 +21,9 @@ class TestBiliBiliAppBarAct: AppCompatActivity() {
 
 
 
-    internal var collapsingToolbarLayout: CollapsingToolbarLayout = toolbar_layout
-    internal var floatingActionButton: FloatingActionButton = fab
-    internal var textView: TextView = text
+    val collapsingToolbarLayout: CollapsingToolbarLayout by bindView(R.id.toolbar_layout)
+    val floatingActionButton: FloatingActionButton by bindView(R.id.fab)
+    val textView: TextView by bindView(R.id.text)
 
 
 

@@ -5,6 +5,8 @@ import android.support.design.widget.CollapsingToolbarLayout
 import android.support.design.widget.FloatingActionButton
 import android.support.v7.app.AppCompatActivity
 import android.widget.TextView
+import android.widget.Toast
+import butterknife.bindView
 import com.ericho.coupleshare.R
 import kotlinx.android.synthetic.main.act_test_app_bar.*
 
@@ -17,14 +19,26 @@ class TestAppBarAct : AppCompatActivity() {
 
     val FLAG = "TestAppBarAct"
 
-    var collapsingToolbarLayout: CollapsingToolbarLayout? = toolbar_layout
-    var floatingActionButton: FloatingActionButton? = fab
-    var textView: TextView? = text
+    val collapsingToolbarLayout: CollapsingToolbarLayout by bindView<CollapsingToolbarLayout>(R.id.toolbar_layout)
+    val floatingActionButton: FloatingActionButton by bindView<FloatingActionButton>(R.id.fab)
+    val textView: TextView by bindView<TextView>(R.id.text)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.act_test_app_bar)
-        textView?.setText(generateLargeText())
+        init()
+    }
+
+    fun init(){
+        textView.text = generateLargeText()
+
+        floatingActionButton.setOnClickListener({
+            _-> showToastMessage("fab click!")
+        })
+
+    }
+    fun showToastMessage(text:String){
+        Toast.makeText(this,text,Toast.LENGTH_SHORT).show()
     }
 
     private fun generateLargeText(): String {

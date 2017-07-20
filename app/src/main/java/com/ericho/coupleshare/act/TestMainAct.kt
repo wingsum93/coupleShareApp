@@ -7,6 +7,8 @@ import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.util.Log
+import android.view.View
+import android.widget.AdapterView
 import butterknife.bindView
 import com.ericho.coupleshare.R
 import com.ericho.coupleshare.adapter.TestMainRecyclerAdapter
@@ -42,29 +44,17 @@ class TestMainAct: AppCompatActivity() {
         val list = getMainList()
         testMainRecyclerAdapter = TestMainRecyclerAdapter(this, list)
         recyclerView.adapter = testMainRecyclerAdapter
-
+        testMainRecyclerAdapter?.onItemClickListener = object :AdapterView.OnItemClickListener{
+            override fun onItemClick(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                val appTestBo: AppTestBo = list[position]
+                startCorrespondAct(appTestBo.code)
+            }
+        }
         //
 
     }
 
-    private fun getObserver(): Observer<AppTestBo> {
-        return object : Observer<AppTestBo> {
-            override fun onSubscribe(d: Disposable) {}
 
-            override fun onNext(appTestBo: AppTestBo) {
-                Log.d(tag, appTestBo.toString())
-                startCorrespondAct(appTestBo.code)
-            }
-
-            override fun onError(e: Throwable) {
-                Log.w(tag, "onError", e)
-            }
-
-            override fun onComplete() {
-                Log.d(tag, "onComplete")
-            }
-        }
-    }
 
     private fun getMainList(): List<AppTestBo> {
         val res = ArrayList<AppTestBo>()

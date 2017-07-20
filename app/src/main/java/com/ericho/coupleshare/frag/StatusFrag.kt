@@ -12,7 +12,7 @@ import android.view.ViewGroup
 import butterknife.bindView
 import com.ericho.coupleshare.App
 import com.ericho.coupleshare.R
-import com.ericho.coupleshare.act.StatusAddAct
+import com.ericho.coupleshare.act.StatusAddAct_copy
 import com.ericho.coupleshare.adapter.StatusAdapter
 import com.ericho.coupleshare.interf.FabListener
 import com.ericho.coupleshare.mvp.StatusBo
@@ -69,7 +69,7 @@ class StatusFrag:BaseFrag(), StatusContract.View, FabListener {
     override fun onAttachFloatingActionListener(floatingActionButton: FloatingActionButton) {
         floatingActionButton.setImageDrawable(ResourcesCompat.getDrawable(App.context!!.resources, R.drawable.ic_add_white_24dp, null))
         floatingActionButton.setOnClickListener {
-            startActivity(Intent(activity, StatusAddAct::class.java))
+            startActivity(Intent(activity, StatusAddAct_copy::class.java))
         }
     }
 

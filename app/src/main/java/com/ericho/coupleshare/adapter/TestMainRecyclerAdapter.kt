@@ -5,6 +5,8 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
+import android.widget.ImageView
 import android.widget.TextView
 import com.ericho.coupleshare.R
 import com.ericho.coupleshare.setting.model.AppTestBo
@@ -19,7 +21,8 @@ import io.reactivex.subjects.PublishSubject
 class TestMainRecyclerAdapter constructor(context: Context,items:List<AppTestBo>):BaseRecyclerAdapter<AppTestBo, TestMainRecyclerAdapter.ViewHolder>(context, items) {
 
 
-    private val onClickSubject = PublishSubject.create<AppTestBo>()
+
+    var onItemClickListener: AdapterView.OnItemClickListener? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(getContext()).inflate(R.layout.grid_change_server, parent, false)
@@ -29,18 +32,17 @@ class TestMainRecyclerAdapter constructor(context: Context,items:List<AppTestBo>
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val o = items!![position]
-        holder.imageView.setOnClickListener { _ -> onClickSubject.onNext(o) }
-        holder.textView.setOnClickListener { _ -> onClickSubject.onNext(o) }
+        holder.imageView.setOnClickListener { _ -> onItemClickListener?.onItemClick(null,holder.imageView,position,getItemId(position)) }
+        holder.textView.setOnClickListener { _ -> onItemClickListener?.onItemClick(null,holder.imageView,position,getItemId(position)) }
         holder.textView.text = o.displayName
 
     }
 
-    fun getPositionClicks(): Observable<AppTestBo> {
-        return onClickSubject
-    }
+
+
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         var textView = view.findViewById(R.id.text1) as TextView
-        var imageView = view.findViewById(R.id.image) as TextView
+        var imageView = view.findViewById(R.id.image) as ImageView
 
     }
 

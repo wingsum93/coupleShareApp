@@ -1,137 +1,83 @@
-package com.ericho.coupleshare.act
+package com.ericho.coupleshare.util
 
 import android.animation.Animator
-import android.app.Activity
-import android.content.Intent
-import android.net.Uri
-import android.support.v7.app.AppCompatActivity
-import android.os.Bundle
-import android.widget.Toast
-import butterknife.bindView
-
-import com.ericho.coupleshare.R
-import android.provider.MediaStore
-import android.view.Menu
-import android.view.View
-import android.widget.Button
-import android.widget.ImageView
-import com.bumptech.glide.Glide
-import com.ericho.coupleshare.http.StatusNoticeManager
-import com.ericho.coupleshare.model.StatusTO
-import kotlinx.android.synthetic.main.act_status_notice_add.*
 import android.animation.AnimatorListenerAdapter
-import android.view.animation.DecelerateInterpolator
-import android.animation.ObjectAnimator
 import android.animation.AnimatorSet
+import android.animation.ObjectAnimator
+import android.app.Activity
 import android.graphics.Point
 import android.graphics.Rect
-import com.ericho.coupleshare.util.float
-import kotlinx.android.synthetic.main.act_test_bilibili_app_bar.*
-import kotlinx.android.synthetic.main.grid_change_server.*
+import android.net.Uri
+import android.view.View
+import android.view.animation.DecelerateInterpolator
+import android.widget.ImageView
+import com.bumptech.glide.Glide
+import com.ericho.coupleshare.R
+import timber.log.Timber
 
+/**
+ * Created by steve_000 on 17/7/2017.
+ * for project coupleShareApp
+ * package name com.ericho.coupleshare.util
+ */
+class ZoomImageHelper {
 
-class StatusAddAct : BasePermissionActivity() {
+    val rootId : Int
+    val expendViewId :Int
 
-    val imageView:ImageView by bindView(R.id.imageView)
-    val btn_ok:Button by bindView(R.id.btn_ok)
-    val btn_cancel:Button by bindView(R.id.btn_cancel)
+    var mCurrentAnimator :Animator? = null
 
-    var item: StatusTO = StatusTO()
+    val mShortAnimationDuration :Int
 
-    val manager:StatusNoticeManager = StatusNoticeManager()
+    val mActivity:Activity
 
-    var mCurrentAnimator:Animator? = null
-    var mShortAnimationDuration:Int? = null
-
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.act_status_notice_add)
-        init(savedInstanceState);
+    constructor(rootId:Int,expendViewId:Int,duration:Int,context: Activity){
+        this.rootId = rootId
+        this.expendViewId = expendViewId
+        this.mShortAnimationDuration = duration
+        this.mActivity = context
     }
 
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.upload,menu)
-        return super.onCreateOptionsMenu(menu)
-    }
+    class Builder(val context: Activity){
 
-    private fun init(bundle:Bundle?) {
+        var rootId : Int? = null
+        var expendViewId :Int? = null
 
 
+        var mShortAnimationDuration :Int? = null
 
 
-        btn_ok.setOnClickListener { _ ->
-            item.title = edt_title.text.toString()
-            item.content = edt_content.text.toString()
-            save()
+        fun setRootId(id:Int) :Builder{
+            this.rootId = id
+            return this
         }
-        btn_cancel.setOnClickListener { _ ->  finish()}
-        imageView.setOnClickListener { _ ->  showImageGallery()}
-        imageView.setOnLongClickListener { _ ->
-            if(item.uri!=null){
-                zoomImageFromThumb(imageView,item.uri!!)
-            }
-            return@setOnLongClickListener true
-
-        }
-
-        mShortAnimationDuration = resources.getInteger(android.R.integer.config_shortAnimTime)
-    }
-
-
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-
-        when(requestCode){
-            //select image gallery
-            REQ_PICK_IMAGE -> {
-                if(resultCode == Activity.RESULT_OK){
-                    val uri = data!!.data
-                    replacePhotoUri(uri)
-                }else{
-                    showToastText("pick photo was cancelled!")
-                }
-            }
-            else -> super.onActivityResult(requestCode, resultCode, data)
+        fun setExpendViewId(id:Int):Builder{
+            this.expendViewId = id
+            return this
         }
 
-    }
-
-    private fun replacePhotoUri(uri: Uri) {
-        item.uri = uri
-        loadImageBitmapFromUri()
-    }
-    fun loadImageBitmapFromUri(){
-        val bitmap = contentResolver.openInputStream(item.uri)
-        Glide.with(this).load(item.uri).into(imageView)
-    }
-
-    fun save(){
-        manager.save(item)
-    }
-
-
-
-
-    fun showImageGallery() {
-        val intent = Intent()
-        intent.type = "image/*"
-        intent.action = Intent.ACTION_GET_CONTENT
-
-        val str = getString(R.string.select_picture)
-        startActivityForResult(Intent.createChooser(intent, str), REQ_PICK_IMAGE)
-    }
-
-    fun showCamera() {
-
-        val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-        if (takePictureIntent.resolveActivity(packageManager) != null) {
-            startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE)
+        fun setDuration(duration:Int):Builder{
+            this.mShortAnimationDuration = duration
+            return this
         }
 
+        fun build(): ZoomImageHelper {
+            val x = ZoomImageHelper(
+                    rootId = rootId!!,
+                    expendViewId = expendViewId!!,
+                    duration = mShortAnimationDuration!!,
+                    context = context
+            )
+
+
+            return x
+        }
+    }
+    fun findViewById(viewId:Int):View{
+        return mActivity.findViewById(viewId)
     }
 
-    fun zoomImageFromThumb(thumbView: View, imageUri:Uri){
+    fun zoomImageFromThumb(thumbView: View, imageUri: Uri){
         // If there's an animation in progress, cancel it
         // immediately and proceed with this one.
         if (mCurrentAnimator != null) {
@@ -141,7 +87,7 @@ class StatusAddAct : BasePermissionActivity() {
         // Load the high-resolution "zoomed-in" image.
         val expandedImageView = findViewById(
                 R.id.expanded_image) as ImageView
-        Glide.with(this)
+        Glide.with(mActivity)
                 .load(imageUri)
                 .into(expandedImageView)
 
@@ -169,7 +115,7 @@ class StatusAddAct : BasePermissionActivity() {
         val startScale: Float
         if ((finalBounds.width() ).div(finalBounds.height()) > (startBounds.width() ).div(startBounds.height())) {
             // Extend start bounds horizontally
-            startScale = startBounds.height() .toFloat() / finalBounds.height() .toFloat()
+            startScale = startBounds.height() .toFloat() / finalBounds.height()
             val startWidth:Int = startScale.times(finalBounds.width().float).toInt()
             val deltaWidth:Int = ((startWidth.minus(startBounds.width().float)) / 2) .toInt()
             startBounds.left -= deltaWidth
@@ -178,7 +124,7 @@ class StatusAddAct : BasePermissionActivity() {
             // Extend start bounds vertically
             startScale = startBounds.width() .toFloat() / finalBounds.width()
             val startHeight:Int  = (startScale * finalBounds.height()).toInt()
-            val deltaHeight:Int = ((startHeight - startBounds.height().toInt()) / 2).toInt()
+            val deltaHeight:Int = (((startHeight - startBounds.height().float)) / 2).toInt()
             startBounds.top -= deltaHeight
             startBounds.bottom += deltaHeight
         }
@@ -226,7 +172,7 @@ class StatusAddAct : BasePermissionActivity() {
         val startScaleFinal = startScale
         expandedImageView.setOnClickListener {
             if (mCurrentAnimator != null) {
-                mCurrentAnimator?.cancel()
+                mCurrentAnimator?.cancel()//for cancelling the zooming
             }
 
             // Animate the four positioning/sizing properties in parallel,
@@ -263,13 +209,9 @@ class StatusAddAct : BasePermissionActivity() {
         }
     }
 
-
-    companion object {
-        val REQUEST_IMAGE_CAPTURE = 109
-        val REQ_PICK_IMAGE = 101
-    }
-
-    fun AppCompatActivity.showToastText(string:String){
-        Toast.makeText(this,string,Toast.LENGTH_LONG).show()
+    fun onBackPress():Boolean{
+        Timber.d("helper onBackPress")
+        mCurrentAnimator?.cancel()
+        return true
     }
 }

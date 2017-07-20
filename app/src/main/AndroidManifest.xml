@@ -28,7 +28,8 @@
 
         <activity
             android:name=".act.MainActivity3"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/AppTheme.NoActionBar"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -78,7 +79,11 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".act.PhotoAddAct"
             android:screenOrientation="portrait"
-            /><activity android:name=".act.StatusAddAct"
+            />
+        <activity android:name=".act.StatusAddAct_origin"
+            android:screenOrientation="portrait"
+            />
+        <activity android:name=".act.StatusAddAct_copy"
             android:screenOrientation="portrait"
             />
 
