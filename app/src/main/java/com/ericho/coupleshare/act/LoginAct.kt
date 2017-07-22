@@ -18,8 +18,12 @@ import com.ericho.coupleshare.Injection
 import com.ericho.coupleshare.R
 import com.ericho.coupleshare.frag.AlertDialogFrag
 import com.ericho.coupleshare.mvp.LoginContract
+import com.ericho.coupleshare.mvp.data.LoginRepository
 import com.ericho.coupleshare.mvp.presenter.LoginPresenter
+import com.ericho.coupleshare.util.IntentConstant
+import kotlinx.android.synthetic.main.act_login.*
 import timber.log.Timber
+import java.util.*
 
 /**
  * Created by steve_000 on 8/7/2017.
@@ -36,7 +40,7 @@ class LoginAct:AppCompatActivity(), View.OnClickListener, LoginContract.View{
     val progressBar: ProgressBar by bindView(R.id.progressBar)
 
     private var mLoginPresenter: LoginContract.Presenter? = null
-
+    val loginRepository: LoginRepository by lazy{Injection.provideLoginRepository(this)}
 
     companion object {
         private val tag = "LoginAct"
@@ -69,6 +73,9 @@ class LoginAct:AppCompatActivity(), View.OnClickListener, LoginContract.View{
             false
         }
 
+        if (loginRepository.isLogin(this)) {
+            showLoginSuccess()
+        }
     }
 
 
@@ -112,9 +119,11 @@ class LoginAct:AppCompatActivity(), View.OnClickListener, LoginContract.View{
     override fun showLoginSuccess() {
         runOnUiThread {
             Toast.makeText(this, "Login Success", Toast.LENGTH_SHORT).show()
-            val intent = Intent()
-            intent.putExtra(RESULT_AUTHENTICATE, true)
-            setResult(Activity.RESULT_OK, intent)
+            val intent = Intent(this,LoadingAct::class.java)
+            intent.putExtra(IntentConstant.LOGIN_NAME,edt_username.text.toString())
+            intent.putExtra(IntentConstant.LOGIN_PASSWORD,edt_password.text.toString())
+            intent.putExtra(IntentConstant.LOGIN_TIME, Date())
+            startActivity(intent)
             finish()
         }
     }

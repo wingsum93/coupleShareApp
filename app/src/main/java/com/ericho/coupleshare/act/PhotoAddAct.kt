@@ -1,6 +1,8 @@
 package com.ericho.coupleshare.act
 
 import android.app.Activity
+import android.app.AlertDialog
+import android.app.DialogFragment
 import android.content.Intent
 import android.net.Uri
 import android.support.v7.app.AppCompatActivity
@@ -20,6 +22,7 @@ import com.ericho.coupleshare.mvp.presenter.AddPhotoPresenter
 import android.provider.MediaStore
 import android.view.Menu
 import android.view.MenuItem
+import com.ericho.coupleshare.frag.AlertDialogFrag
 import com.ericho.coupleshare.util.safe
 import com.ericho.coupleshare.util.toFileList
 import timber.log.Timber
@@ -33,11 +36,13 @@ class PhotoAddAct : BasePermissionActivity(), PhotosAddContract.View {
     val fab:FloatingActionButton by bindView(R.id.fab)
 
     lateinit var layoutManager:RecyclerView.LayoutManager
-    var items:ArrayList<Uri> = ArrayList<Uri>()
+    var uris:ArrayList<Uri> = ArrayList<Uri>()
     lateinit var adapter:UploadPhotoAdapter
+
 
     val presenter = AddPhotoPresenter(this)
 
+    var uploading:Boolean = false
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -54,27 +59,38 @@ class PhotoAddAct : BasePermissionActivity(), PhotosAddContract.View {
     private fun init(bundle:Bundle?) {
         if(bundle!=null){
             val x :ArrayList<Uri>? = bundle.getParcelableArrayList<Uri>("listdata")
-            items.addAll(x.safe)
+            uris.addAll(x.safe)
         }
         textView.text = getString(R.string.loading)
 
-        adapter = UploadPhotoAdapter(this,items)
+        adapter = UploadPhotoAdapter(this, uris)
         layoutManager = GridLayoutManager(this,3)
         recyclerView.adapter = adapter
         recyclerView.layoutManager = layoutManager
         //listener
         fab.setOnClickListener { _ ->  showImageGallery()}
-        adapter.imageClickListener = object :UploadPhotoAdapter.OnImageClickListener{
-            override fun onImageClick(position: Int) = Timber.d("image clcik $position")
-        }
-        adapter.imageLongClickListener = object :UploadPhotoAdapter.OnImageLongClickListener{
-            override fun onImageLongClick(position: Int): Boolean {
-                Timber.d("image long clcik $position")
-                return true
+        adapter.setOnItemClickListener {
+            position ->
+            Timber.d("image clcik $position")
+            if(!uploading){
+
             }
+        }
+        adapter.setOnItemLongClickListener {
+            position->
+            Timber.d("image long clcik $position")
+            if(!uploading){
+                showConfirmDeleteDialog(uris[position])
+            }
+            return@setOnItemLongClickListener true
         }
 
         presenter.start()
+    }
+
+    private fun showConfirmDeleteDialog(uri: Uri) {
+        val dialog = AlertDialogFrag()
+//        dialog.title =
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
@@ -92,7 +108,7 @@ class PhotoAddAct : BasePermissionActivity(), PhotosAddContract.View {
 
         presenter.onActivityResult(requestCode, resultCode, data)
         when(requestCode){
-            PhotoAddAct.REQ_ADD_PHOTO -> {
+            REQ_ADD_PHOTO -> {
                 if(resultCode == Activity.RESULT_OK){
                     doUploadPhoto()
                     fetchUploadList()
@@ -114,13 +130,17 @@ class PhotoAddAct : BasePermissionActivity(), PhotosAddContract.View {
     }
 
     private fun addMorePhoto(uri: Uri) {
-        items.add(uri)
-        fetchUploadList()
+        if(uris.contains(uri))
+            showToastText("Photo already added!")
+        else{
+            uris.add(uri)
+            fetchUploadList()
+        }
     }
 
     fun doUploadPhoto(){
 
-        val fileList:List<File> = items.toFileList()
+        val fileList:List<File> = uris.toFileList()
 
 
     }
@@ -133,7 +153,7 @@ class PhotoAddAct : BasePermissionActivity(), PhotosAddContract.View {
     }
 
     override fun onSaveInstanceState(outState: Bundle?, outPersistentState: PersistableBundle?) {
-        outState!!.putParcelableArrayList("listdata",items)
+        outState!!.putParcelableArrayList("listdata", uris)
         super.onSaveInstanceState(outState, outPersistentState)
     }
 

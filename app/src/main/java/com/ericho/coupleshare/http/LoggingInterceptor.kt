@@ -25,8 +25,6 @@ class LoggingInterceptor : Interceptor {
                res.put(request.headers().name(i),request.headers().value(i))
         }
         Timber.v("$res")
-        request.body().toString()
-        Timber.v("$res")
 
         Log.v(t, String.format("Sending request %s on %s%n%s",
                 request.url(), chain.connection(), request.headers()))

@@ -1,5 +1,6 @@
 package com.ericho.coupleshare.util
 
+import android.content.Context
 import android.location.Location
 import android.net.Uri
 import com.ericho.coupleshare.App
@@ -54,3 +55,13 @@ fun Uri.toOpenStream() :InputStream{
 }
 val Int.float:Float
     get() {return this.toFloat()}
+
+fun String.toList() :List<String>{
+    val list = java.util.ArrayList<String>()
+    list.add(this)
+    return list
+}
+fun Context.getUrl(urlSuffix:String) :String{
+    return ServerAddressUtil.getServerAddress(this) + urlSuffix
+}
+fun <T> List<T>?.safe() :List<T> = if(this == null) ArrayList<T>()else this

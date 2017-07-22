@@ -142,4 +142,12 @@ object NetworkUtil{
         return req
     }
 
+    fun status_get(): Request {
+        val req:Request = Request.Builder()
+                .url(getUrl(App.context!!,WebAddress.API_STATUS_VIEW))
+                .get()
+                .build()
+        return req
+    }
+
 }

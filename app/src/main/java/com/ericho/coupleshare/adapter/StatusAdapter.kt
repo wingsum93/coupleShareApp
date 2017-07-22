@@ -6,8 +6,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.TextView
+import com.bumptech.glide.Glide
 import com.ericho.coupleshare.R
+import com.ericho.coupleshare.http.OkHttpImpl
 import com.ericho.coupleshare.mvp.StatusBo
+import com.ericho.coupleshare.util.getUrl
+import de.hdodenhof.circleimageview.CircleImageView
 
 /**
  * Created by steve_000 on 8/7/2017.
@@ -17,18 +22,27 @@ import com.ericho.coupleshare.mvp.StatusBo
 class StatusAdapter constructor(context: Context, items:List<StatusBo>?) : BaseRecyclerAdapter<StatusBo, StatusAdapter.ViewHolder>(context, items){
 
     override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): ViewHolder {
-        val view = LayoutInflater.from(getContext()).inflate(R.layout.row_photo, parent, false)
+        val view = LayoutInflater.from(getContext()).inflate(R.layout.row_status, parent, false)
         val holder = ViewHolder(view)
         return holder
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.imageView.setImageResource(R.drawable.ic_menu_manage)
+        val item = items!!.get(position)
+        Glide.with(getContext())
+                .load(getContext().getUrl(item.photoUrlSuffix!!))
+                .dontAnimate()
+                .into(holder.imageView)
 
+
+        holder.title.text = item.title
+        holder.content.text = item.content
     }
 
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        var imageView: ImageView = view.findViewById(R.id.imageView) as ImageView
+        var imageView: CircleImageView = view.findViewById(R.id.imageView) as CircleImageView
+        var title: TextView = view.findViewById(R.id.title) as TextView
+        var content: TextView = view.findViewById(R.id.content) as TextView
 
     }
 }

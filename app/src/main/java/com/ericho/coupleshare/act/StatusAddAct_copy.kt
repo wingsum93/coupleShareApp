@@ -13,6 +13,7 @@ import butterknife.bindView
 import com.bumptech.glide.Glide
 import com.ericho.coupleshare.App
 import com.ericho.coupleshare.R
+import com.ericho.coupleshare.eventbus.StatusEvent
 import com.ericho.coupleshare.http.BaseUiCallback
 import com.ericho.coupleshare.http.StatusNoticeManager
 import com.ericho.coupleshare.http.model.BaseResponse
@@ -25,6 +26,7 @@ import com.ericho.coupleshare.util.ZoomImageHelper
 import com.google.gson.reflect.TypeToken
 import okhttp3.Call
 import okhttp3.Response
+import org.greenrobot.eventbus.EventBus
 import timber.log.Timber
 import java.io.File
 import java.io.IOException
@@ -159,6 +161,7 @@ class StatusAddAct_copy : BasePermissionActivity() {
             showToastText(getString(R.string.upload_success))
             showProgress(false)
             lockUi(false)
+            EventBus.getDefault().post(StatusEvent())
             this.finish()
     }
 

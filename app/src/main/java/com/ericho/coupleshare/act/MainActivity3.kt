@@ -54,8 +54,8 @@ class MainActivity3: BasePermissionActivity(), ViewPager.OnPageChangeListener  {
         init()
         val isLogined = getUserLogined()
         if (!isLogined) {
-            val intent = Intent(this, LoginAct::class.java)
-            startActivityForResult(intent, REQ_LOGIN)
+//            val intent = Intent(this, LoginAct::class.java)
+//            startActivityForResult(intent, REQ_LOGIN)
         }else{
             doNormalWork()
         }

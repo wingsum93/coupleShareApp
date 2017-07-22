@@ -1,18 +1,15 @@
 package com.ericho.coupleshare.adapter
 
 import android.content.Context
-import android.graphics.drawable.BitmapDrawable
-import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
 import android.widget.ImageView
-import com.ericho.coupleshare.R
-import android.provider.MediaStore
-import android.graphics.Bitmap
 import com.bumptech.glide.Glide
+import com.ericho.coupleshare.R
 
 
 /**
@@ -22,8 +19,8 @@ import com.bumptech.glide.Glide
  */
 class UploadPhotoAdapter constructor(context:Context, items:List<Uri>):BaseRecyclerAdapter<Uri, UploadPhotoAdapter.ViewHolder>(context, items) {
 
-    var imageClickListener:OnImageClickListener? = null
-    var imageLongClickListener:OnImageLongClickListener? = null
+    var onImageClick :((position:Int)->Unit) = {}
+    var onImageLongClick :((position:Int)->Boolean) ={false}
 
 
     override fun onBindViewHolder(holder: UploadPhotoAdapter.ViewHolder?, position: Int) {
@@ -38,9 +35,9 @@ class UploadPhotoAdapter constructor(context:Context, items:List<Uri>):BaseRecyc
                 .load(item)
                 .into(holder!!.img)
 
-        holder.img.setOnClickListener { imageClickListener?.onImageClick(position) }
+        holder.img.setOnClickListener { onImageClick.invoke(position) }
         holder.img.setOnLongClickListener {
-            return@setOnLongClickListener imageLongClickListener?.onImageLongClick(position) ?:false
+            return@setOnLongClickListener onImageLongClick.invoke(position)
         }
     }
 
@@ -48,13 +45,13 @@ class UploadPhotoAdapter constructor(context:Context, items:List<Uri>):BaseRecyc
         val v = LayoutInflater.from(getContext()).inflate(R.layout.row_photo,parent,false)
         return ViewHolder(v)
     }
-    interface OnImageClickListener{
-        fun onImageClick(position:Int);
-    }
-    interface OnImageLongClickListener{
-        fun onImageLongClick(position:Int) :Boolean
-    }
 
+    fun setOnItemLongClickListener(listener:(position:Int)->Boolean){
+        this.onImageLongClick = listener
+    }
+    fun setOnItemClickListener(listener:(position:Int)->Unit){
+        this.onImageClick = listener
+    }
 
     class ViewHolder constructor(view:View):RecyclerView.ViewHolder(view){
         val img:ImageView = view.findViewById(R.id.imageView) as ImageView

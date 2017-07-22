@@ -28,17 +28,19 @@
 
         <activity
             android:name=".act.MainActivity3"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar">
+
+        </activity>
+        <activity
+            android:name=".act.LoginAct"
+            android:screenOrientation="portrait" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".act.LoginAct"
-            android:screenOrientation="portrait" />
         <activity
             android:name=".act.RegisterAct"
             android:screenOrientation="portrait" />
@@ -77,17 +79,22 @@
         <activity
             android:name=".act.PersonSettingAct"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".act.PhotoAddAct"
-            android:screenOrientation="portrait"
-            />
-        <activity android:name=".act.StatusAddAct_origin"
-            android:screenOrientation="portrait"
-            />
-        <activity android:name=".act.StatusAddAct_copy"
-            android:screenOrientation="portrait"
-            />
+        <activity
+            android:name=".act.PhotoAddAct"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".act.StatusAddAct_origin"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".act.StatusAddAct_copy"
+            android:screenOrientation="portrait" />
 
-        <service android:name=".service.LocationMonitorSer"/>
+        <service android:name=".service.LocationMonitorSer" />
+
+        <activity
+            android:name=".act.LoadingAct"
+            android:label="@string/title_activity_loading"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>

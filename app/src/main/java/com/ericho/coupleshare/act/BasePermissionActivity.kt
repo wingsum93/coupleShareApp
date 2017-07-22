@@ -74,7 +74,7 @@ private val  <E> Collection<E>.random: E
     }
 
 fun String.toList() :List<String>{
-    val list =  ArrayList<String>()
+    val list = ArrayList<String>()
     list.add(this)
     return list
 }

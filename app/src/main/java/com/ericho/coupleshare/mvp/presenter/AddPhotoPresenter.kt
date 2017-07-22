@@ -48,9 +48,9 @@ class AddPhotoPresenter (val view:PhotosAddContract.View):PhotosAddContract.Pres
 
     }
 
-    override var syncing: Boolean
+    override var syncing: Boolean = false
         get() = TODO("not implemented") //To change initializer of created properties use File | Settings | File Templates.
-        set(value) {}
+        set(value) { field = value}
 
 
 }
