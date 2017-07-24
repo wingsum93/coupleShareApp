@@ -14,7 +14,7 @@ android {
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
-        buildConfigField 'String', 'default_address', '"http://192.168.0.100:8080/"'
+        buildConfigField 'String', 'default_address', '"http://59.149.29.78:8080/"'
         vectorDrawables.useSupportLibrary = true
         // Enabling multidex support.
         multiDexEnabled true
@@ -166,6 +166,7 @@ dependencies {
     compile 'org.greenrobot:eventbus:3.0.0'
     compile 'com.jakewharton.timber:timber:4.5.1'
     compile 'de.hdodenhof:circleimageview:2.1.0'
+    compile 'com.ldoublem.loadingview:loadingviewlib:1.0'//loading view animation
     testCompile 'com.netflix.rxjava:rxjava-core:0.16.0'
     testCompile 'junit:junit:4.12'
     androidTestCompile 'com.google.code.findbugs:jsr305:2.0.1'

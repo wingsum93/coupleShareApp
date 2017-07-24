@@ -45,7 +45,7 @@ open class RegisterAct: AppCompatActivity(), RegisterContract.View, View.OnClick
     private fun init() {
 
         mPresenter = RegisterPresenter(Injection.provideLoginRepository(this), this)
-        mPresenter!!.assignOnTextChangeListener(edt_username,edt_pw,btn_login)
+        mPresenter!!.assignOnTextChangeListener(edt_username,edt_pw,btn_action)
         btn_action.setOnClickListener(this)
 
         edt_pw.setOnEditorActionListener { v, actionId, event ->
@@ -57,6 +57,9 @@ open class RegisterAct: AppCompatActivity(), RegisterContract.View, View.OnClick
             }
             false
         }
+
+        btn_action.isEnabled = false
+
     }
 
     override fun onClick(v: View) {

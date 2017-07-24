@@ -1,6 +1,7 @@
 package com.ericho.coupleshare.act
 
 import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -14,18 +15,19 @@ import butterknife.bindView
 
 import com.ericho.coupleshare.R
 import com.ericho.coupleshare.util.IntentConstant
+import com.ldoublem.loadingviewlib.view.LVGhost
 
 class LoadingAct : AppCompatActivity() {
 
-    val progressBar :ProgressBar by bindView(R.id.progressBar)
-
+//    val progressBar :ProgressBar by bindView(R.id.progressBar)
+    val mLvGhost :LVGhost by lazy { findViewById(R.id.lvGhost) as LVGhost }
     val handler:Handler = Handler(Looper.getMainLooper())
+
+    val mLoadingTimeMill :Long = 10 * 1000
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_loading)
-        val toolbar = findViewById(R.id.toolbar) as Toolbar
-        setSupportActionBar(toolbar)
 
         init()
 
@@ -34,17 +36,16 @@ class LoadingAct : AppCompatActivity() {
     }
 
     fun init(){
-        val fab = findViewById(R.id.fab) as FloatingActionButton
-        fab.setOnClickListener { view ->
-            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                    .setAction("Action", null).show()
-        }
 
         handler.postDelayed({
             val i = Intent(this,MainActivity3::class.java)
             startActivity(i)
             this.finish()
 
-        },3000)
+        },mLoadingTimeMill)
+
+        mLvGhost.setHandColor(Color.BLACK)
+        mLvGhost.setViewColor(Color.WHITE)
+        mLvGhost.startAnim()
     }
 }

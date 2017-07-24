@@ -71,9 +71,9 @@ class StatusFrag:BaseFrag(), StatusContract.View, FabListener {
 
 
         //listener
-        list = StatusBo.template()
         adapter = StatusAdapter(activity, list)
         recyclerView.setLayoutManager(LinearLayoutManager(activity))
+        recyclerView.setHasFixedSize(true)
         recyclerView.setAdapter(adapter)
         swipeRefreshLayout.setOnRefreshListener {
             //

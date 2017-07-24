@@ -139,6 +139,7 @@ class ChangeServerDialog:BasePermissionActivity(),View.OnClickListener,
 
         res.add(ServerBean("Ho", ServerAddress.s_home_pc, R.drawable.mountain_64))
         res.add(ServerBean("com", ServerAddress.s_com_pc, R.drawable.fire_orange_64))
+        res.add(ServerBean("external", ServerAddress.s_external_ip, android.R.drawable.ic_dialog_email))
 
         return res
     }

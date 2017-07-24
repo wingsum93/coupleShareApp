@@ -41,6 +41,8 @@ class RegisterPresenter : RegisterContract.Presenter {
     }
 
     override fun register(username: String, password: String) {
+        if(username.trim().isEmpty() || password.trim().isEmpty()) return
+
         mView.showRegisterButtonState(false)
         mView.showLoadingIndicator(true)
         mUsernameEditText.isEnabled = false
