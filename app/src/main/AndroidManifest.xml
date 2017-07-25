@@ -89,13 +89,16 @@
             android:name=".act.StatusAddAct_copy"
             android:screenOrientation="portrait" />
 
-        <service android:name=".service.LocationMonitorSer" />
+
 
         <activity
             android:name=".act.LoadingAct"
             android:label="@string/title_activity_loading"
             android:theme="@style/AppTheme.NoActionBar"
             android:screenOrientation="portrait"/>
+        <service android:name=".service.UploadPhotoService"/>
+        <service android:name=".service.LocationMonitorSer"/>
+
     </application>
 
 </manifest>

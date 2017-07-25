@@ -14,23 +14,18 @@ import com.bumptech.glide.Glide
 import com.ericho.coupleshare.App
 import com.ericho.coupleshare.R
 import com.ericho.coupleshare.eventbus.StatusEvent
-import com.ericho.coupleshare.http.BaseUiCallback
 import com.ericho.coupleshare.http.StatusNoticeManager
-import com.ericho.coupleshare.http.model.BaseResponse
 import com.ericho.coupleshare.http.model.BaseSingleResponse
 import com.ericho.coupleshare.model.StatusTO
 import com.ericho.coupleshare.util.FileHelper
-import com.ericho.coupleshare.util.HttpHelper
+import com.ericho.coupleshare.util.AHttpHelper
 import com.ericho.coupleshare.util.NetworkUtil
 import com.ericho.coupleshare.util.ZoomImageHelper
 import com.google.gson.reflect.TypeToken
 import okhttp3.Call
-import okhttp3.Response
 import org.greenrobot.eventbus.EventBus
 import timber.log.Timber
 import java.io.File
-import java.io.IOException
-import java.lang.reflect.Type
 
 
 class StatusAddAct_copy : BasePermissionActivity() {
@@ -48,7 +43,7 @@ class StatusAddAct_copy : BasePermissionActivity() {
 
     lateinit var zoomHelper:ZoomImageHelper
     lateinit var fileHelper:FileHelper
-    lateinit var httpHelper:HttpHelper<BaseSingleResponse<Unit>>
+    lateinit var httpHelper: AHttpHelper<BaseSingleResponse<Unit>>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -69,7 +64,7 @@ class StatusAddAct_copy : BasePermissionActivity() {
                 .setDuration(resources.getInteger(android.R.integer.config_shortAnimTime))
                 .build()
         fileHelper = FileHelper(this)
-        httpHelper = HttpHelper.Builder<BaseSingleResponse<Unit>>()
+        httpHelper = AHttpHelper.Builder<BaseSingleResponse<Unit>>()
                 .setSuccessMethod(this::success)
                 .setTransformMethod { string -> App.gson.fromJson(string,object :TypeToken<BaseSingleResponse<Unit>>(){}.type)  }
                 .setFail { _call, e ->

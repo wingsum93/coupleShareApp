@@ -1,29 +1,35 @@
 package com.ericho.coupleshare.act
 
-import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
-import android.text.TextWatcher
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.Button
 import android.widget.EditText
+import android.widget.ImageView
 import android.widget.ProgressBar
+import android.widget.TextView
 import android.widget.Toast
 import butterknife.bindView
+import com.ericho.coupleshare.App
 import com.ericho.coupleshare.Injection
 import com.ericho.coupleshare.R
 import com.ericho.coupleshare.frag.AlertDialogFrag
+import com.ericho.coupleshare.http.model.BaseSingleResponse
 import com.ericho.coupleshare.mvp.LoginContract
 import com.ericho.coupleshare.mvp.data.LoginRepository
 import com.ericho.coupleshare.mvp.presenter.LoginPresenter
+import com.ericho.coupleshare.util.DrawableUtil
+import com.ericho.coupleshare.util.AHttpHelper
 import com.ericho.coupleshare.util.IntentConstant
+import com.ericho.coupleshare.util.NetworkUtil
+import com.google.gson.reflect.TypeToken
 import kotlinx.android.synthetic.main.act_login.*
 import timber.log.Timber
-import java.util.*
+import java.util.Date
 
 /**
  * Created by steve_000 on 8/7/2017.
@@ -38,6 +44,11 @@ class LoginAct:AppCompatActivity(), View.OnClickListener, LoginContract.View{
     val edt_username: EditText by bindView(R.id.edt_username)
     val edt_pw: EditText by bindView(R.id.edt_password)
     val progressBar: ProgressBar by bindView(R.id.progressBar)
+
+    val img_state_light: ImageView by bindView(R.id.img_state_light)
+    val txt_server_state: TextView by bindView(R.id.txt_server_state)
+
+    var serverOn = false
 
     private var mLoginPresenter: LoginContract.Presenter? = null
     val loginRepository: LoginRepository by lazy{Injection.provideLoginRepository(this)}
@@ -73,9 +84,13 @@ class LoginAct:AppCompatActivity(), View.OnClickListener, LoginContract.View{
             false
         }
 
-        if (loginRepository.isLogin(this)) {
-            showLoginSuccess()
-        }
+
+
+        //for server state
+        img_state_light.setImageDrawable(DrawableUtil.getDrawble(this,R.drawable.oval_red_24))
+        txt_server_state.text = "Server is unavailable"
+
+        fetchServerState()
     }
 
 
@@ -159,8 +174,25 @@ class LoginAct:AppCompatActivity(), View.OnClickListener, LoginContract.View{
         }
     }
 
-//    override fun onDestroy() {
-//        mLoginPresenter?.destroy()
-//        super.onDestroy()
-//    }
+    fun fetchServerState(){
+
+        val http : AHttpHelper<BaseSingleResponse<String>>
+        = AHttpHelper.Builder<BaseSingleResponse<String>>()
+                .setFail { call, ioException ->
+                    img_state_light.setImageDrawable(DrawableUtil.getDrawble(this,R.drawable.oval_red_24))
+                    txt_server_state.text = "Server Off"
+                    serverOn = false
+                }.setTransformMethod { App.gson.fromJson(it,object :TypeToken<BaseSingleResponse<String>>(){}.type) }
+                .setSuccessMethod { call, baseSingleResponse ->
+                    img_state_light.setImageDrawable(DrawableUtil.getDrawble(this,R.drawable.oval_green_24))
+                    txt_server_state.text = "Server Online"
+                    serverOn = true
+                    if (loginRepository.isLogin(this)) {
+                        showLoginSuccess()
+                    }
+                }
+                .build()
+        val req = NetworkUtil.getFetchServerRequest();
+        http.run(req)
+    }
 }

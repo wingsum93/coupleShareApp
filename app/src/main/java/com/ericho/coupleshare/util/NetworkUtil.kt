@@ -13,6 +13,7 @@ import okhttp3.*
 import timber.log.Timber
 import java.io.File
 import java.io.IOException
+import java.util.UUID
 import java.util.concurrent.TimeUnit
 
 /**
@@ -146,6 +147,36 @@ object NetworkUtil{
         val req:Request = Request.Builder()
                 .url(getUrl(App.context!!,WebAddress.API_STATUS_VIEW))
                 .get()
+                .build()
+        return req
+    }
+
+    fun getFetchServerRequest(): Request {
+        val req:Request = Request.Builder()
+                .url(getUrl(App.context!!,WebAddress.API_SERVER_HEALTH))
+                .get()
+                .build()
+        return req
+    }
+    fun photo_upload(file: File,tags:Array<String>?): Request {
+        var tagString = ""
+        if (tags?.isNotEmpty() ?:false) {
+            tags!!.forEachIndexed { index, s ->
+                tagString += s.trim()
+                if(index!=tags.lastIndex) tagString+=","
+            }
+        }
+
+        val body = MultipartBody.Builder()
+                .addFormDataPart("photo",
+                        file.name,
+                        RequestBody.create(MediaType_Image,file))
+                .addFormDataPart("tags",tagString)
+                .build()
+
+        val req:Request = Request.Builder()
+                .url(getUrl(App.context!!,WebAddress.API_PHOTO_UPLOAD))
+                .post(body)
                 .build()
         return req
     }

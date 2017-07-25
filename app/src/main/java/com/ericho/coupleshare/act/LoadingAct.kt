@@ -23,7 +23,7 @@ class LoadingAct : AppCompatActivity() {
     val mLvGhost :LVGhost by lazy { findViewById(R.id.lvGhost) as LVGhost }
     val handler:Handler = Handler(Looper.getMainLooper())
 
-    val mLoadingTimeMill :Long = 10 * 1000
+    val mLoadingTimeMill :Long = 3 * 1000
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

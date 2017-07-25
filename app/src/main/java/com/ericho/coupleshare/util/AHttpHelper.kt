@@ -2,7 +2,6 @@ package com.ericho.coupleshare.util
 
 import android.os.Handler
 import android.os.Looper
-import com.ericho.coupleshare.http.BaseUiCallback
 import com.ericho.coupleshare.http.model.BaseSingleResponse
 import okhttp3.Call
 import okhttp3.Callback
@@ -15,7 +14,7 @@ import java.io.IOException
  * for project coupleShareApp
  * package name com.ericho.coupleshare.util
  */
-class HttpHelper <T :BaseSingleResponse<*> >(
+class AHttpHelper<T :BaseSingleResponse<*> >(
 
 
         val failureMethod: ((Call,IOException) -> Unit),//run in main thread
@@ -78,11 +77,11 @@ class HttpHelper <T :BaseSingleResponse<*> >(
         }
 
 
-        fun build():HttpHelper<T>{
+        fun build(): AHttpHelper<T>{
             checkNotNull(failureMethod,{"fail method required"})
             checkNotNull(successMethod,{"success method required"})
             checkNotNull(transformMethod,{"transform method required"})
-            return HttpHelper<T>(
+            return AHttpHelper<T>(
                     failureMethod = failureMethod!!,
                     successMethod = successMethod!!,
                     transformMethod = transformMethod!!)

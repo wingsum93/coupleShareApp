@@ -5,8 +5,6 @@ import android.os.Bundle
 import android.support.design.widget.FloatingActionButton
 import android.support.v4.content.res.ResourcesCompat
 import android.support.v4.widget.SwipeRefreshLayout
-import android.support.v7.widget.GridLayoutManager
-import android.support.v7.widget.LinearLayoutCompat
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
@@ -22,7 +20,7 @@ import com.ericho.coupleshare.http.model.BaseResponse
 import com.ericho.coupleshare.interf.FabListener
 import com.ericho.coupleshare.mvp.StatusBo
 import com.ericho.coupleshare.mvp.StatusContract
-import com.ericho.coupleshare.util.HttpHelperB
+import com.ericho.coupleshare.util.AHttpHelperB
 import com.ericho.coupleshare.util.NetworkUtil
 import com.ericho.coupleshare.util.safe
 import com.ericho.coupleshare.util.showToastMessage
@@ -31,7 +29,6 @@ import okhttp3.Request
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import timber.log.Timber
-import java.util.*
 import kotlin.collections.ArrayList
 
 /**
@@ -46,7 +43,7 @@ class StatusFrag:BaseFrag(), StatusContract.View, FabListener {
     private var adapter: StatusAdapter? = null
 
     private var presenter: StatusContract.Presenter? = null
-    lateinit var httpHelper:HttpHelperB<BaseResponse<StatusBo>>
+    lateinit var httpHelper: AHttpHelperB<BaseResponse<StatusBo>>
     private var list: ArrayList<StatusBo> = ArrayList()
 
 
@@ -82,7 +79,7 @@ class StatusFrag:BaseFrag(), StatusContract.View, FabListener {
             loadStatusList()
         }
 
-        httpHelper = HttpHelperB.Builder<BaseResponse<StatusBo>>()
+        httpHelper = AHttpHelperB.Builder<BaseResponse<StatusBo>>()
                 .setFail { call, ioException ->
                     Timber.w(ioException)
                 }

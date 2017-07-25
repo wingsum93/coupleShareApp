@@ -167,6 +167,7 @@ dependencies {
     compile 'com.jakewharton.timber:timber:4.5.1'
     compile 'de.hdodenhof:circleimageview:2.1.0'
     compile 'com.ldoublem.loadingview:loadingviewlib:1.0'//loading view animation
+    compile 'com.songhang:smart-headerfooter-recyclerview:1.0.1'//for recyclerview adapter
     testCompile 'com.netflix.rxjava:rxjava-core:0.16.0'
     testCompile 'junit:junit:4.12'
     androidTestCompile 'com.google.code.findbugs:jsr305:2.0.1'

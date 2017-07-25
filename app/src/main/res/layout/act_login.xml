@@ -1,9 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/LinearLayout1"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:orientation="vertical" >
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:orientation="horizontal"
+        android:paddingLeft="54dp"
+        android:paddingRight="54dp">
+
+        <ImageView
+            android:id="@+id/img_state_light"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_gravity="center_vertical"
+            android:src="@drawable/oval_red_24" />
+
+        <TextView
+            android:id="@+id/txt_server_state"
+            android:layout_width="180dp"
+            android:maxWidth="200dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            tools:text="Server not available"/>
+    </LinearLayout>
 
     <ImageView
         android:id="@+id/img_health"
@@ -22,7 +46,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="120dp" >
+        android:layout_marginTop="100dp">
 
         <TextView
             android:id="@+id/activity_login_consumer_txv_id"
@@ -39,7 +63,7 @@
             android:ems="10"
             android:inputType="none|text"
             android:lines="1"
-            android:text="" >
+            android:text="">
 
             <requestFocus />
 
@@ -49,7 +73,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
+        android:layout_height="wrap_content">
 
         <TextView
             android:id="@+id/activity_login_consumer_txv_pw"
@@ -73,23 +97,34 @@
 
     </LinearLayout>
 
-    <Button
-        android:id="@+id/btn_login"
-        android:layout_width="fill_parent"
+    <LinearLayout
+        style="?android:attr/buttonBarStyle"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Login"
-        android:textSize="30sp" />
-    <Button
-        android:id="@+id/btn_register"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/register"
-         />
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/btn_login"
+            style="?android:attr/buttonBarButtonStyle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Login" />
+
+        <Button
+            android:id="@+id/btn_register"
+            style="?android:attr/buttonBarButtonStyle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/register" />
+    </LinearLayout>
+
     <ProgressBar
+        android:id="@+id/progressBar"
+        style="?android:attr/progressBarStyleHorizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:indeterminate="true"
-        android:id="@+id/progressBar"
-        android:visibility="invisible"
-        style="?android:attr/progressBarStyleHorizontal" />
+        android:visibility="invisible" />
 </LinearLayout>

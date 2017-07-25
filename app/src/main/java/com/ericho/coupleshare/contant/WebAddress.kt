@@ -13,7 +13,7 @@ object WebAddress {
     val API_LOGIN = "api/login"
     @JvmField
     val API_CHANGE_PASSWORD = "api/changePassword"
-
+    val API_SERVER_HEALTH = "api/health"
 
     //operation
     @JvmField

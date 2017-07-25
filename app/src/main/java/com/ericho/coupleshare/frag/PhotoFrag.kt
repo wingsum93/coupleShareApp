@@ -4,21 +4,31 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.FloatingActionButton
 import android.support.v4.content.res.ResourcesCompat
+import android.support.v4.widget.ContentLoadingProgressBar
+import android.support.v7.widget.DefaultItemAnimator
 import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import butterknife.bindView
 import com.ericho.coupleshare.App
 import com.ericho.coupleshare.R
 import com.ericho.coupleshare.act.PhotoAddAct
 import com.ericho.coupleshare.adapter.PhotoAdapter
+import com.ericho.coupleshare.eventbus.PhotoUploadEvent
 import com.ericho.coupleshare.interf.FabListener
 import com.ericho.coupleshare.mvp.Photo
 import com.ericho.coupleshare.mvp.PhotosContract
 import com.ericho.coupleshare.mvp.presenter.PhotoPresenter
+import com.headerfooter.songhang.library.SmartRecyclerAdapter
+import kotlinx.android.synthetic.main.act_status_notice_add.*
+import org.greenrobot.eventbus.EventBus
+import org.greenrobot.eventbus.Subscribe
+import org.greenrobot.eventbus.ThreadMode
 import timber.log.Timber
+import java.io.File
 import java.util.*
 
 /**
@@ -32,6 +42,7 @@ class PhotoFrag:BaseFrag(), PhotosContract.View, FabListener {
 
 
     private var adapter: PhotoAdapter? = null
+    private lateinit var smartAdapter: SmartRecyclerAdapter
 
     private lateinit var mPresenter: PhotosContract.Presenter
 
@@ -43,6 +54,7 @@ class PhotoFrag:BaseFrag(), PhotosContract.View, FabListener {
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater!!.inflate(R.layout.frag_photo, container, false)
+        EventBus.getDefault().register(this)
         return view
     }
 
@@ -51,11 +63,13 @@ class PhotoFrag:BaseFrag(), PhotosContract.View, FabListener {
 
         //listener
         recyclerView.layoutManager = GridLayoutManager(activity, 3)
-        recyclerView.adapter = adapter
-
+        adapter = PhotoAdapter(activity, list)
+        smartAdapter = SmartRecyclerAdapter(adapter!!)
+        recyclerView.adapter = smartAdapter
+        recyclerView.itemAnimator = DefaultItemAnimator()
 
         list = ArrayList<Photo>()
-        adapter = PhotoAdapter(activity, list)
+
 
         mPresenter = PhotoPresenter(this)
         mPresenter.start()
@@ -78,6 +92,37 @@ class PhotoFrag:BaseFrag(), PhotosContract.View, FabListener {
 
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    fun onSubscribe(event:PhotoUploadEvent){
+        Timber.d("onSubscribe ${App.gson.toJson(event)}")
+        when{
+            !event.interrupt->{
+                val b = event.totalCount != event.currentCount
+                if(b){
+                    showHeaderView(event.totalCount,event.currentCount)
+                }else{
+                    removeHeaderView()
+                }
+            }
+            event.interrupt ->{}
+        }
+    }
+
+    private fun removeHeaderView() {
+        smartAdapter.removeHeaderView()
+    }
+
+    private fun showHeaderView(totalCount: Int, currentCount: Int) {
+        val v = LayoutInflater.from(activity).inflate(R.layout.header_upload_image,container,false)
+
+        val textView = v.findViewById(R.id.txv_progress_state) as TextView
+        val progressBar = v.findViewById(R.id.progressBar) as ContentLoadingProgressBar
+
+        textView.text = getString(R.string.uploading)
+
+        smartAdapter.setHeaderView(v)
+    }
+
     override fun showPhotoList(photos: List<Photo>) {
         Timber.d("showPhotoList")
         adapter?.update(photos)
@@ -89,6 +134,11 @@ class PhotoFrag:BaseFrag(), PhotosContract.View, FabListener {
             v -> Timber.d("fab photo click")
             startActivity(Intent(activity, PhotoAddAct::class.java))
         }
+    }
+
+    override fun onDestroyView() {
+        EventBus.getDefault().unregister(this)
+        super.onDestroyView()
     }
 
     companion object {

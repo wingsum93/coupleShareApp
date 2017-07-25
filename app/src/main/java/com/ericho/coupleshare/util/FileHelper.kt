@@ -53,6 +53,10 @@ class FileHelper constructor(val context:Context){
 
     }
 
+    fun convertUriToFile(uris:List<Uri>):List<File>{
+        return uris.map { convertUri(it) }.toList()
+    }
+
 
     fun getFilename(uri:Uri): String? {
         /*  Intent intent = getIntent();

@@ -1,30 +1,34 @@
 package com.ericho.coupleshare.act
 
 import android.app.Activity
-import android.app.AlertDialog
-import android.app.DialogFragment
+import android.content.ComponentName
+import android.content.Context
 import android.content.Intent
+import android.content.ServiceConnection
 import android.net.Uri
-import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.os.IBinder
 import android.os.PersistableBundle
+import android.provider.MediaStore
 import android.support.design.widget.FloatingActionButton
+import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.view.Menu
+import android.view.MenuItem
+import android.view.View
 import android.widget.TextView
 import android.widget.Toast
 import butterknife.bindView
-
 import com.ericho.coupleshare.R
 import com.ericho.coupleshare.adapter.UploadPhotoAdapter
-import com.ericho.coupleshare.mvp.*
-import com.ericho.coupleshare.mvp.presenter.AddPhotoPresenter
-import android.provider.MediaStore
-import android.view.Menu
-import android.view.MenuItem
 import com.ericho.coupleshare.frag.AlertDialogFrag
+import com.ericho.coupleshare.mvp.Photo
+import com.ericho.coupleshare.mvp.PhotosAddContract
+import com.ericho.coupleshare.mvp.presenter.AddPhotoPresenter
+import com.ericho.coupleshare.service.UploadPhotoService
+import com.ericho.coupleshare.util.FileHelper
 import com.ericho.coupleshare.util.safe
-import com.ericho.coupleshare.util.toFileList
 import timber.log.Timber
 import java.io.File
 
@@ -42,13 +46,17 @@ class PhotoAddAct : BasePermissionActivity(), PhotosAddContract.View {
 
     val presenter = AddPhotoPresenter(this)
 
-    var uploading:Boolean = false
+    var mBoundService: UploadPhotoService? = null
+    var mBound: Boolean = false
+    lateinit var fileHelper:FileHelper
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.act_photo_add)
-        init(savedInstanceState);
+        init(savedInstanceState)
+        val mServiceBoundIntent = Intent(this, UploadPhotoService::class.java)
+        this.bindService(mServiceBoundIntent,mServiceConnection, Context.BIND_AUTO_CREATE)
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -62,7 +70,7 @@ class PhotoAddAct : BasePermissionActivity(), PhotosAddContract.View {
             uris.addAll(x.safe)
         }
         textView.text = getString(R.string.loading)
-
+        textView.visibility = View.GONE
         adapter = UploadPhotoAdapter(this, uris)
         layoutManager = GridLayoutManager(this,3)
         recyclerView.adapter = adapter
@@ -72,20 +80,34 @@ class PhotoAddAct : BasePermissionActivity(), PhotosAddContract.View {
         adapter.setOnItemClickListener {
             position ->
             Timber.d("image clcik $position")
-            if(!uploading){
 
-            }
         }
         adapter.setOnItemLongClickListener {
             position->
             Timber.d("image long clcik $position")
-            if(!uploading){
-                showConfirmDeleteDialog(uris[position])
-            }
+
+            showConfirmDeleteDialog(uris[position])
+
             return@setOnItemLongClickListener true
         }
 
         presenter.start()
+
+    }
+
+    private val mServiceConnection = object : ServiceConnection {
+
+        override fun onServiceDisconnected(name: ComponentName) {
+            Timber.d("onServiceDisconnected ${name.className}")
+            mBound = false
+        }
+
+        override fun onServiceConnected(name: ComponentName, service: IBinder) {
+            Timber.d("onServiceConnected ${name.className}")
+            val myBinder = service as UploadPhotoService.MyBinder
+            mBoundService = myBinder.service as UploadPhotoService
+            mBound = true
+        }
     }
 
     private fun showConfirmDeleteDialog(uri: Uri) {
@@ -108,14 +130,6 @@ class PhotoAddAct : BasePermissionActivity(), PhotosAddContract.View {
 
         presenter.onActivityResult(requestCode, resultCode, data)
         when(requestCode){
-            REQ_ADD_PHOTO -> {
-                if(resultCode == Activity.RESULT_OK){
-                    doUploadPhoto()
-                    fetchUploadList()
-                }else{
-                    showToastText("upload photo was cancelled!")
-                }
-            }
             //select image gallery
             REQ_PICK_IMAGE -> {
                 if(resultCode == Activity.RESULT_OK){
@@ -139,10 +153,13 @@ class PhotoAddAct : BasePermissionActivity(), PhotosAddContract.View {
     }
 
     fun doUploadPhoto(){
-
-        val fileList:List<File> = uris.toFileList()
-
-
+        fileHelper = FileHelper(this)
+        Timber.d("click tick ${mBoundService}")
+        if(mBoundService==null) return
+        if(uris.isEmpty()) return
+        val fileList:List<File> = fileHelper.convertUriToFile(uris)
+        mBoundService?.uploadImage(fileList)
+        this.finish()
     }
     fun fetchUploadList(){
         adapter.notifyDataSetChanged()
@@ -184,8 +201,12 @@ class PhotoAddAct : BasePermissionActivity(), PhotosAddContract.View {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
+    override fun onDestroy() {
+        unbindService(mServiceConnection)
+        super.onDestroy()
+    }
+
     companion object {
-        val REQ_ADD_PHOTO = 125
         val REQUEST_IMAGE_CAPTURE = 109
         val REQ_PICK_IMAGE = 101
     }

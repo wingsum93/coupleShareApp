@@ -3,6 +3,7 @@ package com.ericho.coupleshare.util
 import android.content.Context
 import android.location.Location
 import android.net.Uri
+import android.view.ViewConfiguration
 import com.ericho.coupleshare.App
 import com.ericho.coupleshare.model.LocationTo
 import java.io.File
