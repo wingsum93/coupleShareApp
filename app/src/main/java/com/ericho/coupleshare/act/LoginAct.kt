@@ -17,6 +17,7 @@ import butterknife.bindView
 import com.ericho.coupleshare.App
 import com.ericho.coupleshare.Injection
 import com.ericho.coupleshare.R
+import com.ericho.coupleshare.constant.AdsConstant
 import com.ericho.coupleshare.frag.AlertDialogFrag
 import com.ericho.coupleshare.http.model.BaseSingleResponse
 import com.ericho.coupleshare.mvp.LoginContract
@@ -26,6 +27,7 @@ import com.ericho.coupleshare.util.DrawableUtil
 import com.ericho.coupleshare.util.AHttpHelper
 import com.ericho.coupleshare.util.IntentConstant
 import com.ericho.coupleshare.util.NetworkUtil
+import com.google.android.gms.ads.MobileAds
 import com.google.gson.reflect.TypeToken
 import kotlinx.android.synthetic.main.act_login.*
 import timber.log.Timber
@@ -91,6 +93,9 @@ class LoginAct:AppCompatActivity(), View.OnClickListener, LoginContract.View{
         txt_server_state.text = "Server is unavailable"
 
         fetchServerState()
+
+        MobileAds.initialize(this, AdsConstant.APP_ID);
+
     }
 
 

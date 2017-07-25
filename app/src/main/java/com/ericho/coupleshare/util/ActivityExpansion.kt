@@ -4,6 +4,8 @@ import android.support.v4.app.Fragment
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
 import android.widget.Toast
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.reward.RewardedVideoAd
 
 
 /**
@@ -19,4 +21,13 @@ fun AppCompatActivity.checkSelfPermission(  x:String):Int{
 
 fun Fragment.showToastMessage(  text:String){
     if(activity!=null) Toast.makeText(activity,text,Toast.LENGTH_SHORT).show()
+}
+fun AppCompatActivity.loadRewardedVideoAd(  ads_id:String,mAd:RewardedVideoAd):Unit{
+    val req = AdRequest.Builder()
+            .addTestDevice("54464B6ADF6F4418B70974F9BC194FC0")
+            .build()
+    mAd.loadAd(ads_id, req)
+}
+fun AppCompatActivity.showToastMessage(  x:String){
+    Toast.makeText(this,x,Toast.LENGTH_SHORT).show()
 }

@@ -15,6 +15,7 @@ import butterknife.bindView
 import com.ericho.coupleshare.Injection
 import com.ericho.coupleshare.R
 import com.ericho.coupleshare.adapter.HomePageAdapter
+import com.ericho.coupleshare.constant.AdsConstant
 import com.ericho.coupleshare.frag.LocationShowFrag
 import com.ericho.coupleshare.interf.FabListener
 import com.ericho.coupleshare.interf.PermissionListener
@@ -22,6 +23,12 @@ import com.ericho.coupleshare.mvp.data.LoginRepository
 import com.ericho.coupleshare.mvp.presenter.LocationsPresenter
 import com.ericho.coupleshare.mvp.presenter.PhotoPresenter
 import com.ericho.coupleshare.service.LocationMonitorSer
+import com.ericho.coupleshare.util.loadRewardedVideoAd
+import com.ericho.coupleshare.util.showToastMessage
+import com.google.android.gms.ads.MobileAds
+import com.google.android.gms.ads.reward.RewardItem
+import com.google.android.gms.ads.reward.RewardedVideoAd
+import com.google.android.gms.ads.reward.RewardedVideoAdListener
 import timber.log.Timber
 
 
@@ -30,7 +37,7 @@ import timber.log.Timber
  * for project CoupleShare
  * package name com.ericho.coupleshare.act
  */
-class MainActivity3: BasePermissionActivity(), ViewPager.OnPageChangeListener  {
+class MainActivity3: BasePermissionActivity(), ViewPager.OnPageChangeListener ,RewardedVideoAdListener {
 
 
 
@@ -44,6 +51,7 @@ class MainActivity3: BasePermissionActivity(), ViewPager.OnPageChangeListener  {
     lateinit var mLocationPresenter:LocationsPresenter
     lateinit var mPhotoPresenter:PhotoPresenter
     lateinit var mPhotoPresenter1:PhotoPresenter
+    lateinit var mAd:RewardedVideoAd
 
     private var homePageAdapter: HomePageAdapter? = null
 
@@ -52,13 +60,8 @@ class MainActivity3: BasePermissionActivity(), ViewPager.OnPageChangeListener  {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         init()
-        val isLogined = getUserLogined()
-        if (!isLogined) {
-//            val intent = Intent(this, LoginAct::class.java)
-//            startActivityForResult(intent, REQ_LOGIN)
-        }else{
-            doNormalWork()
-        }
+
+        doNormalWork()
 
     }
 
@@ -92,6 +95,11 @@ class MainActivity3: BasePermissionActivity(), ViewPager.OnPageChangeListener  {
         //for presneter
         mLocationPresenter = LocationsPresenter(homePageAdapter!!.getItem(2) as LocationShowFrag)
         mLocationPresenter.start()
+
+        mAd = MobileAds.getRewardedVideoAdInstance(this)
+        mAd.rewardedVideoAdListener = this
+
+        this.loadRewardedVideoAd(AdsConstant.video_unit_id,mAd)
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -146,6 +154,53 @@ class MainActivity3: BasePermissionActivity(), ViewPager.OnPageChangeListener  {
             floatingActionButton.setOnClickListener(null)
             lis.onAttachFloatingActionListener(floatingActionButton)
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        mAd.resume(this)
+
+        if(mAd.isLoaded){
+            mAd.show()
+        }
+    }
+
+    override fun onPause() {
+        mAd.pause(this)
+        super.onPause()
+    }
+
+    override fun onDestroy() {
+        mAd.destroy(this)
+        super.onDestroy()
+    }
+
+    override fun onRewardedVideoAdClosed() {
+        this.showToastMessage("onRewardedVideoAdClosed")
+    }
+
+    override fun onRewardedVideoAdLeftApplication() {
+        this.showToastMessage("onRewardedVideoAdLeftApplication")
+    }
+
+    override fun onRewardedVideoAdLoaded() {
+        this.showToastMessage("onRewardedVideoAdLoaded")
+    }
+
+    override fun onRewardedVideoAdOpened() {
+        this.showToastMessage("onRewardedVideoAdOpened")
+    }
+
+    override fun onRewarded(p0: RewardItem?) {
+        this.showToastMessage("onRewarded")
+    }
+
+    override fun onRewardedVideoStarted() {
+        this.showToastMessage("onRewardedVideoStarted")
+    }
+
+    override fun onRewardedVideoAdFailedToLoad(p0: Int) {
+        this.showToastMessage("onRewardedVideoAdFailedToLoad")
     }
 
     override fun onPageScrollStateChanged(state: Int) {
