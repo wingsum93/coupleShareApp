@@ -7,9 +7,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import com.ericho.coupleshare.R
-import com.ericho.coupleshare.mvp.Photo
+import com.ericho.coupleshare.mvp.PhotoBo
 import android.widget.AdapterView.OnItemClickListener
-
+import com.bumptech.glide.Glide
+import com.ericho.coupleshare.util.NetworkUtil
 
 
 /**
@@ -17,7 +18,7 @@ import android.widget.AdapterView.OnItemClickListener
  * for project CoupleShare
  * package name com.ericho.coupleshare.adapter
  */
-class PhotoAdapter constructor(context: Context,items:List<Photo>?) : BaseRecyclerAdapter<Photo, PhotoAdapter.ViewHolder>(context, items){
+class PhotoAdapter constructor(context: Context,items:List<PhotoBo>?) : BaseRecyclerAdapter<PhotoBo, PhotoAdapter.ViewHolder>(context, items){
 
     private var mListener: OnItemClickListener? = null
 
@@ -36,7 +37,12 @@ class PhotoAdapter constructor(context: Context,items:List<Photo>?) : BaseRecycl
 
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.imageView.setImageResource(R.drawable.ic_menu_manage)
+        val item = items!!.get(position)
+        Glide
+                .with(getContext())
+                .load(NetworkUtil.getUrl(getContext(),item.suffixUrl!!))
+                .skipMemoryCache(true)
+                .into(holder.imageView)
         holder.imageView.setOnClickListener {
             mListener?.onItemClick(null,holder.itemView,position,getItemId(position))
         }

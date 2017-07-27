@@ -5,16 +5,10 @@ import android.graphics.Color
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.support.design.widget.FloatingActionButton
-import android.support.design.widget.Snackbar
 import android.support.v7.app.AppCompatActivity
-import android.support.v7.widget.Toolbar
-import android.view.View
-import android.widget.ProgressBar
-import butterknife.bindView
-
+import android.view.Window
+import android.view.WindowManager
 import com.ericho.coupleshare.R
-import com.ericho.coupleshare.util.IntentConstant
 import com.ldoublem.loadingviewlib.view.LVGhost
 
 class LoadingAct : AppCompatActivity() {
@@ -23,10 +17,12 @@ class LoadingAct : AppCompatActivity() {
     val mLvGhost :LVGhost by lazy { findViewById(R.id.lvGhost) as LVGhost }
     val handler:Handler = Handler(Looper.getMainLooper())
 
-    val mLoadingTimeMill :Long = 3 * 1000
+    val mLoadingTimeMill :Long = 1 * 1000
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        requestWindowFeature(Window.FEATURE_NO_TITLE)
+        window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN)
         setContentView(R.layout.activity_loading)
 
         init()

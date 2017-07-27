@@ -158,6 +158,13 @@ object NetworkUtil{
                 .build()
         return req
     }
+    fun photo_get(): Request {
+        val req:Request = Request.Builder()
+                .url(getUrl(App.context!!,WebAddress.API_PHOTO_VIEW))
+                .get()
+                .build()
+        return req
+    }
     fun photo_upload(file: File,tags:Array<String>?): Request {
         var tagString = ""
         if (tags?.isNotEmpty() ?:false) {

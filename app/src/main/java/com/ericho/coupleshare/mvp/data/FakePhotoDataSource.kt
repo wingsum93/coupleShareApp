@@ -1,6 +1,6 @@
 package com.ericho.coupleshare.mvp.data
 
-import com.ericho.coupleshare.mvp.Photo
+import com.ericho.coupleshare.mvp.PhotoBo
 import com.ericho.coupleshare.mvp.isNull
 
 /**
@@ -12,11 +12,11 @@ class FakePhotoDataSource constructor() : PhotoDataSource {
     
 
 
-    override fun getPhotos(callback: PhotoDataSource.LoadPhotoCallback): List<Photo> {
+    override fun getPhotos(callback: PhotoDataSource.LoadPhotoCallback): List<PhotoBo> {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
-    override fun addPhoto(photos: List<Photo>, callback: PhotoDataSource.AddPhotoCallback) {
+    override fun addPhoto(photos: List<PhotoBo>, callback: PhotoDataSource.AddPhotoCallback) {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 

@@ -12,7 +12,7 @@ interface PhotosAddContract{
         fun showImageGallery()
         fun showCamera()
 
-        fun showPhotoList(photos: List<Photo>)
+        fun showPhotoList(photos: List<PhotoBo>)
 
 
         fun showSyncing(sync:Boolean)

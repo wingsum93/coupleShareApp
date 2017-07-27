@@ -1,6 +1,8 @@
 package com.ericho.coupleshare.mvp
 
 import android.net.Uri
+import com.ericho.coupleshare.App
+import com.ericho.coupleshare.util.NetworkUtil
 
 /**
  * Use for display the status of user and their friend
@@ -15,6 +17,9 @@ open class StatusBo{
     var title:String? = null;
     var content:String? = null;
 
+    val fullPath:String get() {
+        return NetworkUtil.getUrl(App.context!!,suffix = photoUrlSuffix!!)
+    }
     companion object {
         fun template():ArrayList<StatusBo>{
             val list = ArrayList<StatusBo>()

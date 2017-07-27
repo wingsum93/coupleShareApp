@@ -5,32 +5,36 @@ import android.support.annotation.StringRes
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentPagerAdapter
+import android.support.v4.app.FragmentStatePagerAdapter
+import android.support.v4.view.PagerAdapter
 import com.ericho.coupleshare.R
 import com.ericho.coupleshare.frag.*
+import timber.log.Timber
 
 /**
  * Created by steve_000 on 8/7/2017.
  * for project CoupleShare
  * package name com.ericho.coupleshare.adapter
  */
-class HomePageAdapter constructor(fm:FragmentManager,context: Context):FragmentPagerAdapter(fm) {
+class HomePageAdapter constructor(fm:FragmentManager,context: Context):FragmentStatePagerAdapter(fm) {
 
     private var context:Context
 
-    private val f1:BaseFrag = PhotoFrag.newInstance();
-    private val f2:BaseFrag = StatusFrag.newInstance();
-    private val f3:LocationShowFrag = LocationShowFrag.newInstance();
+//    private val f1:BaseFrag = ;
+//    private val f2:BaseFrag = ;
+//    private val f3:LocationShowFrag = ;
     init {
         this.context = context
     }
 
     override fun getItem(position: Int): Fragment? {
+        Timber.d("getItem $position")
         when (position) {
-            0 -> return f1
-            1 -> return f2
-            2 -> return f3
+            0 -> return PhotoFrag.newInstance()
+            1 -> return StatusFrag.newInstance()
+            2 -> return LocationShowFrag.newInstance()
 
-            else -> return LocationShowFrag.newInstance()
+            else -> return null
         }
     }
 

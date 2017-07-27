@@ -41,11 +41,6 @@ class LocationShowFrag: SupportMapFragment(), OnMapReadyCallback, LocationsContr
         isActive = true
     }
 
-    override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
-        inflater!!.inflate(R.menu.change_server_address, menu)
-        super.onCreateOptionsMenu(menu, inflater)
-    }
-
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
     }

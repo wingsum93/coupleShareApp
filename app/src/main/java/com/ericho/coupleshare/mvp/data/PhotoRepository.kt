@@ -1,6 +1,6 @@
 package com.ericho.coupleshare.mvp.data
 
-import com.ericho.coupleshare.mvp.Photo
+import com.ericho.coupleshare.mvp.PhotoBo
 
 /**
  * Created by steve_000 on 4/7/2017.
@@ -16,11 +16,11 @@ constructor(dataSource:PhotoDataSource):PhotoDataSource{
     init {
         mRemoteDataSource = requireNotNull(dataSource)
     }
-    override fun getPhotos(callback: PhotoDataSource.LoadPhotoCallback): List<Photo> {
+    override fun getPhotos(callback: PhotoDataSource.LoadPhotoCallback): List<PhotoBo> {
         return mRemoteDataSource.getPhotos(callback)
     }
 
-    override fun addPhoto(photos: List<Photo>, callback: PhotoDataSource.AddPhotoCallback) {
+    override fun addPhoto(photos: List<PhotoBo>, callback: PhotoDataSource.AddPhotoCallback) {
         return mRemoteDataSource.addPhoto(photos, callback)
     }
 

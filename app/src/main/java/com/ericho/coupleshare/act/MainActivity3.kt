@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.FloatingActionButton
 import android.support.design.widget.TabLayout
+import android.support.v4.app.NavUtils
 import android.support.v4.view.ViewPager
 import android.support.v7.widget.Toolbar
 import android.view.Menu
@@ -46,7 +47,7 @@ class MainActivity3: BasePermissionActivity(), ViewPager.OnPageChangeListener ,R
     val viewPager: ViewPager by bindView(R.id.viewPager)
     val floatingActionButton: FloatingActionButton by bindView(R.id.fab)
 
-    val loginRepository:LoginRepository by lazy{Injection.provideLoginRepository(this)}
+    val loginRepository:LoginRepository by lazy{Injection.provideLoginRepository(this.applicationContext)}
 
     lateinit var mLocationPresenter:LocationsPresenter
     lateinit var mPhotoPresenter:PhotoPresenter
@@ -104,12 +105,18 @@ class MainActivity3: BasePermissionActivity(), ViewPager.OnPageChangeListener ,R
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.more, menu)
+        menuInflater.inflate(R.menu.logout, menu)
         return true
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         when (item?.itemId){
             R.id.more -> openSettingAct()
+            R.id.menu_logout -> {
+                loginRepository.logout(this)
+                startActivity(Intent(this,LoginAct::class.java))
+                this.finish()
+            }
         }
         return super.onOptionsItemSelected(item)
     }
@@ -148,7 +155,6 @@ class MainActivity3: BasePermissionActivity(), ViewPager.OnPageChangeListener ,R
         Timber.d("onPageSelected pos $position")
         val fragment = homePageAdapter?.getItem(position)
         if (fragment is FabListener) {
-            //// TODO: 3/7/2017
             val lis = fragment as FabListener
             floatingActionButton.visibility = View.VISIBLE
             floatingActionButton.setOnClickListener(null)

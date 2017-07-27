@@ -1,6 +1,7 @@
 package com.ericho.coupleshare.frag
 
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.support.design.widget.FloatingActionButton
 import android.support.v4.content.res.ResourcesCompat
@@ -10,6 +11,7 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
 import butterknife.bindView
 import com.ericho.coupleshare.App
 import com.ericho.coupleshare.R
@@ -22,6 +24,7 @@ import com.ericho.coupleshare.mvp.StatusBo
 import com.ericho.coupleshare.mvp.StatusContract
 import com.ericho.coupleshare.util.AHttpHelperB
 import com.ericho.coupleshare.util.NetworkUtil
+import com.ericho.coupleshare.util.ZoomImageHelper
 import com.ericho.coupleshare.util.safe
 import com.ericho.coupleshare.util.showToastMessage
 import com.google.gson.reflect.TypeToken
@@ -45,12 +48,13 @@ class StatusFrag:BaseFrag(), StatusContract.View, FabListener {
     private var presenter: StatusContract.Presenter? = null
     lateinit var httpHelper: AHttpHelperB<BaseResponse<StatusBo>>
     private var list: ArrayList<StatusBo> = ArrayList()
-
+    lateinit var zoomImageHelper:ZoomImageHelper
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
+
     }
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -69,6 +73,10 @@ class StatusFrag:BaseFrag(), StatusContract.View, FabListener {
 
         //listener
         adapter = StatusAdapter(activity, list)
+        adapter!!.imageClickListener = AdapterView.OnItemClickListener {
+            _, view, position, id ->
+            zoomImageHelper.zoomImageFromThumb(view, (list[position].fullPath))
+        }
         recyclerView.setLayoutManager(LinearLayoutManager(activity))
         recyclerView.setHasFixedSize(true)
         recyclerView.setAdapter(adapter)
@@ -91,7 +99,11 @@ class StatusFrag:BaseFrag(), StatusContract.View, FabListener {
                     adapter!!.notifyDataSetChanged()
                 }
                 .build()
-
+        zoomImageHelper = ZoomImageHelper.Builder(activity)
+                .setDuration(resources.getInteger(android.R.integer.config_shortAnimTime))
+                .setExpendViewId(R.id.expanded_image)
+                .setRootId(R.id.frameLayout)
+                .build()
         loadStatusList()
     }
 
@@ -112,12 +124,15 @@ class StatusFrag:BaseFrag(), StatusContract.View, FabListener {
     override fun onAttachFloatingActionListener(floatingActionButton: FloatingActionButton) {
         floatingActionButton.setImageDrawable(ResourcesCompat.getDrawable(App.context!!.resources, R.drawable.ic_add_white_24dp, null))
         floatingActionButton.setOnClickListener {
-            startActivity(Intent(activity, StatusAddAct_copy::class.java))
+            if (activity != null) {
+                startActivity(Intent(activity, StatusAddAct_copy::class.java))
+            }
         }
     }
 
     override fun onDestroyView() {
         EventBus.getDefault().unregister(this)
+        zoomImageHelper.onDestoryView()
         super.onDestroyView()
     }
 

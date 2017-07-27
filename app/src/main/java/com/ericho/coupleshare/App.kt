@@ -6,6 +6,8 @@ import com.facebook.stetho.Stetho
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.google.gson.JsonDeserializer
+import com.squareup.leakcanary.LeakCanary
+import com.squareup.leakcanary.RefWatcher
 import org.xutils.x
 import timber.log.Timber
 import java.util.*
@@ -18,6 +20,7 @@ import java.util.*
  */
 class App :Application() {
 
+    lateinit var refWatcher:RefWatcher
 
     override fun onCreate() {
         super.onCreate()
@@ -26,6 +29,16 @@ class App :Application() {
         x.Ext.init(this)
         x.Ext.setDebug(BuildConfig.DEBUG)
         Timber.plant(Timber.DebugTree())
+        if (LeakCanary.isInAnalyzerProcess(this)) {
+            // This process is dedicated to LeakCanary for heap analysis.
+            // You should not init your app in this process.
+            return;
+        }
+        if(BuildConfig.DEBUG) {
+            refWatcher = LeakCanary.install(this)
+        }else{
+            refWatcher = RefWatcher.DISABLED
+        }
     }
 
     override fun onTerminate() {
@@ -40,6 +53,10 @@ class App :Application() {
                     .create()
         }
 
+        fun getRefWatcher(context: Context): RefWatcher {
+            val application = context.applicationContext as App
+            return application.refWatcher
+        }
 
     }
 }

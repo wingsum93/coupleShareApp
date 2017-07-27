@@ -24,7 +24,7 @@ fun Fragment.showToastMessage(  text:String){
 }
 fun AppCompatActivity.loadRewardedVideoAd(  ads_id:String,mAd:RewardedVideoAd):Unit{
     val req = AdRequest.Builder()
-            .addTestDevice("54464B6ADF6F4418B70974F9BC194FC0")
+//            .addTestDevice("54464B6ADF6F4418B70974F9BC194FC0")
             .build()
     mAd.loadAd(ads_id, req)
 }

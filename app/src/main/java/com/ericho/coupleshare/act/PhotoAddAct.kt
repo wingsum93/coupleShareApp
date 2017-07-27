@@ -23,7 +23,7 @@ import butterknife.bindView
 import com.ericho.coupleshare.R
 import com.ericho.coupleshare.adapter.UploadPhotoAdapter
 import com.ericho.coupleshare.frag.AlertDialogFrag
-import com.ericho.coupleshare.mvp.Photo
+import com.ericho.coupleshare.mvp.PhotoBo
 import com.ericho.coupleshare.mvp.PhotosAddContract
 import com.ericho.coupleshare.mvp.presenter.AddPhotoPresenter
 import com.ericho.coupleshare.service.UploadPhotoService
@@ -67,7 +67,7 @@ class PhotoAddAct : BasePermissionActivity(), PhotosAddContract.View {
     private fun init(bundle:Bundle?) {
         if(bundle!=null){
             val x :ArrayList<Uri>? = bundle.getParcelableArrayList<Uri>("listdata")
-            uris.addAll(x.safe)
+            uris.addAll(x.safe())
         }
         textView.text = getString(R.string.loading)
         textView.visibility = View.GONE
@@ -197,7 +197,7 @@ class PhotoAddAct : BasePermissionActivity(), PhotosAddContract.View {
         textView.text =txt
     }
 
-    override fun showPhotoList(photos: List<Photo>) {
+    override fun showPhotoList(photos: List<PhotoBo>) {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 

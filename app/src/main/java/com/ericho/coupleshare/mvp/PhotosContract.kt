@@ -10,7 +10,7 @@ interface PhotosContract{
     interface View : BaseView<Presenter> {
         fun showAddPhotoUI()
 
-        fun showPhotoList(photos: List<Photo>)
+        fun showPhotoList(photos: List<PhotoBo>)
 
     }
 

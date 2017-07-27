@@ -5,7 +5,7 @@ package com.ericho.coupleshare.mvp
  * for project CoupleShare
  * package name com.ericho.coupleshare.mvp
  */
-fun Photo.isSis():Boolean{
+fun PhotoBo.isSis():Boolean{
     return false
 }
 

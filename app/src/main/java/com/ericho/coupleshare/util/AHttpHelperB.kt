@@ -14,7 +14,7 @@ import java.io.IOException
  * for project coupleShareApp
  * package name com.ericho.coupleshare.util
  */
-class AHttpHelperB<T :BaseResponse<*> >(
+class AHttpHelperB<T :BaseResponse<*> >private constructor(
 
 
         val failureMethod: ((Call,IOException) -> Unit),//run in main thread
@@ -23,15 +23,17 @@ class AHttpHelperB<T :BaseResponse<*> >(
 ){
 
     val handler = Handler(Looper.getMainLooper())
+    val mRunningCalls = HashSet<Call>()
 
 
 
     fun run(request: Request):Unit{
 
         val call = NetworkUtil.execute(request = request)
-
+        mRunningCalls.add(call)
         call.enqueue(object :Callback{
             override fun onFailure(okCall: Call?, e: IOException?) {
+                mRunningCalls.remove(call)
                 handler.post {
                     failureMethod.invoke(okCall!!,e!!)
                 }
@@ -50,6 +52,7 @@ class AHttpHelperB<T :BaseResponse<*> >(
                     onFailure(okhttpCall!!,IOException(res.errorMessage))
                     return
                 }else{
+                    mRunningCalls.remove(call)
                     //success
                     handler.post { successMethod.invoke(okhttpCall!!,res) }
                 }

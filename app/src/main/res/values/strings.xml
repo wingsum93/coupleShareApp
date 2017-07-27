@@ -116,4 +116,5 @@
     <string name="success">Success</string>
     <string name="upload_success">Upload Success</string>
     <string name="title_activity_loading">LoadingAct</string>
+    <string name="logout">Logout</string>
 </resources>

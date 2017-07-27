@@ -25,22 +25,24 @@
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
-
-        <activity
-            android:name=".act.MainActivity3"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar">
-
-        </activity>
         <activity
             android:name=".act.LoginAct"
             android:screenOrientation="portrait" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".act.MainActivity3"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:parentActivityName=".act.LoginAct">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+            </intent-filter>
+        </activity>
+
         <activity
             android:name=".act.RegisterAct"
             android:screenOrientation="portrait" />
@@ -88,7 +90,9 @@
         <activity
             android:name=".act.StatusAddAct_copy"
             android:screenOrientation="portrait" />
-
+        <activity
+            android:name=".act.TestHoldAct"
+            android:screenOrientation="portrait" />
 
 
         <activity

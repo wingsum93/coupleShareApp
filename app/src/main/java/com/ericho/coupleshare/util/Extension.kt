@@ -41,19 +41,7 @@ val Location.toLocationTo: LocationTo
         x.uploadBy = "eriii"
         return x
     }
-val <T> ArrayList<T>?.safe :ArrayList<T>
-    get() {
-        if (this == null)
-            return ArrayList<T>()
-        else
-            return this
-    }
-fun List<Uri>.toFileList() :List<File>{
-    return this.map { File(it.path) }
-}
-fun Uri.toOpenStream() :InputStream{
-    return App.context!!.contentResolver.openInputStream(this)
-}
+
 val Int.float:Float
     get() {return this.toFloat()}
 
@@ -66,3 +54,5 @@ fun Context.getUrl(urlSuffix:String) :String{
     return ServerAddressUtil.getServerAddress(this) + urlSuffix
 }
 fun <T> List<T>?.safe() :List<T> = if(this == null) ArrayList<T>()else this
+
+

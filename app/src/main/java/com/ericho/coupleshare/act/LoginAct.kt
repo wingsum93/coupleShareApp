@@ -6,6 +6,8 @@ import android.support.v7.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.view.Window
+import android.view.WindowManager
 import android.view.inputmethod.EditorInfo
 import android.widget.Button
 import android.widget.EditText
@@ -53,7 +55,7 @@ class LoginAct:AppCompatActivity(), View.OnClickListener, LoginContract.View{
     var serverOn = false
 
     private var mLoginPresenter: LoginContract.Presenter? = null
-    val loginRepository: LoginRepository by lazy{Injection.provideLoginRepository(this)}
+    val loginRepository: LoginRepository by lazy{Injection.provideLoginRepository(this.applicationContext)}
 
     companion object {
         private val tag = "LoginAct"
@@ -70,7 +72,7 @@ class LoginAct:AppCompatActivity(), View.OnClickListener, LoginContract.View{
     private fun init() {
 
         Timber.d("init")
-        mLoginPresenter = LoginPresenter(Injection.provideLoginRepository(this), this)
+        mLoginPresenter = LoginPresenter(Injection.provideLoginRepository(applicationContext), this)
         mLoginPresenter?.start()
         mLoginPresenter?.registerOnTextChangeListener(edt_username, edt_pw,btn_login)
 
@@ -138,7 +140,6 @@ class LoginAct:AppCompatActivity(), View.OnClickListener, LoginContract.View{
 
     override fun showLoginSuccess() {
         runOnUiThread {
-            Toast.makeText(this, "Login Success", Toast.LENGTH_SHORT).show()
             val intent = Intent(this,LoadingAct::class.java)
             intent.putExtra(IntentConstant.LOGIN_NAME,edt_username.text.toString())
             intent.putExtra(IntentConstant.LOGIN_PASSWORD,edt_password.text.toString())
