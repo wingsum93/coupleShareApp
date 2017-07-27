@@ -5,7 +5,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.FloatingActionButton
 import android.support.design.widget.TabLayout
-import android.support.v4.app.NavUtils
 import android.support.v4.view.ViewPager
 import android.support.v7.widget.Toolbar
 import android.view.Menu
@@ -16,20 +15,12 @@ import butterknife.bindView
 import com.ericho.coupleshare.Injection
 import com.ericho.coupleshare.R
 import com.ericho.coupleshare.adapter.HomePageAdapter
-import com.ericho.coupleshare.constant.AdsConstant
 import com.ericho.coupleshare.frag.LocationShowFrag
 import com.ericho.coupleshare.interf.FabListener
 import com.ericho.coupleshare.interf.PermissionListener
 import com.ericho.coupleshare.mvp.data.LoginRepository
 import com.ericho.coupleshare.mvp.presenter.LocationsPresenter
-import com.ericho.coupleshare.mvp.presenter.PhotoPresenter
 import com.ericho.coupleshare.service.LocationMonitorSer
-import com.ericho.coupleshare.util.loadRewardedVideoAd
-import com.ericho.coupleshare.util.showToastMessage
-import com.google.android.gms.ads.MobileAds
-import com.google.android.gms.ads.reward.RewardItem
-import com.google.android.gms.ads.reward.RewardedVideoAd
-import com.google.android.gms.ads.reward.RewardedVideoAdListener
 import timber.log.Timber
 
 
@@ -38,7 +29,7 @@ import timber.log.Timber
  * for project CoupleShare
  * package name com.ericho.coupleshare.act
  */
-class MainActivity3: BasePermissionActivity(), ViewPager.OnPageChangeListener ,RewardedVideoAdListener {
+class MainActivity3: BasePermissionActivity(), ViewPager.OnPageChangeListener  {
 
 
 
@@ -47,12 +38,9 @@ class MainActivity3: BasePermissionActivity(), ViewPager.OnPageChangeListener ,R
     val viewPager: ViewPager by bindView(R.id.viewPager)
     val floatingActionButton: FloatingActionButton by bindView(R.id.fab)
 
-    val loginRepository:LoginRepository by lazy{Injection.provideLoginRepository(this.applicationContext)}
+    var loginRepository:LoginRepository? = null
 
-    lateinit var mLocationPresenter:LocationsPresenter
-    lateinit var mPhotoPresenter:PhotoPresenter
-    lateinit var mPhotoPresenter1:PhotoPresenter
-    lateinit var mAd:RewardedVideoAd
+    var mLocationPresenter:LocationsPresenter? = null
 
     private var homePageAdapter: HomePageAdapter? = null
 
@@ -95,12 +83,10 @@ class MainActivity3: BasePermissionActivity(), ViewPager.OnPageChangeListener ,R
 
         //for presneter
         mLocationPresenter = LocationsPresenter(homePageAdapter!!.getItem(2) as LocationShowFrag)
-        mLocationPresenter.start()
+        mLocationPresenter!!.start()
 
-        mAd = MobileAds.getRewardedVideoAdInstance(this)
-        mAd.rewardedVideoAdListener = this
+        loginRepository = Injection.provideLoginRepository(this.applicationContext)
 
-        this.loadRewardedVideoAd(AdsConstant.video_unit_id,mAd)
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -113,7 +99,7 @@ class MainActivity3: BasePermissionActivity(), ViewPager.OnPageChangeListener ,R
         when (item?.itemId){
             R.id.more -> openSettingAct()
             R.id.menu_logout -> {
-                loginRepository.logout(this)
+                loginRepository?.logout(this)
                 startActivity(Intent(this,LoginAct::class.java))
                 this.finish()
             }
@@ -127,7 +113,7 @@ class MainActivity3: BasePermissionActivity(), ViewPager.OnPageChangeListener ,R
     }
 
     private fun getUserLogined(): Boolean {
-        return loginRepository.isLogin(this)
+        return loginRepository!!.isLogin(this)
     }
 
 
@@ -164,50 +150,19 @@ class MainActivity3: BasePermissionActivity(), ViewPager.OnPageChangeListener ,R
 
     override fun onResume() {
         super.onResume()
-        mAd.resume(this)
 
-        if(mAd.isLoaded){
-            mAd.show()
-        }
+
     }
 
     override fun onPause() {
-        mAd.pause(this)
         super.onPause()
     }
 
     override fun onDestroy() {
-        mAd.destroy(this)
         super.onDestroy()
     }
 
-    override fun onRewardedVideoAdClosed() {
-        this.showToastMessage("onRewardedVideoAdClosed")
-    }
 
-    override fun onRewardedVideoAdLeftApplication() {
-        this.showToastMessage("onRewardedVideoAdLeftApplication")
-    }
-
-    override fun onRewardedVideoAdLoaded() {
-        this.showToastMessage("onRewardedVideoAdLoaded")
-    }
-
-    override fun onRewardedVideoAdOpened() {
-        this.showToastMessage("onRewardedVideoAdOpened")
-    }
-
-    override fun onRewarded(p0: RewardItem?) {
-        this.showToastMessage("onRewarded")
-    }
-
-    override fun onRewardedVideoStarted() {
-        this.showToastMessage("onRewardedVideoStarted")
-    }
-
-    override fun onRewardedVideoAdFailedToLoad(p0: Int) {
-        this.showToastMessage("onRewardedVideoAdFailedToLoad")
-    }
 
     override fun onPageScrollStateChanged(state: Int) {
 

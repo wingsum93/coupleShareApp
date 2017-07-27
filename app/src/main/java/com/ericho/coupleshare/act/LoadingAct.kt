@@ -14,7 +14,7 @@ import com.ldoublem.loadingviewlib.view.LVGhost
 class LoadingAct : AppCompatActivity() {
 
 //    val progressBar :ProgressBar by bindView(R.id.progressBar)
-    val mLvGhost :LVGhost by lazy { findViewById(R.id.lvGhost) as LVGhost }
+    var mLvGhost :LVGhost? = null
     val handler:Handler = Handler(Looper.getMainLooper())
 
     val mLoadingTimeMill :Long = 1 * 1000
@@ -39,9 +39,16 @@ class LoadingAct : AppCompatActivity() {
             this.finish()
 
         },mLoadingTimeMill)
+        mLvGhost = findViewById(R.id.lvGhost) as LVGhost
+        mLvGhost!!.setHandColor(Color.BLACK)
+        mLvGhost!!.setViewColor(Color.WHITE)
+        mLvGhost!!.startAnim()
 
-        mLvGhost.setHandColor(Color.BLACK)
-        mLvGhost.setViewColor(Color.WHITE)
-        mLvGhost.startAnim()
+    }
+
+    override fun onDestroy() {
+        mLvGhost?.destroyDrawingCache()
+        mLvGhost?.stopAnim()
+        super.onDestroy()
     }
 }

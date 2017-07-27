@@ -2,11 +2,7 @@ package com.ericho.coupleshare.frag
 
 import android.os.Bundle
 import android.support.design.widget.FloatingActionButton
-import android.view.Menu
-import android.view.MenuInflater
 import android.view.View
-import android.widget.Toast
-import com.ericho.coupleshare.R
 import com.ericho.coupleshare.contant.LatLong
 import com.ericho.coupleshare.interf.FabListener
 import com.ericho.coupleshare.mvp.Location
@@ -28,7 +24,7 @@ import timber.log.Timber
 class LocationShowFrag: SupportMapFragment(), OnMapReadyCallback, LocationsContract.View, FabListener {
     override var isActive: Boolean = false
 
-    lateinit var mPresenter: LocationsContract.Presenter
+    var mPresenter: LocationsContract.Presenter? = null
 
     override fun onCreate(bundle: Bundle?) {
         super.onCreate(bundle)

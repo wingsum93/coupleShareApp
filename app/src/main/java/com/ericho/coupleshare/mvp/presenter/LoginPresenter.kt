@@ -22,9 +22,9 @@ class LoginPresenter: LoginContract.Presenter {
 
     private var mLoginView: LoginContract.View
 
-    private lateinit var mUsernameEditText: EditText
-    private lateinit var mPasswordEditText: EditText
-    private lateinit var mLoginBtn: Button
+    private var mUsernameEditText: EditText? = null
+    private var mPasswordEditText: EditText? = null
+    private var mLoginBtn: Button? = null
     private var observable: Observable<Boolean>? = null
     private var disposable: Disposable? = null
     private var mHandler: Handler
@@ -94,16 +94,16 @@ class LoginPresenter: LoginContract.Presenter {
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
             }
         }
-        mUsernameEditText.addTextChangedListener(textWatcher)
-        mPasswordEditText.addTextChangedListener(textWatcher)
+        mUsernameEditText?.addTextChangedListener(textWatcher)
+        mPasswordEditText?.addTextChangedListener(textWatcher)
     }
 
     fun checkShouldEnableLogin(){
         val enableBtn =
-                mUsernameEditText.text.isNotBlank() &&
-                        mPasswordEditText.text.isNotBlank()
+                mUsernameEditText!!.text.isNotBlank() &&
+                        mPasswordEditText!!.text.isNotBlank()
 
-        mLoginBtn.isEnabled = enableBtn
+        mLoginBtn?.isEnabled = enableBtn
     }
 
     override fun displayChangeServerAddressUi() {

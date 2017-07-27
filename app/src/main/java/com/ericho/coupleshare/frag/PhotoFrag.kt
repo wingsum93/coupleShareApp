@@ -18,7 +18,6 @@ import butterknife.bindView
 import com.ericho.coupleshare.App
 import com.ericho.coupleshare.R
 import com.ericho.coupleshare.act.PhotoAddAct
-import com.ericho.coupleshare.act.TestHoldAct
 import com.ericho.coupleshare.adapter.PhotoAdapter
 import com.ericho.coupleshare.eventbus.PhotoUploadEvent
 import com.ericho.coupleshare.http.model.BaseResponse
@@ -38,7 +37,6 @@ import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 import timber.log.Timber
-import kotlin.collections.ArrayList
 
 /**
  * Created by steve_000 on 8/7/2017.
@@ -54,9 +52,9 @@ class PhotoFrag:BaseFrag(), PhotosContract.View, FabListener,SwipeRefreshLayout.
     private var adapter: PhotoAdapter? = null
     private var smartAdapter: SmartRecyclerAdapter? = null
 
-    private lateinit var mPresenter: PhotosContract.Presenter
-    lateinit var httpHelper :AHttpHelperB<BaseResponse<PhotoBo>>
-    lateinit var zoomImageHelper :ZoomImageHelper
+    private var mPresenter: PhotosContract.Presenter? = null
+    private var httpHelper :AHttpHelperB<BaseResponse<PhotoBo>>? = null
+    private var zoomImageHelper :ZoomImageHelper? = null
 
     private var list: ArrayList<PhotoBo> = ArrayList<PhotoBo>()
     var mFirstCreate = true
@@ -101,7 +99,7 @@ class PhotoFrag:BaseFrag(), PhotosContract.View, FabListener,SwipeRefreshLayout.
         if(adapter == null) {
             adapter = PhotoAdapter(activity, list)
             adapter!!.setOnItemClickListener(AdapterView.OnItemClickListener { _, view, position, id ->
-                zoomImageHelper.zoomImageFromThumb(view,urlPath = list[position].fullPath)
+                zoomImageHelper?.zoomImageFromThumb(view,urlPath = list[position].fullPath)
             })
         }
         if(smartAdapter == null) {
@@ -112,7 +110,7 @@ class PhotoFrag:BaseFrag(), PhotosContract.View, FabListener,SwipeRefreshLayout.
         swipeRefreshLayout.setOnRefreshListener(this)
 
         mPresenter = PhotoPresenter(this)
-        mPresenter.start()
+        mPresenter?.start()
 
         loadPhotoList()
 
@@ -125,7 +123,7 @@ class PhotoFrag:BaseFrag(), PhotosContract.View, FabListener,SwipeRefreshLayout.
 
     private fun loadPhotoList() {
 
-        httpHelper.run(NetworkUtil.photo_get())
+        httpHelper?.run(NetworkUtil.photo_get())
     }
 
 
@@ -199,7 +197,7 @@ class PhotoFrag:BaseFrag(), PhotosContract.View, FabListener,SwipeRefreshLayout.
         EventBus.getDefault().unregister(this)
         Timber.d("onDestroyView")
         mFirstCreate = false
-        zoomImageHelper.onDestoryView()
+        zoomImageHelper?.onDestoryView()
         recyclerView.adapter = null
         super.onDestroyView()
     }

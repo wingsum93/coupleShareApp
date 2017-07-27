@@ -1,8 +1,6 @@
 package com.ericho.coupleshare.frag
 
-import android.app.Activity
 import android.support.v4.app.Fragment
-import com.ericho.coupleshare.App
 
 
 /**

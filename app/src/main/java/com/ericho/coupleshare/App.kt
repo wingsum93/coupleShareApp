@@ -20,7 +20,7 @@ import java.util.*
  */
 class App :Application() {
 
-    lateinit var refWatcher:RefWatcher
+    var refWatcher:RefWatcher? = null
 
     override fun onCreate() {
         super.onCreate()
@@ -55,7 +55,7 @@ class App :Application() {
 
         fun getRefWatcher(context: Context): RefWatcher {
             val application = context.applicationContext as App
-            return application.refWatcher
+            return application.refWatcher!!
         }
 
     }

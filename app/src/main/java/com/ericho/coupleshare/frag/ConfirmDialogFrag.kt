@@ -1,7 +1,6 @@
 package com.ericho.coupleshare.frag
 
 import android.app.Dialog
-import android.content.DialogInterface
 import android.os.Bundle
 import android.support.v4.app.DialogFragment
 import android.support.v7.app.AlertDialog
@@ -14,8 +13,8 @@ import android.support.v7.app.AlertDialog
  */
 class ConfirmDialogFrag : DialogFragment(){
 
-    lateinit var title:String
-    lateinit var message:String
+    var title:String? = null
+    var message:String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

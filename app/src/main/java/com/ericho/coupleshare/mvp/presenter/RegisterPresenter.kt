@@ -22,9 +22,9 @@ class RegisterPresenter : RegisterContract.Presenter {
 
     private var mView: RegisterContract.View
 
-    private lateinit var mUsernameEditText: EditText
-    private lateinit var mPasswordEditText: EditText
-    private lateinit var loginButton: Button
+    private var mUsernameEditText: EditText? = null
+    private var mPasswordEditText: EditText? = null
+    private var loginButton: Button? = null
     private var disposable: Disposable? = null
     private var mHandler: Handler
 
@@ -45,16 +45,16 @@ class RegisterPresenter : RegisterContract.Presenter {
 
         mView.showRegisterButtonState(false)
         mView.showLoadingIndicator(true)
-        mUsernameEditText.isEnabled = false
-        mPasswordEditText.isEnabled = false
+        mUsernameEditText?.isEnabled = false
+        mPasswordEditText?.isEnabled = false
 
         loginRepository.register(username, password, object : LoginDataSource.RegisterCallback {
             override fun onRegisterSuccess() {
                 mHandler.post {
                     mView.showRegisterButtonState(true)
                     mView.showLoadingIndicator(false)
-                    mUsernameEditText.isEnabled = true
-                    mPasswordEditText.isEnabled = true
+                    mUsernameEditText?.isEnabled = true
+                    mPasswordEditText?.isEnabled = true
                     //
                     mView.showRegisterSuccess()
                 }
@@ -65,8 +65,8 @@ class RegisterPresenter : RegisterContract.Presenter {
                 mHandler.post{
                     mView.showRegisterButtonState(true)
                     mView.showLoadingIndicator(false)
-                    mUsernameEditText.isEnabled = true
-                    mPasswordEditText.isEnabled = true
+                    mUsernameEditText?.isEnabled = true
+                    mPasswordEditText?.isEnabled = true
                     //
                     mView.showRegisterFailure(t.message)
                 }
@@ -94,17 +94,17 @@ class RegisterPresenter : RegisterContract.Presenter {
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
             }
         }
-        mUsernameEditText.addTextChangedListener(textWatcher)
-        mPasswordEditText.addTextChangedListener(textWatcher)
+        mUsernameEditText?.addTextChangedListener(textWatcher)
+        mPasswordEditText?.addTextChangedListener(textWatcher)
     }
 
 
     fun checkShouldEnableLogin(){
         val enableBtn =
-        mUsernameEditText.text.isNotBlank() &&
-        mPasswordEditText.text.isNotBlank()
+        mUsernameEditText!!.text.isNotBlank() &&
+        mPasswordEditText!!.text.isNotBlank()
 
-        loginButton.isEnabled = enableBtn
+        loginButton!!.isEnabled = enableBtn
     }
 
     override fun destroy() {

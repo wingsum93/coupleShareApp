@@ -16,7 +16,7 @@ import timber.log.Timber
  * for project CoupleShare
  * package name com.ericho.coupleshare.adapter
  */
-class HomePageAdapter constructor(fm:FragmentManager,context: Context):FragmentStatePagerAdapter(fm) {
+class HomePageAdapter constructor(fm:FragmentManager,context: Context):FragmentPagerAdapter(fm) {
 
     private var context:Context
 

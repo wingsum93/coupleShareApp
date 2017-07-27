@@ -1,7 +1,6 @@
 package com.ericho.coupleshare.frag
 
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.support.design.widget.FloatingActionButton
 import android.support.v4.content.res.ResourcesCompat
@@ -32,7 +31,6 @@ import okhttp3.Request
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import timber.log.Timber
-import kotlin.collections.ArrayList
 
 /**
  * Created by steve_000 on 8/7/2017.
@@ -46,9 +44,9 @@ class StatusFrag:BaseFrag(), StatusContract.View, FabListener {
     private var adapter: StatusAdapter? = null
 
     private var presenter: StatusContract.Presenter? = null
-    lateinit var httpHelper: AHttpHelperB<BaseResponse<StatusBo>>
+    private var httpHelper: AHttpHelperB<BaseResponse<StatusBo>>? = null
     private var list: ArrayList<StatusBo> = ArrayList()
-    lateinit var zoomImageHelper:ZoomImageHelper
+    private var zoomImageHelper:ZoomImageHelper? = null
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -75,7 +73,7 @@ class StatusFrag:BaseFrag(), StatusContract.View, FabListener {
         adapter = StatusAdapter(activity, list)
         adapter!!.imageClickListener = AdapterView.OnItemClickListener {
             _, view, position, id ->
-            zoomImageHelper.zoomImageFromThumb(view, (list[position].fullPath))
+            zoomImageHelper?.zoomImageFromThumb(view, (list[position].fullPath))
         }
         recyclerView.setLayoutManager(LinearLayoutManager(activity))
         recyclerView.setHasFixedSize(true)
@@ -110,7 +108,7 @@ class StatusFrag:BaseFrag(), StatusContract.View, FabListener {
     fun loadStatusList(){
 
         val request: Request = NetworkUtil.status_get()
-        httpHelper.run(request)
+        httpHelper?.run(request)
     }
     @Subscribe()
     fun onStatusUpdate(event:StatusEvent){
@@ -132,7 +130,7 @@ class StatusFrag:BaseFrag(), StatusContract.View, FabListener {
 
     override fun onDestroyView() {
         EventBus.getDefault().unregister(this)
-        zoomImageHelper.onDestoryView()
+        zoomImageHelper?.onDestoryView()
         super.onDestroyView()
     }
 
