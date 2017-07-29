@@ -1,15 +1,16 @@
 package com.ericho.coupleshare.frag
 
+
 import android.os.Bundle
-import android.support.design.widget.FloatingActionButton
+import android.support.v4.app.LoaderManager
+import android.support.v4.content.Loader
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import com.ericho.coupleshare.R
 import com.ericho.coupleshare.contant.LatLong
-import com.ericho.coupleshare.db.Dao
-import com.ericho.coupleshare.interf.FabListener
+import com.ericho.coupleshare.http.LocationHttpLoader
 import com.ericho.coupleshare.model.LocationTo
 import com.ericho.coupleshare.mvp.Location
 import com.ericho.coupleshare.mvp.LocationsContract
@@ -33,6 +34,8 @@ class LocationShowFrag: SupportMapFragment(), OnMapReadyCallback, LocationsContr
     var mPresenter: LocationsContract.Presenter? = null
 
     var googleMap:GoogleMap? = null
+
+
     override fun onCreate(bundle: Bundle?) {
         super.onCreate(bundle)
         setHasOptionsMenu(true)
@@ -41,23 +44,13 @@ class LocationShowFrag: SupportMapFragment(), OnMapReadyCallback, LocationsContr
     override fun onMapReady(googleMap: GoogleMap) {
         this.googleMap = googleMap
         googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(LatLng(LatLong.HK_C_LAT, LatLong.HK_C_LONG), 10f))
-        googleMap.addMarker(MarkerOptions()
-                .position(LatLng(22.309111, 114.174993)).title("HK")
-                .snippet("123"))
-        isActive = true
-
-        val list:List<LocationTo> = Dao.getInstance().getLocationToList()
-        list.forEach {
-            locationTo ->
-            val ll = LatLng(locationTo.latitude!!,locationTo.longitude!!)
-            googleMap.addMarker(MarkerOptions()
-                    .position(ll).title(locationTo.id.toString())
-                    .snippet("accuracy= ${locationTo.accurate}"))
-        }
+        loaderManager?.restartLoader(LOADER_ID,null,loaderCallback)
+        Timber.d("loaderManager is $loaderManager")
     }
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
     }
 
     //my method
@@ -74,7 +67,12 @@ class LocationShowFrag: SupportMapFragment(), OnMapReadyCallback, LocationsContr
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         when(item!!.itemId){
             R.id.clear ->{
-                googleMap?.clear()
+                val b = LocationHttpLoader.BundleBuilder()
+
+                b.includeFriendData = true
+                b.locationPeriod = LocationHttpLoader.LocationPeriod.ONE_DAY
+
+                loaderManager.restartLoader(LOADER_ID,b.build(),loaderCallback)
                 return true
             }
             else ->return super.onOptionsItemSelected(item)
@@ -107,7 +105,50 @@ class LocationShowFrag: SupportMapFragment(), OnMapReadyCallback, LocationsContr
 
     }
 
+    override fun onDestroyView() {
+
+        super.onDestroyView()
+    }
+
+    override fun onDestroy() {
+        loaderManager.destroyLoader(LOADER_ID)
+        super.onDestroy()
+    }
+
+    var loaderCallback   :LoaderManager.LoaderCallbacks<List<LocationTo>> = object :LoaderManager.LoaderCallbacks<List<LocationTo>>{
+        override fun onCreateLoader(id: Int, args: Bundle?): Loader<List<LocationTo>> {
+            when(id){
+                LOADER_ID -> {
+                    val x = LocationHttpLoader.from(activity,args)
+                    Timber.d("onCreateLoader")
+                    x.startLoading()
+                    return x
+                }else ->throw UnsupportedOperationException("")
+            }
+
+        }
+
+        override fun onLoaderReset(loader: android.support.v4.content.Loader<List<LocationTo>>?) {
+            Timber.d("onLoaderReset")
+            googleMap?.clear()
+        }
+
+        override fun onLoadFinished(loader: android.support.v4.content.Loader<List<LocationTo>>?, data: List<LocationTo>?) {
+            Timber.d("onLoadFinished loader $loader .. data $data")
+            data?.forEach {
+                locationTo ->
+                val ll = LatLng(locationTo.latitude!!,locationTo.longitude!!)
+                googleMap?.addMarker(MarkerOptions()
+                        .position(ll).title(locationTo.id.toString())
+                        .snippet("accuracy= ${locationTo.accurate}"))
+            }
+        }
+    }
+
+
+
     companion object {
+        val LOADER_ID = 155
         @JvmStatic
         fun newInstance(): LocationShowFrag {
             val frag = LocationShowFrag()
