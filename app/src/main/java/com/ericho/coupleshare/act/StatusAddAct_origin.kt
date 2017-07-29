@@ -100,7 +100,9 @@ class StatusAddAct_origin : BasePermissionActivity() {
     }
     fun loadImageBitmapFromUri(){
         val bitmap = contentResolver.openInputStream(item.uri)
-        Glide.with(this).load(item.uri).into(imageView)
+        Glide.with(this)
+                .load(item.uri)
+                .skipMemoryCache(true).into(imageView)
     }
 
     fun save(){
@@ -140,6 +142,7 @@ class StatusAddAct_origin : BasePermissionActivity() {
                 R.id.expanded_image) as ImageView
         Glide.with(this)
                 .load(imageUri)
+                .skipMemoryCache(true)
                 .into(expandedImageView)
 
         // Calculate the starting and ending bounds for the zoomed-in image.

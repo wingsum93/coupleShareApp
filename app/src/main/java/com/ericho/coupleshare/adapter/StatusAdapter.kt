@@ -34,6 +34,7 @@ class StatusAdapter constructor(context: Context, items:List<StatusBo>?) : BaseR
         val item = items!!.get(position)
         Glide.with(getContext())
                 .load(getContext().getUrl(item.photoUrlSuffix!!))
+                .skipMemoryCache(true)
                 .dontAnimate()
                 .into(holder.imageView)
 

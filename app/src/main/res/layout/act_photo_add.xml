@@ -5,6 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:id="@+id/root"
     tools:context="com.ericho.coupleshare.act.PhotoAddAct">
 
     <LinearLayout
@@ -46,4 +47,11 @@
         android:layout_gravity="bottom|right|end"
         app:srcCompat="@drawable/ic_add_white_24dp"
         android:layout_margin="@dimen/fab_margin" />
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/photo_expand"
+        android:src="@drawable/girl2"
+        android:visibility="gone"
+        android:scaleType="fitCenter"/>
 </android.support.design.widget.CoordinatorLayout>

@@ -44,4 +44,7 @@ class LocationTo {
     @SerializedName("collectDate")
     @Column(name = "date")
     var date: Date? = null
+    @SerializedName("sync")
+    @Column(name = "sync")
+    var sync:Boolean = false
 }

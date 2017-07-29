@@ -33,7 +33,7 @@ class UploadPhotoService :Service() {
 
 
 
-        return START_STICKY
+        return START_NOT_STICKY
     }
 
     override fun onBind(intent: Intent?): IBinder {
@@ -52,15 +52,13 @@ class UploadPhotoService :Service() {
 
     fun uploadImage( files:List<File>){
         val task = UploadPhotoAsyncTask()
-//        task.executeOnExecutor(AsyncTask.SERIAL_EXECUTOR,files)
-//        task.execute(files)
         task.fileList = files
         task.execute()
     }
 
     private class UploadPhotoAsyncTask : AsyncTask<File, String, Boolean>(){
 
-        var fileList:List<File>? = null
+        var  fileList:List<File>? = null
 
         override fun onPreExecute() {
             EventBus.getDefault().post(PhotoUploadEvent(0,0))
@@ -68,19 +66,20 @@ class UploadPhotoService :Service() {
         override fun doInBackground(vararg params: File): Boolean {
 
             if(fileList!!.isEmpty()) throw Exception("param required")
+            val totalCount = fileList!!.size
             //background
-            val success_size = fileList!!.filterIndexed { index, param ->
-                mFunction.invoke(param,fileList!!.size,index)
-            }.size
-
-            return success_size == fileList!!.size
+            for ((index, value) in fileList!!.withIndex()){
+                val b = mFunction.invoke(value)
+                EventBus.getDefault().post(PhotoUploadEvent(totalCount,index+1))
+            }
+            return true
         }
 
-        var mFunction: (file:File,totalCount:Int,index:Int) -> Boolean
+        var mFunction: (file:File) -> Boolean
 
         init{
             mFunction = {
-                f: File, totalCount:Int,index: Int ->
+                f: File ->
                 val req = NetworkUtil.photo_upload(file = f,tags = null)
                 val call = NetworkUtil.execute(request = req)
 
@@ -92,10 +91,9 @@ class UploadPhotoService :Service() {
 
                     val r :BaseSingleResponse<String> = App.gson.fromJson(str,object :TypeToken<BaseSingleResponse<String>>(){}.type)
 
-                    if(r.status.not()) false
+                    if(r.status.not())
+                        throw IOException(r.errorMessage)
 
-
-                    EventBus.getDefault().post(PhotoUploadEvent(totalCount,index))
                      true
                 }catch (e:IOException){
                     Timber.w(e)
@@ -105,5 +103,14 @@ class UploadPhotoService :Service() {
 
         }
 
+        override fun onPostExecute(result: Boolean?) {
+            super.onPostExecute(result)
+            Timber.v("onPostExecute ${result}")
+        }
+
+        override fun onCancelled() {
+            super.onCancelled()
+            Timber.v("onCancelled")
+        }
     }
 }

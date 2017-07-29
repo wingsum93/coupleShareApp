@@ -15,5 +15,6 @@ interface CoupleShareDao {
     fun saveLocationTO(locations:LocationTo)
     fun delLocationTO(locations:LocationTo)
 
+    fun getLocationToList():List<LocationTo>
 
 }

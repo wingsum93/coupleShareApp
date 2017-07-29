@@ -17,18 +17,20 @@ import android.support.v7.widget.RecyclerView
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.widget.AdapterView
 import android.widget.TextView
 import android.widget.Toast
 import butterknife.bindView
 import com.ericho.coupleshare.R
 import com.ericho.coupleshare.adapter.UploadPhotoAdapter
-import com.ericho.coupleshare.frag.AlertDialogFrag
+import com.ericho.coupleshare.frag.ConfirmDialog
+import com.ericho.coupleshare.interf.PermissionListener
 import com.ericho.coupleshare.mvp.PhotoBo
 import com.ericho.coupleshare.mvp.PhotosAddContract
 import com.ericho.coupleshare.mvp.presenter.AddPhotoPresenter
 import com.ericho.coupleshare.service.UploadPhotoService
 import com.ericho.coupleshare.util.FileHelper
-import com.ericho.coupleshare.util.safe
+import com.ericho.coupleshare.util.ZoomImageHelper
 import timber.log.Timber
 import java.io.File
 
@@ -39,22 +41,23 @@ class PhotoAddAct : BasePermissionActivity(), PhotosAddContract.View {
     val recyclerView:RecyclerView by bindView(R.id.recyclerView)
     val fab:FloatingActionButton by bindView(R.id.fab)
 
-    lateinit var layoutManager:RecyclerView.LayoutManager
-    var uris:ArrayList<Uri> = ArrayList<Uri>()
-    lateinit var adapter:UploadPhotoAdapter
+    var layoutManager:RecyclerView.LayoutManager? = null
+    var items:ArrayList<Uri> = ArrayList<Uri>()
+    var adapter:UploadPhotoAdapter? = null
 
 
     val presenter = AddPhotoPresenter(this)
 
     var mBoundService: UploadPhotoService? = null
     var mBound: Boolean = false
-    lateinit var fileHelper:FileHelper
+    var fileHelper:FileHelper? = null
+    var zoomImageHelper:ZoomImageHelper? = null
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.act_photo_add)
-        init(savedInstanceState)
+        init()
         val mServiceBoundIntent = Intent(this, UploadPhotoService::class.java)
         this.bindService(mServiceBoundIntent,mServiceConnection, Context.BIND_AUTO_CREATE)
     }
@@ -64,32 +67,33 @@ class PhotoAddAct : BasePermissionActivity(), PhotosAddContract.View {
         return super.onCreateOptionsMenu(menu)
     }
 
-    private fun init(bundle:Bundle?) {
-        if(bundle!=null){
-            val x :ArrayList<Uri>? = bundle.getParcelableArrayList<Uri>("listdata")
-            uris.addAll(x.safe())
-        }
+    private fun init() {
+
         textView.text = getString(R.string.loading)
         textView.visibility = View.GONE
-        adapter = UploadPhotoAdapter(this, uris)
+        adapter = UploadPhotoAdapter(this, items)
         layoutManager = GridLayoutManager(this,3)
         recyclerView.adapter = adapter
         recyclerView.layoutManager = layoutManager
         //listener
         fab.setOnClickListener { _ ->  showImageGallery()}
-        adapter.setOnItemClickListener {
-            position ->
+        adapter!!.setOnItemClickListener(AdapterView.OnItemClickListener { parent, view, position, id ->
             Timber.d("image clcik $position")
-
-        }
-        adapter.setOnItemLongClickListener {
+            zoomImageHelper?.zoomImageFromThumb(view, items[position])
+        })
+        adapter!!.setOnItemLongClickListener {
             position->
             Timber.d("image long clcik $position")
 
-            showConfirmDeleteDialog(uris[position])
+            showConfirmDeleteDialog(items[position])
 
             return@setOnItemLongClickListener true
         }
+        zoomImageHelper = ZoomImageHelper.Builder(this)
+                .setRootId(R.id.root)
+                .setExpendViewId(R.id.photo_expand)
+                .setDuration(resources.getInteger(android.R.integer.config_shortAnimTime))
+                .build()
 
         presenter.start()
 
@@ -111,8 +115,13 @@ class PhotoAddAct : BasePermissionActivity(), PhotosAddContract.View {
     }
 
     private fun showConfirmDeleteDialog(uri: Uri) {
-        val dialog = AlertDialogFrag()
-//        dialog.title =
+        val dialog = ConfirmDialog.newInstance(getString(R.string.confirm),getString(R.string.confirm_to_delete))
+        dialog.setConfirmRunnable {
+            items.remove(uri)
+            adapter?.notifyDataSetChanged()
+        }
+        dialog.show(supportFragmentManager,"confirm")
+
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
@@ -133,8 +142,8 @@ class PhotoAddAct : BasePermissionActivity(), PhotosAddContract.View {
             //select image gallery
             REQ_PICK_IMAGE -> {
                 if(resultCode == Activity.RESULT_OK){
-                    val uri = data!!.data
-                    addMorePhoto(uri)
+                    val x : ArrayList<Uri> = processPhotoIntent(data)
+                    addMorePhoto(x)
                 }else{
                     showToastText("pick photo was cancelled!")
                 }
@@ -143,42 +152,73 @@ class PhotoAddAct : BasePermissionActivity(), PhotosAddContract.View {
         super.onActivityResult(requestCode, resultCode, data)
     }
 
+    private fun processPhotoIntent(intent: Intent?): ArrayList<Uri> {
+        val res = ArrayList<Uri>()
+
+
+        val onePhoto:Boolean = intent!!.clipData==null || intent.clipData.itemCount==1
+        if(onePhoto){
+            res.add(intent!!.data)
+        }
+        else{
+            for (i in 0 until intent!!.clipData.itemCount) {
+                res.add(intent.clipData.getItemAt(i).uri)
+            }
+        }
+        return res
+    }
+
     private fun addMorePhoto(uri: Uri) {
-        if(uris.contains(uri))
+        if(items.contains(uri))
             showToastText("Photo already added!")
         else{
-            uris.add(uri)
+            items.add(uri)
             fetchUploadList()
         }
+    }
+    private fun addMorePhoto(uri: ArrayList<Uri>) {
+
+        val data = uri.filterNot {
+            items.contains(it)
+        }
+        items.addAll(data)
+        fetchUploadList()
     }
 
     fun doUploadPhoto(){
         fileHelper = FileHelper(this)
         Timber.d("click tick ${mBoundService}")
         if(mBoundService==null) return
-        if(uris.isEmpty()) return
-        val fileList:List<File> = fileHelper.convertUriToFile(uris)
+        if(items.isEmpty()) return
+        val fileList:List<File> = fileHelper!!.convertUriToFile(items)
         mBoundService?.uploadImage(fileList)
         this.finish()
     }
     fun fetchUploadList(){
-        adapter.notifyDataSetChanged()
+        adapter?.notifyDataSetChanged()
     }
 
     override fun setPresenter(presenter: PhotosAddContract.Presenter) {
         //
     }
 
-    override fun onSaveInstanceState(outState: Bundle?, outPersistentState: PersistableBundle?) {
-        outState!!.putParcelableArrayList("listdata", uris)
-        super.onSaveInstanceState(outState, outPersistentState)
-    }
-
     override fun showImageGallery() {
+
+        this.checkSelfPermission(REQ_PERMISSION_PICK_IMAGE,android.Manifest.permission.READ_EXTERNAL_STORAGE.toList(),object :PermissionListener{
+            override fun onGranted() {
+                _showImageGallery()
+            }
+
+            override fun onDenied(deniedPermission: List<String>) {
+                showToastText(getString(R.string.permission_denied))
+            }
+        })
+    }
+    fun _showImageGallery(){
         val intent = Intent()
         intent.type = "image/*"
         intent.action = Intent.ACTION_GET_CONTENT
-
+        intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
         val str = getString(R.string.select_picture)
         startActivityForResult(Intent.createChooser(intent, str), REQ_PICK_IMAGE)
     }
@@ -209,6 +249,7 @@ class PhotoAddAct : BasePermissionActivity(), PhotosAddContract.View {
     companion object {
         val REQUEST_IMAGE_CAPTURE = 109
         val REQ_PICK_IMAGE = 101
+        val REQ_PERMISSION_PICK_IMAGE = 102
     }
 
     fun AppCompatActivity.showToastText(string:String){

@@ -5,6 +5,7 @@ import android.location.Location
 import android.net.Uri
 import android.view.ViewConfiguration
 import com.ericho.coupleshare.App
+import com.ericho.coupleshare.contant.Key
 import com.ericho.coupleshare.model.LocationTo
 import java.io.File
 import java.io.InputStream
@@ -17,28 +18,19 @@ import kotlin.collections.ArrayList
  * package name com.ericho.coupleshare.util
  */
 
-val Location.toLocation: com.ericho.coupleshare.mvp.Location
-    get() {
-        val x = com.ericho.coupleshare.mvp.Location()
-        x.accurate = this.accuracy.toInt()
-        x.date = Date()
-        x.username = "eriii"
-        x.attitude = this.altitude
-        x.latitude = this.latitude
-        x.longitude = this.longitude
-        x.uploadBy = "eriii"
-        return x
-    }
+
 val Location.toLocationTo: LocationTo
     get() {
+        val username = App.context?.getUserName() ?: ""
         val x = LocationTo()
         x.accurate = this.accuracy.toInt()
         x.date = Date()
-        x.username = "eriii"
+        x.username = username
+        x.uploadBy = username
         x.attitude = this.altitude
         x.latitude = this.latitude
         x.longitude = this.longitude
-        x.uploadBy = "eriii"
+
         return x
     }
 
@@ -54,5 +46,9 @@ fun Context.getUrl(urlSuffix:String) :String{
     return ServerAddressUtil.getServerAddress(this) + urlSuffix
 }
 fun <T> List<T>?.safe() :List<T> = if(this == null) ArrayList<T>()else this
+fun Context.getUserName(): String {
+    val pref = this.getSharedPreferences(com.ericho.coupleshare.contant.Key.pref_name,0)
+    return pref.getString(Key.loginName,"unknown")
+}
 
 

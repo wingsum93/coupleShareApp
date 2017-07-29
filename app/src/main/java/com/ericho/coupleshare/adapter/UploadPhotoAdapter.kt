@@ -19,7 +19,7 @@ import com.ericho.coupleshare.R
  */
 class UploadPhotoAdapter constructor(context:Context, items:List<Uri>):BaseRecyclerAdapter<Uri, UploadPhotoAdapter.ViewHolder>(context, items) {
 
-    var onImageClick :((position:Int)->Unit) = {}
+    var imageItemClickListener:AdapterView.OnItemClickListener = AdapterView.OnItemClickListener { parent, view, position, id ->  }
     var onImageLongClick :((position:Int)->Boolean) ={false}
 
 
@@ -33,9 +33,10 @@ class UploadPhotoAdapter constructor(context:Context, items:List<Uri>):BaseRecyc
 
         Glide.with(getContext())
                 .load(item)
+                .skipMemoryCache(true)
                 .into(holder!!.img)
 
-        holder.img.setOnClickListener { onImageClick.invoke(position) }
+        holder.img.setOnClickListener { imageItemClickListener.onItemClick(null,holder.img,position,getItemId(position)) }
         holder.img.setOnLongClickListener {
             return@setOnLongClickListener onImageLongClick.invoke(position)
         }
@@ -49,8 +50,8 @@ class UploadPhotoAdapter constructor(context:Context, items:List<Uri>):BaseRecyc
     fun setOnItemLongClickListener(listener:(position:Int)->Boolean){
         this.onImageLongClick = listener
     }
-    fun setOnItemClickListener(listener:(position:Int)->Unit){
-        this.onImageClick = listener
+    fun setOnItemClickListener(listener:AdapterView.OnItemClickListener){
+        this.imageItemClickListener = listener
     }
 
     class ViewHolder constructor(view:View):RecyclerView.ViewHolder(view){

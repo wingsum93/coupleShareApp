@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">CoupleShare</string>
+    <string name="app_name">Fruit Share</string>
     <string name="username">Username</string>
     <string name="register">Register</string>
     <string name="label_password">Password:</string>
@@ -117,4 +117,9 @@
     <string name="upload_success">Upload Success</string>
     <string name="title_activity_loading">LoadingAct</string>
     <string name="logout">Logout</string>
+    <string name="add">Add</string>
+    <string name="confirm">Comfirm</string>
+    <string name="confirm_to_delete">Comfirm to delete?</string>
+    <string name="permission_denied">Permission Denied</string>
+    <string name="clear">Clear</string>
 </resources>

@@ -8,6 +8,7 @@ import android.app.Activity
 import android.graphics.Point
 import android.graphics.Rect
 import android.net.Uri
+import android.os.Build
 import android.view.View
 import android.view.animation.DecelerateInterpolator
 import android.widget.ImageView
@@ -30,22 +31,26 @@ class ZoomImageHelper {
     val mShortAnimationDuration :Int
 
     var mActivity:Activity?
+    val isFragmentMode :Boolean
+    val fragmentGetViewFunction: (()->View?)?
 
-    private constructor(rootId:Int,expendViewId:Int,duration:Int,context: Activity){
+    private constructor(rootId:Int, expendViewId:Int, duration:Int, context: Activity, isFragmentMode:Boolean = false, fragmentFindViewFunc: (()->View?)?){
         this.rootId = rootId
         this.expendViewId = expendViewId
         this.mShortAnimationDuration = duration
         this.mActivity = context
+        this.isFragmentMode = false
+        this.fragmentGetViewFunction = fragmentFindViewFunc;
     }
 
     class Builder(val context: Activity){
 
         var rootId : Int? = null
         var expendViewId :Int? = null
-
-
         var mShortAnimationDuration :Int? = null
 
+        var isFragmentMode:Boolean = false
+        var fragmentFindViewFunction :(()->View?)? = null
 
         fun setRootId(id:Int) :Builder{
             this.rootId = id
@@ -60,13 +65,22 @@ class ZoomImageHelper {
             this.mShortAnimationDuration = duration
             return this
         }
-
+        fun setFragmentMode(b:Boolean):Builder{
+            this.isFragmentMode = b
+            return this
+        }
+        fun setFragmentFindViewFunction(func:()->View?):Builder{
+            this.fragmentFindViewFunction = func
+            return this
+        }
         fun build(): ZoomImageHelper {
             val x = ZoomImageHelper(
                     rootId = rootId!!,
                     expendViewId = expendViewId!!,
                     duration = mShortAnimationDuration!!,
-                    context = context
+                    context = context,
+                    fragmentFindViewFunc = fragmentFindViewFunction,
+                    isFragmentMode = isFragmentMode
             )
 
 
@@ -74,7 +88,11 @@ class ZoomImageHelper {
         }
     }
     fun findViewById(viewId:Int):View{
-        return mActivity!!.findViewById(viewId)
+        if(isFragmentMode){
+            return fragmentGetViewFunction!!.invoke()!!.findViewById(viewId)
+        }else {
+            return mActivity!!.findViewById(viewId)
+        }
     }
 
     fun zoomImageFromThumb(thumbView: View, imageUri: Uri){
@@ -216,8 +234,7 @@ class ZoomImageHelper {
         }
 
         // Load the high-resolution "zoomed-in" image.
-        val expandedImageView = findViewById(
-                expendViewId) as ImageView
+        val expandedImageView = findViewById( expendViewId) as ImageView
         Glide.with(mActivity)
                 .load(urlPath)
                 .skipMemoryCache(true)

@@ -10,14 +10,19 @@ import android.support.v7.widget.DefaultItemAnimator
 import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
+import android.widget.ProgressBar
 import android.widget.TextView
 import butterknife.bindView
 import com.ericho.coupleshare.App
 import com.ericho.coupleshare.R
 import com.ericho.coupleshare.act.PhotoAddAct
+import com.ericho.coupleshare.act.StatusAddAct_copy
 import com.ericho.coupleshare.adapter.PhotoAdapter
 import com.ericho.coupleshare.eventbus.PhotoUploadEvent
 import com.ericho.coupleshare.http.model.BaseResponse
@@ -47,7 +52,7 @@ class PhotoFrag:BaseFrag(), PhotosContract.View, FabListener,SwipeRefreshLayout.
 
     val recyclerView: RecyclerView by bindView<RecyclerView>(R.id.recyclerView)
     val swipeRefreshLayout: SwipeRefreshLayout by bindView<SwipeRefreshLayout>(R.id.swipeRefreshLayout)
-
+    val fab :FloatingActionButton by bindView(R.id.fab)
 
     private var adapter: PhotoAdapter? = null
     private var smartAdapter: SmartRecyclerAdapter? = null
@@ -62,7 +67,7 @@ class PhotoFrag:BaseFrag(), PhotosContract.View, FabListener,SwipeRefreshLayout.
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Timber.d("onCreate")
-
+        setHasOptionsMenu(true)
 
         httpHelper = AHttpHelperB.Builder<BaseResponse<PhotoBo>>()
                 .setFail { call, ioException ->
@@ -83,8 +88,6 @@ class PhotoFrag:BaseFrag(), PhotosContract.View, FabListener,SwipeRefreshLayout.
         val view = inflater!!.inflate(R.layout.frag_photo, container, false)
         EventBus.getDefault().register(this)
         Timber.d("onCreateView")
-
-
 
         return view
     }
@@ -116,16 +119,38 @@ class PhotoFrag:BaseFrag(), PhotosContract.View, FabListener,SwipeRefreshLayout.
 
         zoomImageHelper = ZoomImageHelper.Builder(activity)
                 .setRootId(R.id.frameLayout)
-                .setExpendViewId(R.id.expanded_image)
+                .setExpendViewId(R.id.photo_full_image)
                 .setDuration(resources.getInteger(android.R.integer.config_shortAnimTime))
+                .setFragmentMode(true)
+                .setFragmentFindViewFunction {
+                    view
+                }
                 .build()
+        fab.setOnClickListener {
+            startActivity(Intent(activity, PhotoAddAct::class.java))
+        }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
+        super.onCreateOptionsMenu(menu, inflater)
+        inflater?.inflate(R.menu.add,menu)
     }
 
     private fun loadPhotoList() {
-
         httpHelper?.run(NetworkUtil.photo_get())
     }
 
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        when(item?.itemId){
+            R.id.menu_add -> {
+                if (activity != null) {
+                    startActivity(Intent(activity, PhotoAddAct::class.java))
+                }
+                return true
+            }
+            else -> return super.onOptionsItemSelected(item)
+        }
+    }
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -171,9 +196,10 @@ class PhotoFrag:BaseFrag(), PhotosContract.View, FabListener,SwipeRefreshLayout.
         val v = LayoutInflater.from(activity).inflate(R.layout.header_upload_image,container,false)
 
         val textView = v.findViewById(R.id.txv_progress_state) as TextView
-        val progressBar = v.findViewById(R.id.progressBar) as ContentLoadingProgressBar
+        val progressBar = v.findViewById(R.id.progressBar) as ProgressBar
 
-        textView.text = getString(R.string.uploading)
+        val t = getString(R.string.uploading) + "$currentCount / $totalCount"
+        textView.text = t
 
         smartAdapter?.setHeaderView(v)
     }
@@ -185,6 +211,7 @@ class PhotoFrag:BaseFrag(), PhotosContract.View, FabListener,SwipeRefreshLayout.
 
     override fun onAttachFloatingActionListener(floatingActionButton: FloatingActionButton) {
         floatingActionButton.setImageDrawable(ResourcesCompat.getDrawable(App.context!!.resources, R.drawable.ic_add_white_24dp, null))
+        floatingActionButton.visibility = View.GONE
         floatingActionButton.setOnClickListener {
             v -> Timber.d("fab photo click")
             if (activity != null) {

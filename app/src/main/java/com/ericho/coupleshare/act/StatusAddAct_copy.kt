@@ -123,7 +123,10 @@ class StatusAddAct_copy : BasePermissionActivity() {
         loadImageBitmapFromUri()
     }
     fun loadImageBitmapFromUri(){
-        Glide.with(this).load(item.uri).into(imageView)
+        Glide.with(this)
+                .load(item.uri)
+                .skipMemoryCache(true)
+                .into(imageView)
     }
     fun showProgress( active:Boolean){
         progressBar.visibility = if (active) View.VISIBLE else View.GONE
@@ -161,6 +164,14 @@ class StatusAddAct_copy : BasePermissionActivity() {
     }
 
     fun showImageGallery() {
+        val intent = Intent()
+        intent.type = "image/*"
+        intent.action = Intent.ACTION_GET_CONTENT
+
+        val str = getString(R.string.select_picture)
+        startActivityForResult(Intent.createChooser(intent, str), REQ_PICK_IMAGE)
+    }
+    fun _showImageGallery() {
         val intent = Intent()
         intent.type = "image/*"
         intent.action = Intent.ACTION_GET_CONTENT

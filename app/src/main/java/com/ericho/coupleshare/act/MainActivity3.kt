@@ -1,6 +1,9 @@
 package com.ericho.coupleshare.act
 
 import android.app.Activity
+import android.app.AlarmManager
+import android.app.PendingIntent
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.FloatingActionButton
@@ -12,9 +15,11 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
 import butterknife.bindView
+import com.ericho.coupleshare.App
 import com.ericho.coupleshare.Injection
 import com.ericho.coupleshare.R
 import com.ericho.coupleshare.adapter.HomePageAdapter
+import com.ericho.coupleshare.constant.BroadcastConstant
 import com.ericho.coupleshare.frag.LocationShowFrag
 import com.ericho.coupleshare.interf.FabListener
 import com.ericho.coupleshare.interf.PermissionListener
@@ -22,6 +27,8 @@ import com.ericho.coupleshare.mvp.data.LoginRepository
 import com.ericho.coupleshare.mvp.presenter.LocationsPresenter
 import com.ericho.coupleshare.service.LocationMonitorSer
 import timber.log.Timber
+import java.util.Calendar
+import java.util.Date
 
 
 /**
@@ -36,12 +43,12 @@ class MainActivity3: BasePermissionActivity(), ViewPager.OnPageChangeListener  {
     val toolbar: Toolbar by bindView(R.id.toolbar)
     val tabLayout: TabLayout by bindView(R.id.tabLayout)
     val viewPager: ViewPager by bindView(R.id.viewPager)
-    val floatingActionButton: FloatingActionButton by bindView(R.id.fab)
 
     var loginRepository:LoginRepository? = null
 
     var mLocationPresenter:LocationsPresenter? = null
-
+    var alarmManager  : AlarmManager? = null
+    var alarmLocationIntent  : PendingIntent? = null
     private var homePageAdapter: HomePageAdapter? = null
 
 
@@ -87,6 +94,17 @@ class MainActivity3: BasePermissionActivity(), ViewPager.OnPageChangeListener  {
 
         loginRepository = Injection.provideLoginRepository(this.applicationContext)
 
+
+        alarmManager  = this.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+        val intent = Intent()
+        intent.action = BroadcastConstant.REQ_LOC_MONITOR
+        alarmLocationIntent = PendingIntent.getBroadcast(App.context, 0, intent, 0)
+
+        alarmManager!!.setInexactRepeating(
+                AlarmManager.ELAPSED_REALTIME,
+                Calendar.getInstance().timeInMillis,
+                10 * 60 * 1000,
+                alarmLocationIntent)
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -139,13 +157,8 @@ class MainActivity3: BasePermissionActivity(), ViewPager.OnPageChangeListener  {
     override fun onPageSelected(position: Int) {
         invalidateOptionsMenu()
         Timber.d("onPageSelected pos $position")
-        val fragment = homePageAdapter?.getItem(position)
-        if (fragment is FabListener) {
-            val lis = fragment as FabListener
-            floatingActionButton.visibility = View.VISIBLE
-            floatingActionButton.setOnClickListener(null)
-            lis.onAttachFloatingActionListener(floatingActionButton)
-        }
+//        val fragment = homePageAdapter?.getItem(position)
+
     }
 
     override fun onResume() {
@@ -159,6 +172,7 @@ class MainActivity3: BasePermissionActivity(), ViewPager.OnPageChangeListener  {
     }
 
     override fun onDestroy() {
+        alarmManager?.cancel (alarmLocationIntent)
         super.onDestroy()
     }
 

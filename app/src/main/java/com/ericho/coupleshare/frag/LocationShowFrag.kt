@@ -2,9 +2,15 @@ package com.ericho.coupleshare.frag
 
 import android.os.Bundle
 import android.support.design.widget.FloatingActionButton
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.View
+import com.ericho.coupleshare.R
 import com.ericho.coupleshare.contant.LatLong
+import com.ericho.coupleshare.db.Dao
 import com.ericho.coupleshare.interf.FabListener
+import com.ericho.coupleshare.model.LocationTo
 import com.ericho.coupleshare.mvp.Location
 import com.ericho.coupleshare.mvp.LocationsContract
 import com.ericho.coupleshare.util.showToastMessage
@@ -21,20 +27,33 @@ import timber.log.Timber
  * for project CoupleShare
  * package name com.ericho.coupleshare.frag
  */
-class LocationShowFrag: SupportMapFragment(), OnMapReadyCallback, LocationsContract.View, FabListener {
+class LocationShowFrag: SupportMapFragment(), OnMapReadyCallback, LocationsContract.View {
     override var isActive: Boolean = false
 
     var mPresenter: LocationsContract.Presenter? = null
 
+    var googleMap:GoogleMap? = null
     override fun onCreate(bundle: Bundle?) {
         super.onCreate(bundle)
         setHasOptionsMenu(true)
     }
 
     override fun onMapReady(googleMap: GoogleMap) {
+        this.googleMap = googleMap
         googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(LatLng(LatLong.HK_C_LAT, LatLong.HK_C_LONG), 10f))
-        googleMap.addMarker(MarkerOptions().position(LatLng(22.309111, 114.174993)).title("HK"))
+        googleMap.addMarker(MarkerOptions()
+                .position(LatLng(22.309111, 114.174993)).title("HK")
+                .snippet("123"))
         isActive = true
+
+        val list:List<LocationTo> = Dao.getInstance().getLocationToList()
+        list.forEach {
+            locationTo ->
+            val ll = LatLng(locationTo.latitude!!,locationTo.longitude!!)
+            googleMap.addMarker(MarkerOptions()
+                    .position(ll).title(locationTo.id.toString())
+                    .snippet("accuracy= ${locationTo.accurate}"))
+        }
     }
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
@@ -45,6 +64,22 @@ class LocationShowFrag: SupportMapFragment(), OnMapReadyCallback, LocationsContr
 
     override fun setPresenter(presenter: LocationsContract.Presenter) {
         this.mPresenter = presenter
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
+        super.onCreateOptionsMenu(menu, inflater)
+        inflater!!.inflate(R.menu.clear,menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        when(item!!.itemId){
+            R.id.clear ->{
+                googleMap?.clear()
+                return true
+            }
+            else ->return super.onOptionsItemSelected(item)
+        }
+
     }
 
     override fun setLoadingIndicator(active: Boolean) {
@@ -70,10 +105,6 @@ class LocationShowFrag: SupportMapFragment(), OnMapReadyCallback, LocationsContr
 
     override fun showFilteringPopUpMenu() {
 
-    }
-
-    override fun onAttachFloatingActionListener(floatingActionButton: FloatingActionButton) {
-        floatingActionButton.visibility = View.GONE
     }
 
     companion object {

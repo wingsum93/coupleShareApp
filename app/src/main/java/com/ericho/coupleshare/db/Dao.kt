@@ -3,7 +3,10 @@ package com.ericho.coupleshare.db
 import com.ericho.coupleshare.App
 import com.ericho.coupleshare.model.LocationTo
 import com.ericho.coupleshare.mvp.data.local.DbConfig
+import com.ericho.coupleshare.util.getUserName
+import com.ericho.coupleshare.util.safe
 import org.xutils.DbManager
+import org.xutils.db.sqlite.WhereBuilder
 import org.xutils.ex.DbException
 import org.xutils.x
 import timber.log.Timber
@@ -52,6 +55,20 @@ class Dao :CoupleShareDao{
             dbManager.delete(locations)
         }catch (e:DbException){
             Timber.w(e)
+        }
+    }
+
+    override fun getLocationToList(): List<LocationTo> {
+        try {
+            val username = App.context!!.getUserName()
+            val whereBuilder:WhereBuilder = WhereBuilder.b("username","=",username)
+            val list = dbManager.selector(LocationTo::class.java)
+                    .where(whereBuilder)
+                    .orderBy("date",true).findAll()
+            return list.safe()
+        }catch (e:DbException){
+            Timber.w(e)
+            return ArrayList<LocationTo>()
         }
     }
 }

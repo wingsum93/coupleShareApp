@@ -93,3 +93,10 @@
     @org.xutils.view.annotation.Event <methods>;
 }
 #################### end region
+
+## for EventBus 3.0
+-keepattributes *Annotation*
+-keepclassmembers class ** {
+    @org.greenrobot.eventbus.Subscribe <methods>;
+}
+-keep enum org.greenrobot.eventbus.ThreadMode { *; }

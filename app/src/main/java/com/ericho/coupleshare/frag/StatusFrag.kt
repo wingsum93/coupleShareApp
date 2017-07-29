@@ -8,6 +8,9 @@ import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
@@ -40,6 +43,7 @@ import timber.log.Timber
 class StatusFrag:BaseFrag(), StatusContract.View, FabListener {
     val recyclerView: RecyclerView by bindView(R.id.recyclerView)
     val swipeRefreshLayout: SwipeRefreshLayout by bindView(R.id.swipeRefreshLayout)
+    val fab :FloatingActionButton by bindView(R.id.fab)
 
     private var adapter: StatusAdapter? = null
 
@@ -102,7 +106,27 @@ class StatusFrag:BaseFrag(), StatusContract.View, FabListener {
                 .setExpendViewId(R.id.expanded_image)
                 .setRootId(R.id.frameLayout)
                 .build()
+        fab.setOnClickListener {
+            startActivity(Intent(activity, StatusAddAct_copy::class.java))
+        }
         loadStatusList()
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
+        super.onCreateOptionsMenu(menu, inflater)
+        inflater?.inflate(R.menu.add,menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        when(item?.itemId){
+            R.id.menu_add -> {
+                if (activity != null) {
+                    startActivity(Intent(activity, StatusAddAct_copy::class.java))
+                }
+                return true
+            }
+            else -> return super.onOptionsItemSelected(item)
+        }
     }
 
     fun loadStatusList(){
@@ -121,6 +145,7 @@ class StatusFrag:BaseFrag(), StatusContract.View, FabListener {
 
     override fun onAttachFloatingActionListener(floatingActionButton: FloatingActionButton) {
         floatingActionButton.setImageDrawable(ResourcesCompat.getDrawable(App.context!!.resources, R.drawable.ic_add_white_24dp, null))
+        floatingActionButton.visibility = View.GONE
         floatingActionButton.setOnClickListener {
             if (activity != null) {
                 startActivity(Intent(activity, StatusAddAct_copy::class.java))

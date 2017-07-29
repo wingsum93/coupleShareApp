@@ -11,10 +11,14 @@ import android.support.v7.app.AlertDialog
  * for project CoupleShare
  * package name com.ericho.coupleshare.frag
  */
-class ConfirmDialogFrag : DialogFragment(){
+class ConfirmDialog : DialogFragment(){
 
     var title:String? = null
     var message:String? = null
+    @JvmField
+    var confirmRunnable :()->Unit = {}
+    @JvmField
+    var cancelRunnable :()->Unit = {}
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,7 +35,9 @@ class ConfirmDialogFrag : DialogFragment(){
         builder.setTitle(title)
         builder.setMessage(message)
                 .setPositiveButton(android.R.string.ok, { _, _ ->
-
+                    confirmRunnable.invoke()
+                }).setNegativeButton(android.R.string.cancel,{ _, _ ->
+                    cancelRunnable.invoke()
                 })
 
         // Create the AlertDialog object and return it
@@ -39,13 +45,22 @@ class ConfirmDialogFrag : DialogFragment(){
 
     }
 
+    fun setConfirmRunnable(runnable: ()->Unit) : ConfirmDialog {
+        confirmRunnable = runnable
+        return this
+    }
+    fun setCancelRunnable(runnable: ()->Unit) : ConfirmDialog {
+        cancelRunnable = runnable
+        return this
+    }
+
     companion object {
         @JvmField
         val FLAG_TITLE:String = "AAA"
         val FLAG_MESSAGE:String = "BBB"
         @JvmStatic
-        fun newInstance(title:String,message:String?):AlertDialogFrag{
-            val frag = AlertDialogFrag()
+        fun newInstance(title:String,message:String?): ConfirmDialog {
+            val frag = ConfirmDialog()
             val args: Bundle = Bundle()
             args.putString(FLAG_TITLE,title)
             args.putString(FLAG_MESSAGE,message)

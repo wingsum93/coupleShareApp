@@ -5,6 +5,7 @@ import android.content.SharedPreferences
 import com.ericho.coupleshare.App
 import com.ericho.coupleshare.contant.Key
 
+
 /**
  * Created by steve_000 on 7/7/2017.
  * for project CoupleShare
