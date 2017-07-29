@@ -41,9 +41,9 @@ import timber.log.Timber
  * package name com.ericho.coupleshare.frag
  */
 class StatusFrag:BaseFrag(), StatusContract.View, FabListener {
-    val recyclerView: RecyclerView by bindView(R.id.recyclerView)
-    val swipeRefreshLayout: SwipeRefreshLayout by bindView(R.id.swipeRefreshLayout)
-    val fab :FloatingActionButton by bindView(R.id.fab)
+    var recyclerView: RecyclerView? = null
+    var swipeRefreshLayout: SwipeRefreshLayout? = null
+    var fab :FloatingActionButton? = null
 
     private var adapter: StatusAdapter? = null
 
@@ -72,6 +72,10 @@ class StatusFrag:BaseFrag(), StatusContract.View, FabListener {
 
     private fun init() {
 
+        fab = view?.findViewById(R.id.fab) as FloatingActionButton
+        swipeRefreshLayout = view?.findViewById(R.id.swipeRefreshLayout) as SwipeRefreshLayout
+        recyclerView = view?.findViewById(R.id.recyclerView) as RecyclerView
+
 
         //listener
         adapter = StatusAdapter(activity, list)
@@ -79,13 +83,13 @@ class StatusFrag:BaseFrag(), StatusContract.View, FabListener {
             _, view, position, id ->
             zoomImageHelper?.zoomImageFromThumb(view, (list[position].fullPath))
         }
-        recyclerView.setLayoutManager(LinearLayoutManager(activity))
-        recyclerView.setHasFixedSize(true)
-        recyclerView.setAdapter(adapter)
-        swipeRefreshLayout.setOnRefreshListener {
+        recyclerView?.setLayoutManager(LinearLayoutManager(activity))
+        recyclerView?.setHasFixedSize(true)
+        recyclerView?.setAdapter(adapter)
+        swipeRefreshLayout?.setOnRefreshListener {
             //
             showToastMessage("refresh")
-            swipeRefreshLayout.isRefreshing = false
+            swipeRefreshLayout?.isRefreshing = false
             loadStatusList()
         }
 
@@ -106,7 +110,7 @@ class StatusFrag:BaseFrag(), StatusContract.View, FabListener {
                 .setExpendViewId(R.id.expanded_image)
                 .setRootId(R.id.frameLayout)
                 .build()
-        fab.setOnClickListener {
+        fab?.setOnClickListener {
             startActivity(Intent(activity, StatusAddAct_copy::class.java))
         }
         loadStatusList()
@@ -156,6 +160,7 @@ class StatusFrag:BaseFrag(), StatusContract.View, FabListener {
     override fun onDestroyView() {
         EventBus.getDefault().unregister(this)
         zoomImageHelper?.onDestoryView()
+        zoomImageHelper = null
         super.onDestroyView()
     }
 

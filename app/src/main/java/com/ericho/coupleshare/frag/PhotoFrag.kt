@@ -1,10 +1,13 @@
 package com.ericho.coupleshare.frag
 
+import android.app.ActivityOptions
 import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.Color
 import android.os.Bundle
 import android.support.design.widget.FloatingActionButton
-import android.support.v4.content.res.ResourcesCompat
-import android.support.v4.widget.ContentLoadingProgressBar
+import android.support.v4.app.LoaderManager
+import android.support.v4.content.Loader
 import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.widget.DefaultItemAnimator
 import android.support.v7.widget.GridLayoutManager
@@ -22,20 +25,17 @@ import butterknife.bindView
 import com.ericho.coupleshare.App
 import com.ericho.coupleshare.R
 import com.ericho.coupleshare.act.PhotoAddAct
-import com.ericho.coupleshare.act.StatusAddAct_copy
+import com.ericho.coupleshare.act.ViewPhotoAct
 import com.ericho.coupleshare.adapter.PhotoAdapter
 import com.ericho.coupleshare.eventbus.PhotoUploadEvent
-import com.ericho.coupleshare.http.model.BaseResponse
-import com.ericho.coupleshare.interf.FabListener
+import com.ericho.coupleshare.http.PhotoHttpLoader
+import com.ericho.coupleshare.http.WrapperObject
 import com.ericho.coupleshare.mvp.PhotoBo
 import com.ericho.coupleshare.mvp.PhotosContract
 import com.ericho.coupleshare.mvp.presenter.PhotoPresenter
-import com.ericho.coupleshare.util.AHttpHelperB
-import com.ericho.coupleshare.util.NetworkUtil
 import com.ericho.coupleshare.util.ZoomImageHelper
 import com.ericho.coupleshare.util.safe
 import com.ericho.coupleshare.util.showToastMessage
-import com.google.gson.reflect.TypeToken
 import com.headerfooter.songhang.library.SmartRecyclerAdapter
 import kotlinx.android.synthetic.main.act_status_notice_add.*
 import org.greenrobot.eventbus.EventBus
@@ -48,17 +48,16 @@ import timber.log.Timber
  * for project CoupleShare
  * package name com.ericho.coupleshare.frag
  */
-class PhotoFrag:BaseFrag(), PhotosContract.View, FabListener,SwipeRefreshLayout.OnRefreshListener{
+class PhotoFrag:BaseFrag(), PhotosContract.View, SwipeRefreshLayout.OnRefreshListener,LoaderManager.LoaderCallbacks<WrapperObject<PhotoBo>>{
 
-    val recyclerView: RecyclerView by bindView<RecyclerView>(R.id.recyclerView)
-    val swipeRefreshLayout: SwipeRefreshLayout by bindView<SwipeRefreshLayout>(R.id.swipeRefreshLayout)
-    val fab :FloatingActionButton by bindView(R.id.fab)
+    var recyclerView: RecyclerView? = null
+    var swipeRefreshLayout: SwipeRefreshLayout? = null
+    var fab :FloatingActionButton? = null
 
     private var adapter: PhotoAdapter? = null
     private var smartAdapter: SmartRecyclerAdapter? = null
 
     private var mPresenter: PhotosContract.Presenter? = null
-    private var httpHelper :AHttpHelperB<BaseResponse<PhotoBo>>? = null
     private var zoomImageHelper :ZoomImageHelper? = null
 
     private var list: ArrayList<PhotoBo> = ArrayList<PhotoBo>()
@@ -69,19 +68,6 @@ class PhotoFrag:BaseFrag(), PhotosContract.View, FabListener,SwipeRefreshLayout.
         Timber.d("onCreate")
         setHasOptionsMenu(true)
 
-        httpHelper = AHttpHelperB.Builder<BaseResponse<PhotoBo>>()
-                .setFail { call, ioException ->
-                    Timber.w(ioException)
-                    showToastMessage("load photo list fail ${ioException.message}")
-                }.setTransformMethod { App.gson.fromJson(it,object :TypeToken<BaseResponse<PhotoBo>>(){}.type) }
-                .setSuccessMethod { call, response ->
-                    list.clear()
-                    list.addAll(response.extra.safe())
-                    Timber.d("netowrk get data ok! ${smartAdapter}")
-                    Timber.d("recycler's dapter = ${recyclerView.adapter}")
-                    adapter!!.notifyDataSetChanged()
-                }
-                .build()
     }
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -94,28 +80,36 @@ class PhotoFrag:BaseFrag(), PhotosContract.View, FabListener,SwipeRefreshLayout.
 
     private fun init() {
 
-
+        recyclerView = view!!.findViewById(R.id.recyclerView) as RecyclerView
+        swipeRefreshLayout = view?.findViewById(R.id.swipeRefreshLayout) as SwipeRefreshLayout
+        fab = view?.findViewById(R.id.fab) as FloatingActionButton
         //listener
-        recyclerView.layoutManager = GridLayoutManager(activity, 3)
-        recyclerView.setHasFixedSize(true)
-        recyclerView.itemAnimator = DefaultItemAnimator()
+        recyclerView!!.layoutManager = GridLayoutManager(activity, 3)
+        recyclerView!!.setHasFixedSize(true)
+        recyclerView!!.itemAnimator = DefaultItemAnimator()
         if(adapter == null) {
             adapter = PhotoAdapter(activity, list)
             adapter!!.setOnItemClickListener(AdapterView.OnItemClickListener { _, view, position, id ->
-                zoomImageHelper?.zoomImageFromThumb(view,urlPath = list[position].fullPath)
+//                zoomImageHelper?.zoomImageFromThumb(view,urlPath = list[position].fullPath)
+                val uriList = list.map {
+                    it.fullPath
+                }.toTypedArray()
+
+                val actOpt =
+                ActivityOptions.makeScaleUpAnimation(view,view.x.toInt(),view.y.toInt(),view.width,view.height)
+                startActivity(ViewPhotoAct.newIntent(activity,uriList,position),actOpt.toBundle())
             })
         }
         if(smartAdapter == null) {
             smartAdapter = SmartRecyclerAdapter(adapter!!)
         }
-        recyclerView.adapter = smartAdapter
-        smartAdapter!!.notifyDataSetChanged()
-        swipeRefreshLayout.setOnRefreshListener(this)
+        recyclerView!!.adapter = smartAdapter
+        swipeRefreshLayout?.setOnRefreshListener(this)
 
         mPresenter = PhotoPresenter(this)
         mPresenter?.start()
 
-        loadPhotoList()
+        loaderManager.initLoader(LOADER_ID,null,this)
 
         zoomImageHelper = ZoomImageHelper.Builder(activity)
                 .setRootId(R.id.frameLayout)
@@ -126,8 +120,16 @@ class PhotoFrag:BaseFrag(), PhotosContract.View, FabListener,SwipeRefreshLayout.
                     view
                 }
                 .build()
-        fab.setOnClickListener {
-            startActivity(Intent(activity, PhotoAddAct::class.java))
+        fab?.setOnClickListener {
+            v->
+            //b = ActivityOptions.makeScaleUpAnimation(view, 0, 0, view.getWidth(),
+            //                                         view.getHeight()).toBundle();
+            val bitmap = Bitmap.createBitmap(v.getWidth(), v.getHeight(), Bitmap.Config.ARGB_8888);
+            bitmap.eraseColor(Color.parseColor("#308cf8"));
+
+            val b = ActivityOptions.makeScaleUpAnimation(v, v.x.toInt(), v.y.toInt(), v.width,v.height).toBundle();
+
+            startActivity(Intent(activity, PhotoAddAct::class.java),b)
         }
     }
 
@@ -136,9 +138,6 @@ class PhotoFrag:BaseFrag(), PhotosContract.View, FabListener,SwipeRefreshLayout.
         inflater?.inflate(R.menu.add,menu)
     }
 
-    private fun loadPhotoList() {
-        httpHelper?.run(NetworkUtil.photo_get())
-    }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         when(item?.itemId){
@@ -160,8 +159,9 @@ class PhotoFrag:BaseFrag(), PhotosContract.View, FabListener,SwipeRefreshLayout.
     }
 
     override fun onRefresh() {
-        swipeRefreshLayout.isRefreshing = false
-        loadPhotoList()
+        swipeRefreshLayout?.isRefreshing = false
+
+        loaderManager.restartLoader(LOADER_ID,null,this)
     }
 
     override fun setPresenter(presenter: PhotosContract.Presenter) {
@@ -209,15 +209,27 @@ class PhotoFrag:BaseFrag(), PhotosContract.View, FabListener,SwipeRefreshLayout.
         adapter?.update(photos)
     }
 
-    override fun onAttachFloatingActionListener(floatingActionButton: FloatingActionButton) {
-        floatingActionButton.setImageDrawable(ResourcesCompat.getDrawable(App.context!!.resources, R.drawable.ic_add_white_24dp, null))
-        floatingActionButton.visibility = View.GONE
-        floatingActionButton.setOnClickListener {
-            v -> Timber.d("fab photo click")
-            if (activity != null) {
-                startActivity(Intent(activity, PhotoAddAct::class.java))
-            }
+    override fun onCreateLoader(id: Int, args: Bundle?): Loader<WrapperObject<PhotoBo>> {
+        val load = PhotoHttpLoader.from(activity,args)
+        return load
+    }
+
+    override fun onLoadFinished(loader: Loader<WrapperObject<PhotoBo>>?, data: WrapperObject<PhotoBo>?) {
+        if(data!!.success()){
+            list.clear()
+            list.addAll(data.result.safe())
+            Timber.d("netowrk get data ok! ${smartAdapter}")
+            adapter!!.notifyDataSetChanged()
+            smartAdapter!!.notifyDataSetChanged()
+        }else{
+            val ioException = data.error
+            Timber.w(ioException)
+            showToastMessage("load photo list fail ${ioException?.message}")
         }
+    }
+
+    override fun onLoaderReset(loader: Loader<WrapperObject<PhotoBo>>?) {
+        list.clear()
     }
 
     override fun onDestroyView() {
@@ -225,16 +237,22 @@ class PhotoFrag:BaseFrag(), PhotosContract.View, FabListener,SwipeRefreshLayout.
         Timber.d("onDestroyView")
         mFirstCreate = false
         zoomImageHelper?.onDestoryView()
-        recyclerView.adapter = null
+        zoomImageHelper = null
+        recyclerView?.adapter = null
+        adapter = null
+        smartAdapter = null
         super.onDestroyView()
     }
 
     override fun onDestroy() {
+        loaderManager.destroyLoader(LOADER_ID)
         Timber.d("onDestroy")
         super.onDestroy()
     }
 
     companion object {
+
+        val LOADER_ID = 111
         @JvmStatic
         fun newInstance(): PhotoFrag {
             val frag = PhotoFrag()

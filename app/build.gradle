@@ -148,7 +148,8 @@ dependencies {
 //    compile 'com.jakewharton.rxbinding2:rxbinding:2.0.0'
     //    compile 'com.afollestad.material-dialogs:core:0.9.4.4'
 
-
+    //loading view animation
+    //for recyclerview adapter
     compile 'org.jetbrains.kotlinx:kotlinx-coroutines-core:0.16'
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
     compile 'com.android.support:multidex:1.0.1'
@@ -168,15 +169,16 @@ dependencies {
     compile 'org.xutils:xutils:3.5.0'
     compile 'org.greenrobot:eventbus:3.0.0'
     compile 'com.jakewharton.timber:timber:4.5.1'
+    compile 'com.jakewharton:kotterknife:0.1.0-SNAPSHOT'
     compile 'de.hdodenhof:circleimageview:2.1.0'
-    compile 'com.ldoublem.loadingview:loadingviewlib:1.0'//loading view animation
-    compile 'com.songhang:smart-headerfooter-recyclerview:1.0.1'//for recyclerview adapter
-    debugCompile 'com.squareup.leakcanary:leakcanary-android:1.5.1'
-    releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5.1'
+    compile 'com.ldoublem.loadingview:loadingviewlib:1.0'
+    compile 'com.songhang:smart-headerfooter-recyclerview:1.0.1'
     testCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5.1'
     testCompile 'com.netflix.rxjava:rxjava-core:0.16.0'
     testCompile 'junit:junit:4.12'
     androidTestCompile 'com.google.code.findbugs:jsr305:2.0.1'
+    debugCompile 'com.squareup.leakcanary:leakcanary-android:1.5.1'
+    releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5.1'
 }
 
 

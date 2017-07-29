@@ -92,7 +92,7 @@
         <item>3</item>
     </string-array>
 
-    <string-array name="multi_select_list_preference_default_value" />
+    <string-array name="multi_select_list_preference_default_value"/>
 
     <string name="pref_title_system_sync_settings">System sync settings</string>
 
@@ -108,7 +108,7 @@
     <string name="loading">Loading</string>
     <string name="select_picture">Select Picture</string>
     <string name="uploading">Uploading</string>
-    <string name="empty" />
+    <string name="empty"/>
     <string name="title">Title</string>
     <string name="content">Content</string>
     <string name="label_content">Content:</string>
