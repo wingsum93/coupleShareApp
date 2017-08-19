@@ -1,19 +1,25 @@
 package com.ericho.coupleshare.util
 
 import android.content.Context
-import android.net.Uri
 import com.ericho.coupleshare.App
 import com.ericho.coupleshare.contant.WebAddress
-import com.ericho.coupleshare.http.BaseUiCallback
-import com.ericho.coupleshare.http.LoggingInterceptor
-import com.ericho.coupleshare.http.UserInfoInterceptor
+import com.ericho.coupleshare.network.LoggingInterceptor
+import com.ericho.coupleshare.network.UserInfoInterceptor
 import com.ericho.coupleshare.inputmodel.UploadLocationInputModel
+import com.ericho.coupleshare.inputmodel.ViewLocationInputModel
 import com.ericho.coupleshare.mvp.Location
-import okhttp3.*
+import okhttp3.Call
+import okhttp3.FormBody
+import okhttp3.HttpUrl
+import okhttp3.MediaType
+import okhttp3.MultipartBody
+import okhttp3.OkHttpClient
+import okhttp3.Request
+import okhttp3.RequestBody
+import okhttp3.Response
 import timber.log.Timber
 import java.io.File
 import java.io.IOException
-import java.util.UUID
 import java.util.concurrent.TimeUnit
 
 /**
@@ -101,9 +107,9 @@ object NetworkUtil{
         return b.build()
     }
 
-    fun getLocationList() : Call {
+    fun getLocationList() : Request {
 
-        val model = UploadLocationInputModel.sample
+        val model = ViewLocationInputModel()
         Timber.v(App.gson.toJson(model))
         val requestBody = RequestBody.create(json,App.gson.toJson(model))
 
@@ -111,9 +117,9 @@ object NetworkUtil{
         b.post(requestBody)
         b.url(HttpUrl.parse(getUrl(App.context!!, WebAddress.API_LOC_GET)))
 
-        return execute(getOkhttpClient(),b.build())
+        return b.build()
     }
-    fun saveLocation(location: Location) : Request {
+    fun uploadLocation(location: Location) : Request {
 
         val model = UploadLocationInputModel()
         model.locations.add(location)

@@ -102,8 +102,11 @@
         <activity
             android:name=".act.ViewPhotoAct"
             android:theme="@style/AppTheme.NoActionBar"
-            android:screenOrientation="portrait">
-        </activity>
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".act.LocationDetailAct"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:screenOrientation="portrait"/>
         <service android:name=".service.UploadPhotoService"/>
         <service android:name=".service.LocationMonitorSer"/>
 

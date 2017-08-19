@@ -10,11 +10,11 @@ import com.ericho.coupleshare.BuildConfig
 import com.ericho.coupleshare.R
 import com.ericho.coupleshare.adapter.ServerUrlAdapter
 import com.ericho.coupleshare.contant.Key
-import com.ericho.coupleshare.http.ApiManager
+import com.ericho.coupleshare.network.ApiManager
 import com.ericho.coupleshare.setting.ServerAddress
 import com.ericho.coupleshare.setting.model.ServerBean
 import kotlinx.android.synthetic.main.act_dialog_change_server.*
-import java.util.*
+import java.util.ArrayList
 
 /**
  * Created by steve_000 on 8/7/2017.

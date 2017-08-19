@@ -1,7 +1,6 @@
 package com.ericho.coupleshare.util;
 
 import java.util.Collection;
-import java.util.Objects;
 
 /**
  * Created by steve_000 on 12/6/2017.

@@ -2,8 +2,8 @@ package com.ericho.coupleshare.mvp.data.remote
 
 import android.content.Context
 import com.ericho.coupleshare.App
-import com.ericho.coupleshare.http.BaseUiCallback
-import com.ericho.coupleshare.http.model.BaseResponse
+import com.ericho.coupleshare.network.BaseUiCallback
+import com.ericho.coupleshare.network.model.BaseResponse
 import com.ericho.coupleshare.mvp.Location
 import com.ericho.coupleshare.mvp.data.LocationDataSource
 import com.ericho.coupleshare.util.NetworkUtil
@@ -19,20 +19,21 @@ import java.io.IOException
  * for project CoupleShare
  * package name com.ericho.coupleshare.mvp.data.remote
  */
-class LocationRemoteDataSource constructor(val context: Context) :LocationDataSource {
+open class LocationRemoteDataSource :LocationDataSource {
 
 
 
     private val client: OkHttpClient//can be ignore
-
+    var call :Call? = null
 
     init {
         client = NetworkUtil.getOkhttpClient()
     }
 
     override fun getLocations(callback: LocationDataSource.LoadLocationsCallback) {
-        val call = NetworkUtil.getLocationList()
-        call.enqueue(object :BaseUiCallback(){
+        val req = NetworkUtil.getLocationList()
+        call = NetworkUtil.execute(request = req)
+        call!!.enqueue(object :BaseUiCallback(){
             override fun onUiFailure(okCall: Call?, e: IOException?) {
                 callback.onDataNotAvailable(e!!)
             }
@@ -56,7 +57,7 @@ class LocationRemoteDataSource constructor(val context: Context) :LocationDataSo
 
 
     override fun saveLocation(location: Location, callback: LocationDataSource.SaveLocationCallback) {
-        val request = NetworkUtil.saveLocation(location)
+        val request = NetworkUtil.uploadLocation(location)
         val call = NetworkUtil.execute(client, request)
         call.enqueue(object :BaseUiCallback(){
             override fun onUiFailure(okCall: Call?, e: IOException?) {
@@ -98,7 +99,7 @@ class LocationRemoteDataSource constructor(val context: Context) :LocationDataSo
         @JvmStatic
         fun getInstance(context: Context) :LocationRemoteDataSource{
             if(INSTANCE==null){
-                INSTANCE = LocationRemoteDataSource(context)
+                INSTANCE = LocationRemoteDataSource()
             }
             return INSTANCE as LocationRemoteDataSource
         }

@@ -119,7 +119,8 @@
     <string name="logout">Logout</string>
     <string name="add">Add</string>
     <string name="confirm">Comfirm</string>
-    <string name="confirm_to_delete">Comfirm to delete?</string>
+    <string name="confirm_to_delete">Confirm to delete?</string>
     <string name="permission_denied">Permission Denied</string>
     <string name="clear">Clear</string>
+    <string name="refresh">Refresh</string>
 </resources>

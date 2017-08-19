@@ -5,25 +5,28 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
-import android.support.v7.app.AppCompatActivity
 import android.view.Menu
 import android.view.View
-import android.widget.*
+import android.widget.Button
+import android.widget.EditText
+import android.widget.ImageView
+import android.widget.ProgressBar
 import butterknife.bindView
 import com.bumptech.glide.Glide
 import com.ericho.coupleshare.App
 import com.ericho.coupleshare.R
 import com.ericho.coupleshare.eventbus.StatusEvent
-import com.ericho.coupleshare.http.StatusNoticeManager
-import com.ericho.coupleshare.http.model.BaseSingleResponse
+import com.ericho.coupleshare.network.StatusNoticeManager
+import com.ericho.coupleshare.network.model.BaseSingleResponse
 import com.ericho.coupleshare.model.StatusTO
-import com.ericho.coupleshare.util.FileHelper
 import com.ericho.coupleshare.util.AHttpHelper
+import com.ericho.coupleshare.util.FileHelper
 import com.ericho.coupleshare.util.NetworkUtil
 import com.ericho.coupleshare.util.ZoomImageHelper
 import com.google.gson.reflect.TypeToken
 import okhttp3.Call
 import org.greenrobot.eventbus.EventBus
+import org.jetbrains.anko.toast
 import timber.log.Timber
 import java.io.File
 
@@ -69,7 +72,7 @@ class StatusAddAct_copy : BasePermissionActivity() {
                 .setTransformMethod { string -> App.gson.fromJson(string,object :TypeToken<BaseSingleResponse<Unit>>(){}.type)  }
                 .setFail { _call, e ->
                     Timber.w(e)
-                    showToastText("${e.message}")
+                    toast("${e.message}")
                     showProgress(false)
                     lockUi(false)
                 }.build()
@@ -82,7 +85,7 @@ class StatusAddAct_copy : BasePermissionActivity() {
                 file.lastModified()
                 uploadStatueNotice(file)
             }catch (e:Exception){
-                showToastText("${e.message}")
+                toast("${e.message}")
                 Timber.w(e)
             }
 
@@ -110,7 +113,7 @@ class StatusAddAct_copy : BasePermissionActivity() {
                     val uri = data!!.data
                     replacePhotoUri(uri)
                 }else{
-                    showToastText("pick photo was cancelled!")
+                    toast("pick photo was cancelled!")
                 }
             }
             else -> super.onActivityResult(requestCode, resultCode, data)
@@ -125,7 +128,6 @@ class StatusAddAct_copy : BasePermissionActivity() {
     fun loadImageBitmapFromUri(){
         Glide.with(this)
                 .load(item.uri)
-                .skipMemoryCache(true)
                 .into(imageView)
     }
     fun showProgress( active:Boolean){
@@ -156,7 +158,7 @@ class StatusAddAct_copy : BasePermissionActivity() {
 
     private fun success(call: Call, res: BaseSingleResponse<Unit>) {
             //success
-            showToastText(getString(R.string.upload_success))
+            toast(getString(R.string.upload_success))
             showProgress(false)
             lockUi(false)
             EventBus.getDefault().post(StatusEvent())
@@ -198,9 +200,5 @@ class StatusAddAct_copy : BasePermissionActivity() {
     companion object {
         val REQUEST_IMAGE_CAPTURE = 109
         val REQ_PICK_IMAGE = 101
-    }
-
-    fun AppCompatActivity.showToastText(string:String){
-        Toast.makeText(this,string,Toast.LENGTH_LONG).show()
     }
 }

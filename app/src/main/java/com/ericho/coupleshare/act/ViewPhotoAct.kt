@@ -1,17 +1,15 @@
 package com.ericho.coupleshare.act
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
-import android.net.Uri
-import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.design.widget.FloatingActionButton
-import android.view.View
+import android.support.v7.app.AppCompatActivity
 import android.view.Window
 import android.view.WindowManager
 import android.widget.ImageView
 import com.bumptech.glide.Glide
-
 import com.ericho.coupleshare.R
 
 class ViewPhotoAct : AppCompatActivity() {
@@ -57,8 +55,15 @@ class ViewPhotoAct : AppCompatActivity() {
 
         Glide.with(this)
                 .load(items!![pos])
-                .skipMemoryCache(true)
                 .into(img)
+        val i=Intent()
+        i.putExtra("RESULT",pos)
+        setResult(Activity.RESULT_OK,i)
+    }
+
+    override fun onDestroy() {
+
+        super.onDestroy()
     }
 
     companion object {

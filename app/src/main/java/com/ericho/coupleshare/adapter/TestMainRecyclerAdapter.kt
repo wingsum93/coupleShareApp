@@ -10,8 +10,6 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.ericho.coupleshare.R
 import com.ericho.coupleshare.setting.model.AppTestBo
-import io.reactivex.Observable
-import io.reactivex.subjects.PublishSubject
 
 /**
  * Created by steve_000 on 8/7/2017.

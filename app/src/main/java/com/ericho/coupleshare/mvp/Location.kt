@@ -1,10 +1,5 @@
 package com.ericho.coupleshare.mvp
 
-import com.google.gson.annotations.SerializedName
-import org.xutils.db.annotation.Column
-import org.xutils.db.annotation.Table
-import java.util.*
-
 /**
  * Created by steve_000 on 4/7/2017.
  * for project CoupleShare

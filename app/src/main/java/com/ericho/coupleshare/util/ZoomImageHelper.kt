@@ -8,12 +8,10 @@ import android.app.Activity
 import android.graphics.Point
 import android.graphics.Rect
 import android.net.Uri
-import android.os.Build
 import android.view.View
 import android.view.animation.DecelerateInterpolator
 import android.widget.ImageView
 import com.bumptech.glide.Glide
-import com.ericho.coupleshare.R
 import timber.log.Timber
 
 /**
@@ -106,7 +104,6 @@ class ZoomImageHelper {
         val expandedImageView = findViewById( expendViewId) as ImageView
         Glide.with(mActivity)
                 .load(imageUri)
-                .skipMemoryCache(true)
                 .into(expandedImageView)
 
         // Calculate the starting and ending bounds for the zoomed-in image.
@@ -237,7 +234,6 @@ class ZoomImageHelper {
         val expandedImageView = findViewById( expendViewId) as ImageView
         Glide.with(mActivity)
                 .load(urlPath)
-                .skipMemoryCache(true)
                 .into(expandedImageView)
 
         // Calculate the starting and ending bounds for the zoomed-in image.

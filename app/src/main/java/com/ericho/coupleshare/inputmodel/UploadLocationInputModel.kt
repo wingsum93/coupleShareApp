@@ -2,8 +2,6 @@ package com.ericho.coupleshare.inputmodel
 
 import com.ericho.coupleshare.mvp.Location
 import com.google.gson.annotations.SerializedName
-import java.util.*
-import kotlin.collections.ArrayList
 
 /**
  * Created by steve_000 on 4/7/2017.

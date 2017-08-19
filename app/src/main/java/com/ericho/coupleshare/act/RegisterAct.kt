@@ -7,15 +7,14 @@ import android.view.inputmethod.EditorInfo
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ProgressBar
-import android.widget.Toast
 import butterknife.bindView
 import com.ericho.coupleshare.Injection
 import com.ericho.coupleshare.R
 import com.ericho.coupleshare.frag.AlertDialogFrag
-import com.ericho.coupleshare.http.retrofit2.UserService
+import com.ericho.coupleshare.network.retrofit2.UserService
 import com.ericho.coupleshare.mvp.RegisterContract
 import com.ericho.coupleshare.mvp.presenter.RegisterPresenter
-import kotlinx.android.synthetic.main.act_login.*
+import org.jetbrains.anko.toast
 
 /**
  * Created by steve_000 on 8/7/2017.
@@ -75,7 +74,9 @@ open class RegisterAct: AppCompatActivity(), RegisterContract.View, View.OnClick
     }
 
     override fun showRegisterSuccess() {
-        runOnUiThread { Toast.makeText(this, "rgister Success", Toast.LENGTH_LONG).show() }
+        runOnUiThread {
+          toast("register Success")
+        }
     }
 
     override fun showRegisterFailure(errorMessage: String?) {

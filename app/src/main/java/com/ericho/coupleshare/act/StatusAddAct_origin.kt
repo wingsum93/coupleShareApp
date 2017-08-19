@@ -11,20 +11,19 @@ import android.graphics.Rect
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
-import android.support.v7.app.AppCompatActivity
 import android.view.Menu
 import android.view.View
 import android.view.animation.DecelerateInterpolator
 import android.widget.Button
 import android.widget.ImageView
-import android.widget.Toast
 import butterknife.bindView
 import com.bumptech.glide.Glide
 import com.ericho.coupleshare.R
-import com.ericho.coupleshare.http.StatusNoticeManager
+import com.ericho.coupleshare.network.StatusNoticeManager
 import com.ericho.coupleshare.model.StatusTO
 import com.ericho.coupleshare.util.float
 import kotlinx.android.synthetic.main.act_status_notice_add.*
+import org.jetbrains.anko.toast
 
 
 class StatusAddAct_origin : BasePermissionActivity() {
@@ -86,7 +85,7 @@ class StatusAddAct_origin : BasePermissionActivity() {
                     val uri = data!!.data
                     replacePhotoUri(uri)
                 }else{
-                    showToastText("pick photo was cancelled!")
+                    toast("pick photo was cancelled!")
                 }
             }
             else -> super.onActivityResult(requestCode, resultCode, data)
@@ -102,7 +101,7 @@ class StatusAddAct_origin : BasePermissionActivity() {
         val bitmap = contentResolver.openInputStream(item.uri)
         Glide.with(this)
                 .load(item.uri)
-                .skipMemoryCache(true).into(imageView)
+                .into(imageView)
     }
 
     fun save(){
@@ -142,7 +141,6 @@ class StatusAddAct_origin : BasePermissionActivity() {
                 R.id.expanded_image) as ImageView
         Glide.with(this)
                 .load(imageUri)
-                .skipMemoryCache(true)
                 .into(expandedImageView)
 
         // Calculate the starting and ending bounds for the zoomed-in image.
@@ -269,7 +267,5 @@ class StatusAddAct_origin : BasePermissionActivity() {
         val REQ_PICK_IMAGE = 101
     }
 
-    fun AppCompatActivity.showToastText(string:String){
-        Toast.makeText(this,string,Toast.LENGTH_LONG).show()
-    }
+
 }

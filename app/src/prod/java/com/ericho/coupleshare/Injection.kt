@@ -14,18 +14,23 @@ import com.ericho.coupleshare.mvp.data.remote.LoginRemoteDataSource
  * for project CoupleShare
  * package name com.ericho.coupleshare
  */
-object Injection{
-    @JvmStatic
-    fun provideLoginRepository(context: Context):LoginRepository {
-        return LoginRepository.getInstance(LoginRemoteDataSource.getInstance(context))
-    }
-    @JvmStatic
-    fun provideLocationsRepository(context: Context): LocationsRepository {
-        return LocationsRepository.getInstance(LocationRemoteDataSource.getInstance(context),
-                LocationsLocalDataSource.getInstance())
-    }
-    @JvmStatic
-    fun providePhotoRepository(context: Context): PhotoRepository {
-        return PhotoRepository.getInstance(FakePhotoDataSource())
-    }
+object Injection {
+  @JvmStatic
+  fun provideLoginRepository(context: Context): LoginRepository {
+    return LoginRepository.getInstance(LoginRemoteDataSource.getInstance(context))
+  }
+
+  @JvmStatic
+  fun provideLocationsRepository(context: Context,
+                                 locRemoteDataSource: LocationRemoteDataSource = LocationRemoteDataSource.getInstance(context),
+                                 locLocalDataSource: LocationsLocalDataSource = LocationsLocalDataSource.getInstance()): LocationsRepository {
+    return LocationsRepository.getInstance(
+            locRemoteDataSource,
+            locLocalDataSource)
+  }
+
+  @JvmStatic
+  fun providePhotoRepository(context: Context): PhotoRepository {
+    return PhotoRepository.getInstance(FakePhotoDataSource())
+  }
 }

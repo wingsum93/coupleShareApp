@@ -14,13 +14,12 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
-import butterknife.bindView
 import com.ericho.coupleshare.App
 import com.ericho.coupleshare.R
 import com.ericho.coupleshare.act.StatusAddAct_copy
 import com.ericho.coupleshare.adapter.StatusAdapter
 import com.ericho.coupleshare.eventbus.StatusEvent
-import com.ericho.coupleshare.http.model.BaseResponse
+import com.ericho.coupleshare.network.model.BaseResponse
 import com.ericho.coupleshare.interf.FabListener
 import com.ericho.coupleshare.mvp.StatusBo
 import com.ericho.coupleshare.mvp.StatusContract
@@ -28,11 +27,11 @@ import com.ericho.coupleshare.util.AHttpHelperB
 import com.ericho.coupleshare.util.NetworkUtil
 import com.ericho.coupleshare.util.ZoomImageHelper
 import com.ericho.coupleshare.util.safe
-import com.ericho.coupleshare.util.showToastMessage
 import com.google.gson.reflect.TypeToken
 import okhttp3.Request
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
+import org.jetbrains.anko.toast
 import timber.log.Timber
 
 /**
@@ -88,7 +87,7 @@ class StatusFrag:BaseFrag(), StatusContract.View, FabListener {
         recyclerView?.setAdapter(adapter)
         swipeRefreshLayout?.setOnRefreshListener {
             //
-            showToastMessage("refresh")
+            activity.toast("refresh")
             swipeRefreshLayout?.isRefreshing = false
             loadStatusList()
         }

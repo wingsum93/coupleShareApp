@@ -5,10 +5,9 @@ import android.support.design.widget.CollapsingToolbarLayout
 import android.support.design.widget.FloatingActionButton
 import android.support.v7.app.AppCompatActivity
 import android.widget.TextView
-import android.widget.Toast
 import butterknife.bindView
 import com.ericho.coupleshare.R
-import kotlinx.android.synthetic.main.act_test_app_bar.*
+import org.jetbrains.anko.toast
 
 /**
  * Created by steve_000 on 8/7/2017.
@@ -33,13 +32,11 @@ class TestAppBarAct : AppCompatActivity() {
         textView.text = generateLargeText()
 
         floatingActionButton.setOnClickListener({
-            _-> showToastMessage("fab click!")
+            _-> toast("fab click!")
         })
 
     }
-    fun showToastMessage(text:String){
-        Toast.makeText(this,text,Toast.LENGTH_SHORT).show()
-    }
+
 
     private fun generateLargeText(): String {
         val size = 35555

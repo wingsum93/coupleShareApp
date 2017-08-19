@@ -5,7 +5,7 @@ import android.os.Handler
 import android.os.HandlerThread
 import android.os.Looper
 import com.ericho.coupleshare.App
-import com.ericho.coupleshare.http.model.BaseSingleResponse
+import com.ericho.coupleshare.network.model.BaseSingleResponse
 import com.ericho.coupleshare.mvp.data.LoginDataSource
 import com.ericho.coupleshare.util.NetworkUtil
 import com.google.gson.reflect.TypeToken

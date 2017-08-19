@@ -8,15 +8,17 @@ import android.support.v7.widget.RecyclerView
  * for project CoupleShare
  * package name com.ericho.coupleshare.adapter
  */
-open abstract class BaseRecyclerAdapter<T, VH : RecyclerView.ViewHolder> constructor(context :Context , items:List<T>? ): RecyclerView.Adapter<VH>()  {
+abstract class BaseRecyclerAdapter<T, VH : RecyclerView.ViewHolder> : RecyclerView.Adapter<VH> {
 
     var items: List<T>? = null
     private val context: Context
 
-    init {
+    constructor(context :Context , items:List<T>? ){
         this.items = items
         this.context = context
     }
+    constructor(context :Context , items:Array<T> ):this(context,items.toList())
+
 
 
     override fun getItemCount(): Int {

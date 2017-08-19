@@ -13,7 +13,7 @@ import java.io.IOException
  * for project CoupleShare
  * package name com.ericho.coupleshare.mvp.data.local
  */
-class LocationsLocalDataSource: LocationDataSource {
+open class LocationsLocalDataSource: LocationDataSource {
 
 
     private val daoConfig: DbManager.DaoConfig

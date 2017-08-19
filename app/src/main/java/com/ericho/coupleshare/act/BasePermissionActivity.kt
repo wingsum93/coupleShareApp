@@ -6,7 +6,8 @@ import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
 import android.util.SparseArray
 import com.ericho.coupleshare.interf.PermissionListener
-import java.util.*
+import java.util.ArrayList
+import java.util.Collections
 
 /**
  * Created by steve_000 on 9/7/2017.

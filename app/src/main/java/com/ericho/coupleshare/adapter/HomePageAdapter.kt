@@ -5,10 +5,10 @@ import android.support.annotation.StringRes
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentPagerAdapter
-import android.support.v4.app.FragmentStatePagerAdapter
-import android.support.v4.view.PagerAdapter
 import com.ericho.coupleshare.R
-import com.ericho.coupleshare.frag.*
+import com.ericho.coupleshare.frag.LocationShowFrag2
+import com.ericho.coupleshare.frag.PhotoFrag
+import com.ericho.coupleshare.frag.StatusFrag
 import timber.log.Timber
 
 /**
@@ -32,7 +32,7 @@ class HomePageAdapter constructor(fm:FragmentManager,context: Context):FragmentP
         when (position) {
             0 -> return PhotoFrag.newInstance()
             1 -> return StatusFrag.newInstance()
-            2 -> return LocationShowFrag.newInstance()
+            2 -> return LocationShowFrag2.newInstance()
 
             else -> return null
         }

@@ -1,6 +1,6 @@
 package com.ericho.coupleshare.eventbus
 
-import java.util.*
+import java.util.Date
 
 /**
  * Created by steve_000 on 21/7/2017.

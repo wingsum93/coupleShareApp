@@ -8,7 +8,6 @@ import android.content.ServiceConnection
 import android.net.Uri
 import android.os.Bundle
 import android.os.IBinder
-import android.os.PersistableBundle
 import android.provider.MediaStore
 import android.support.design.widget.FloatingActionButton
 import android.support.v7.app.AppCompatActivity
@@ -19,7 +18,6 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.AdapterView
 import android.widget.TextView
-import android.widget.Toast
 import butterknife.bindView
 import com.ericho.coupleshare.R
 import com.ericho.coupleshare.adapter.UploadPhotoAdapter
@@ -31,6 +29,7 @@ import com.ericho.coupleshare.mvp.presenter.AddPhotoPresenter
 import com.ericho.coupleshare.service.UploadPhotoService
 import com.ericho.coupleshare.util.FileHelper
 import com.ericho.coupleshare.util.ZoomImageHelper
+import org.jetbrains.anko.toast
 import timber.log.Timber
 import java.io.File
 
@@ -145,7 +144,7 @@ class PhotoAddAct : BasePermissionActivity(), PhotosAddContract.View {
                     val x : ArrayList<Uri> = processPhotoIntent(data)
                     addMorePhoto(x)
                 }else{
-                    showToastText("pick photo was cancelled!")
+                  toast("pick photo was cancelled!")
                 }
             }
         }
@@ -253,6 +252,6 @@ class PhotoAddAct : BasePermissionActivity(), PhotosAddContract.View {
     }
 
     fun AppCompatActivity.showToastText(string:String){
-        Toast.makeText(this,string,Toast.LENGTH_LONG).show()
+      toast(string)
     }
 }

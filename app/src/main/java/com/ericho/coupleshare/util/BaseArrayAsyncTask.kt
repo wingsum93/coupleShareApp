@@ -1,7 +1,6 @@
 package com.ericho.coupleshare.util
 
 import android.os.AsyncTask
-import com.ericho.coupleshare.mvp.isNull
 
 /**
  * Created by steve_000 on 25/7/2017.

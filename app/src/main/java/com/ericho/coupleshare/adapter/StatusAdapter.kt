@@ -6,11 +6,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
-import android.widget.ImageView
 import android.widget.TextView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.TransitionOptions
+import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.ericho.coupleshare.R
-import com.ericho.coupleshare.http.OkHttpImpl
 import com.ericho.coupleshare.mvp.StatusBo
 import com.ericho.coupleshare.util.getUrl
 import de.hdodenhof.circleimageview.CircleImageView
@@ -34,8 +34,7 @@ class StatusAdapter constructor(context: Context, items:List<StatusBo>?) : BaseR
         val item = items!!.get(position)
         Glide.with(getContext())
                 .load(getContext().getUrl(item.photoUrlSuffix!!))
-                .skipMemoryCache(true)
-                .dontAnimate()
+                .transition(DrawableTransitionOptions.withCrossFade())
                 .into(holder.imageView)
 
 

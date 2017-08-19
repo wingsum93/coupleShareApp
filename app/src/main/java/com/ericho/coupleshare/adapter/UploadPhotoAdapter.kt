@@ -33,7 +33,6 @@ class UploadPhotoAdapter constructor(context:Context, items:List<Uri>):BaseRecyc
 
         Glide.with(getContext())
                 .load(item)
-                .skipMemoryCache(true)
                 .into(holder!!.img)
 
         holder.img.setOnClickListener { imageItemClickListener.onItemClick(null,holder.img,position,getItemId(position)) }

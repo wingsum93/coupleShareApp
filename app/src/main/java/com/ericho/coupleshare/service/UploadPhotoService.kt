@@ -7,12 +7,9 @@ import android.os.Binder
 import android.os.IBinder
 import com.ericho.coupleshare.App
 import com.ericho.coupleshare.eventbus.PhotoUploadEvent
-import com.ericho.coupleshare.http.model.BaseSingleResponse
-import com.ericho.coupleshare.util.BaseArrayAsyncTask
-import com.ericho.coupleshare.util.AHttpHelper
+import com.ericho.coupleshare.network.model.BaseSingleResponse
 import com.ericho.coupleshare.util.NetworkUtil
 import com.google.gson.reflect.TypeToken
-import okhttp3.Response
 import org.greenrobot.eventbus.EventBus
 import timber.log.Timber
 import java.io.File

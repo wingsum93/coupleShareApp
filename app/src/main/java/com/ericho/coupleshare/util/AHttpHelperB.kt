@@ -2,7 +2,7 @@ package com.ericho.coupleshare.util
 
 import android.os.Handler
 import android.os.Looper
-import com.ericho.coupleshare.http.model.BaseResponse
+import com.ericho.coupleshare.network.model.BaseResponse
 import okhttp3.Call
 import okhttp3.Callback
 import okhttp3.Request

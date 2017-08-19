@@ -1,6 +1,5 @@
 package com.ericho.coupleshare.mvp
 
-import android.net.Uri
 import com.ericho.coupleshare.App
 import com.ericho.coupleshare.util.NetworkUtil
 

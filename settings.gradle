@@ -1,2 +1,2 @@
-include ':app', ':multiStateView'
+include ':app', ':multiStateView', ':erichouilibrary'
 project(':multiStateView').projectDir = new File('lib/multiStateView')

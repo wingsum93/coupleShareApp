@@ -56,9 +56,10 @@ class LocationMonitorSer : Service(){
         if (!mRequestingLocationUpdates) {
             val mLocationRequest = LocationRequest()
             mLocationRequest.priority = LocationRequest.PRIORITY_HIGH_ACCURACY
-            mLocationRequest.interval = 10 * 1000
-            mLocationRequest.maxWaitTime = (30*1000)
-            mLocationRequest.fastestInterval = 5 * 1000
+            mLocationRequest.fastestInterval = 5 *60 * 1000
+            mLocationRequest.interval = 10 *60 * 1000
+            mLocationRequest.maxWaitTime = (30* 60 * 1000)
+            mLocationRequest.smallestDisplacement = 50f
             startLocationUpdates(mLocationRequest);
         }
 

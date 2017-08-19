@@ -15,7 +15,6 @@ interface LocationsContract {
         fun showLocations(locations: List<Location>)
 
 
-        fun showTaskMarkedActive()
 
         var isActive: Boolean
 
@@ -24,6 +23,7 @@ interface LocationsContract {
         fun showErrorMessage(error:String)
 
         fun showFilteringPopUpMenu()
+        fun showConfirmDeleteDialog(location: Location)
 
     }
 
@@ -31,8 +31,12 @@ interface LocationsContract {
         fun result(requestCode: Int, resultCode: Int)
 
         fun loadLocations(forceUpdate: Boolean)
-
         fun openLocationDetails(requestedLocation: Location)
+
+        fun deleteOneLocation(location: Location)
+
+        fun confirmDeleteOneLocation(location: Location)
+
 
         var filtering: LocationsFilterType
     }

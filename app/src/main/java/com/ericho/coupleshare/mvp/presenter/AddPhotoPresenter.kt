@@ -1,10 +1,8 @@
 package com.ericho.coupleshare.mvp.presenter
 
-import android.app.Activity
 import android.content.Intent
 import com.ericho.coupleshare.App
 import com.ericho.coupleshare.Injection
-import com.ericho.coupleshare.act.PhotoAddAct
 import com.ericho.coupleshare.mvp.PhotosAddContract
 import com.ericho.coupleshare.mvp.data.PhotoRepository
 

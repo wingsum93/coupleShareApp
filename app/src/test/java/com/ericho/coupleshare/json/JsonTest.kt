@@ -1,6 +1,6 @@
 package com.ericho.coupleshare.json
 
-import com.ericho.coupleshare.http.model.BaseResponse
+import com.ericho.coupleshare.network.model.BaseResponse
 import com.ericho.coupleshare.mvp.Location
 import com.google.gson.GsonBuilder
 import com.google.gson.JsonDeserializer
@@ -9,7 +9,7 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.JUnit4
 import java.lang.reflect.Type
-import java.util.*
+import java.util.Date
 
 /**
  * Created by steve_000 on 10/7/2017.

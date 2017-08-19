@@ -5,11 +5,11 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView.OnItemClickListener
 import android.widget.ImageView
+import com.bumptech.glide.Glide
 import com.ericho.coupleshare.R
 import com.ericho.coupleshare.mvp.PhotoBo
-import android.widget.AdapterView.OnItemClickListener
-import com.bumptech.glide.Glide
 import com.ericho.coupleshare.util.NetworkUtil
 
 
@@ -41,7 +41,6 @@ class PhotoAdapter constructor(context: Context,items:List<PhotoBo>?) : BaseRecy
         Glide
                 .with(getContext())
                 .load(NetworkUtil.getUrl(getContext(),item.suffixUrl!!))
-                .skipMemoryCache(true)
                 .into(holder.imageView)
         holder.imageView.setOnClickListener {
             mListener?.onItemClick(null,holder.itemView,position,getItemId(position))

@@ -6,50 +6,56 @@ import com.ericho.coupleshare.mvp.Location
 import com.ericho.coupleshare.mvp.LocationsContract
 import com.ericho.coupleshare.mvp.LocationsRepository
 import com.ericho.coupleshare.mvp.data.LocationDataSource
-import timber.log.Timber
-import java.util.*
 
 /**
  * Created by steve_000 on 8/7/2017.
  * for project CoupleShare
  * package name com.ericho.coupleshare.mvp.presenter
  */
-class LocationsPresenter constructor(val mView:LocationsContract.View): LocationsContract.Presenter {
-    override var filtering: LocationsFilterType = LocationsFilterType.All
+class LocationsPresenter constructor(
+        val mView: LocationsContract.View,
+        var locationsRepository: LocationsRepository) : LocationsContract.Presenter {
+  override var filtering: LocationsFilterType = LocationsFilterType.All
 
-    private var locationsRepository: LocationsRepository? = null
 
-    override fun start() {
-        locationsRepository = Injection.provideLocationsRepository(App.context!!)
+  override fun start() {
+    locationsRepository = Injection.provideLocationsRepository(App.context!!)
 //        loadLocations(true)
 
 
-    }
+  }
 
-    override fun result(requestCode: Int, resultCode: Int) {
+  override fun result(requestCode: Int, resultCode: Int) {
 
-    }
+  }
 
-    override fun loadLocations(forceUpdate: Boolean) {
-        if(false){
+  override fun loadLocations(forceUpdate: Boolean) {
+    if (false) {
 
-        }else{
-            locationsRepository!!.getLocations(object :LocationDataSource.LoadLocationsCallback{
-                override fun onLocationsLoaded(locations: List<Location>) {
-                    mView.showLocations(locations)
-                }
-
-                override fun onDataNotAvailable(t: Throwable) {
-                    mView.showErrorMessage(t.message.toString())
-                }
-            })
+    } else {
+      locationsRepository.getLocations(object : LocationDataSource.LoadLocationsCallback {
+        override fun onLocationsLoaded(locations: List<Location>) {
+          mView.showLocations(locations)
         }
+
+        override fun onDataNotAvailable(t: Throwable) {
+          mView.showErrorMessage(t.message.toString())
+        }
+      })
     }
+  }
 
-    override fun openLocationDetails(requestedLocation: Location) {
+  override fun openLocationDetails(requestedLocation: Location) {
 
+  }
+
+  override fun deleteOneLocation(location: Location) {
+    if (location.id != null) {
+      locationsRepository.deleteLocation(location.id!!)
     }
+  }
 
-
-
+  override fun confirmDeleteOneLocation(location: Location) {
+    mView.showConfirmDeleteDialog(location)
+  }
 }

@@ -21,26 +21,25 @@ import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ProgressBar
 import android.widget.TextView
-import butterknife.bindView
 import com.ericho.coupleshare.App
 import com.ericho.coupleshare.R
 import com.ericho.coupleshare.act.PhotoAddAct
 import com.ericho.coupleshare.act.ViewPhotoAct
 import com.ericho.coupleshare.adapter.PhotoAdapter
 import com.ericho.coupleshare.eventbus.PhotoUploadEvent
-import com.ericho.coupleshare.http.PhotoHttpLoader
-import com.ericho.coupleshare.http.WrapperObject
+import com.ericho.coupleshare.network.PhotoHttpLoader
+import com.ericho.coupleshare.network.Result
 import com.ericho.coupleshare.mvp.PhotoBo
 import com.ericho.coupleshare.mvp.PhotosContract
 import com.ericho.coupleshare.mvp.presenter.PhotoPresenter
 import com.ericho.coupleshare.util.ZoomImageHelper
 import com.ericho.coupleshare.util.safe
-import com.ericho.coupleshare.util.showToastMessage
 import com.headerfooter.songhang.library.SmartRecyclerAdapter
 import kotlinx.android.synthetic.main.act_status_notice_add.*
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
+import org.jetbrains.anko.toast
 import timber.log.Timber
 
 /**
@@ -48,7 +47,7 @@ import timber.log.Timber
  * for project CoupleShare
  * package name com.ericho.coupleshare.frag
  */
-class PhotoFrag:BaseFrag(), PhotosContract.View, SwipeRefreshLayout.OnRefreshListener,LoaderManager.LoaderCallbacks<WrapperObject<PhotoBo>>{
+class PhotoFrag:BaseFrag(), PhotosContract.View, SwipeRefreshLayout.OnRefreshListener,LoaderManager.LoaderCallbacks<Result<PhotoBo>>{
 
     var recyclerView: RecyclerView? = null
     var swipeRefreshLayout: SwipeRefreshLayout? = null
@@ -56,7 +55,7 @@ class PhotoFrag:BaseFrag(), PhotosContract.View, SwipeRefreshLayout.OnRefreshLis
 
     private var adapter: PhotoAdapter? = null
     private var smartAdapter: SmartRecyclerAdapter? = null
-
+    private var layoutManager:RecyclerView.LayoutManager? = null
     private var mPresenter: PhotosContract.Presenter? = null
     private var zoomImageHelper :ZoomImageHelper? = null
 
@@ -84,7 +83,8 @@ class PhotoFrag:BaseFrag(), PhotosContract.View, SwipeRefreshLayout.OnRefreshLis
         swipeRefreshLayout = view?.findViewById(R.id.swipeRefreshLayout) as SwipeRefreshLayout
         fab = view?.findViewById(R.id.fab) as FloatingActionButton
         //listener
-        recyclerView!!.layoutManager = GridLayoutManager(activity, 3)
+        layoutManager = GridLayoutManager(activity, 3)
+        recyclerView!!.layoutManager = layoutManager
         recyclerView!!.setHasFixedSize(true)
         recyclerView!!.itemAnimator = DefaultItemAnimator()
         if(adapter == null) {
@@ -97,7 +97,7 @@ class PhotoFrag:BaseFrag(), PhotosContract.View, SwipeRefreshLayout.OnRefreshLis
 
                 val actOpt =
                 ActivityOptions.makeScaleUpAnimation(view,view.x.toInt(),view.y.toInt(),view.width,view.height)
-                startActivity(ViewPhotoAct.newIntent(activity,uriList,position),actOpt.toBundle())
+                startActivityForResult(ViewPhotoAct.newIntent(activity,uriList,position),REQ_VIEW_PHOTO,actOpt.toBundle())
             })
         }
         if(smartAdapter == null) {
@@ -172,6 +172,17 @@ class PhotoFrag:BaseFrag(), PhotosContract.View, SwipeRefreshLayout.OnRefreshLis
 
     }
 
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        when(requestCode){
+            REQ_VIEW_PHOTO->{
+                val pos = data?.getIntExtra("RESULT",0)
+                if(pos!=null) layoutManager?.scrollToPosition(pos)
+            }
+            else->super.onActivityResult(requestCode, resultCode, data)
+        }
+    }
+
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun onSubscribe(event:PhotoUploadEvent){
         Timber.d("onSubscribe ${App.gson.toJson(event)}")
@@ -209,12 +220,12 @@ class PhotoFrag:BaseFrag(), PhotosContract.View, SwipeRefreshLayout.OnRefreshLis
         adapter?.update(photos)
     }
 
-    override fun onCreateLoader(id: Int, args: Bundle?): Loader<WrapperObject<PhotoBo>> {
+    override fun onCreateLoader(id: Int, args: Bundle?): Loader<Result<PhotoBo>> {
         val load = PhotoHttpLoader.from(activity,args)
         return load
     }
 
-    override fun onLoadFinished(loader: Loader<WrapperObject<PhotoBo>>?, data: WrapperObject<PhotoBo>?) {
+    override fun onLoadFinished(loader: Loader<Result<PhotoBo>>?, data: Result<PhotoBo>?) {
         if(data!!.success()){
             list.clear()
             list.addAll(data.result.safe())
@@ -224,11 +235,11 @@ class PhotoFrag:BaseFrag(), PhotosContract.View, SwipeRefreshLayout.OnRefreshLis
         }else{
             val ioException = data.error
             Timber.w(ioException)
-            showToastMessage("load photo list fail ${ioException?.message}")
+            activity.toast("load photo list fail ${ioException?.message}")
         }
     }
 
-    override fun onLoaderReset(loader: Loader<WrapperObject<PhotoBo>>?) {
+    override fun onLoaderReset(loader: Loader<Result<PhotoBo>>?) {
         list.clear()
     }
 
@@ -253,6 +264,7 @@ class PhotoFrag:BaseFrag(), PhotosContract.View, SwipeRefreshLayout.OnRefreshLis
     companion object {
 
         val LOADER_ID = 111
+        val REQ_VIEW_PHOTO = 888
         @JvmStatic
         fun newInstance(): PhotoFrag {
             val frag = PhotoFrag()

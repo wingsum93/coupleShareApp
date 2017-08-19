@@ -3,7 +3,7 @@ package com.ericho.coupleshare.mvp
 import com.ericho.coupleshare.App
 import com.ericho.coupleshare.util.NetworkUtil
 import com.google.gson.annotations.SerializedName
-import java.util.*
+import java.util.Date
 
 /**
  * Created by steve_000 on 4/7/2017.

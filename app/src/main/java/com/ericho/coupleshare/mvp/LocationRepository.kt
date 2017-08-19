@@ -11,7 +11,7 @@ import java.util.LinkedHashMap
  * package name com.ericho.coupleshare.mvp
  */
 class LocationsRepository// Prevent direct instantiation.
-private constructor(private val mLocationsRemoteDataSource: LocationDataSource,
+(val mLocationsRemoteDataSource: LocationDataSource,
                     private val mLocationsLocalDataSource: LocationDataSource) : LocationDataSource {
 
     /**

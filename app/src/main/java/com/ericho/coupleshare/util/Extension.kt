@@ -2,15 +2,10 @@ package com.ericho.coupleshare.util
 
 import android.content.Context
 import android.location.Location
-import android.net.Uri
-import android.view.ViewConfiguration
 import com.ericho.coupleshare.App
 import com.ericho.coupleshare.contant.Key
 import com.ericho.coupleshare.model.LocationTo
-import java.io.File
-import java.io.InputStream
-import java.util.*
-import kotlin.collections.ArrayList
+import java.util.Date
 
 /**
  * Created by steve_000 on 14/7/2017.
@@ -50,5 +45,10 @@ fun Context.getUserName(): String {
     val pref = this.getSharedPreferences(com.ericho.coupleshare.contant.Key.pref_name,0)
     return pref.getString(Key.loginName,"unknown")
 }
+
+fun <T> List<T>.toArrayList():ArrayList<T>{
+    return ArrayList(this)
+}
+
 
 

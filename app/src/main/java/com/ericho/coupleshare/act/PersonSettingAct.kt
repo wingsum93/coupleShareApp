@@ -1,8 +1,7 @@
 package com.ericho.coupleshare.act
 
-import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
-
+import android.support.v7.app.AppCompatActivity
 import com.ericho.coupleshare.R
 
 class PersonSettingAct : AppCompatActivity() {

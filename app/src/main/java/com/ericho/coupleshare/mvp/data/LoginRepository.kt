@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.SharedPreferences
 import com.ericho.coupleshare.App
 import com.ericho.coupleshare.contant.Key
+import java.io.Serializable
 
 
 /**
@@ -11,7 +12,7 @@ import com.ericho.coupleshare.contant.Key
  * for project CoupleShare
  * package name com.ericho.coupleshare.mvp.data
  */
-class LoginRepository private constructor(private var dataSource: LoginDataSource):LoginDataSource {
+class LoginRepository private constructor(private var dataSource: LoginDataSource):LoginDataSource,Serializable {
     override fun login(username: String, password: String, callback: LoginDataSource.LoginCallback) {
         dataSource.login(username, password, object :LoginDataSource.LoginCallback{
             override fun onLoginSuccess() {

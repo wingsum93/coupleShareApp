@@ -100,3 +100,9 @@
     @org.greenrobot.eventbus.Subscribe <methods>;
 }
 -keep enum org.greenrobot.eventbus.ThreadMode { *; }
+
+# Parceler library
+# To configure Proguard, add the following lines to your proguard configuration file. These will keep files related to the Parcels utilty class and the Parcelable CREATOR instance: er
+-keep interface org.parceler.Parcel
+-keep @org.parceler.Parcel class * { *; }
+-keep class **$$Parcelable { *; }

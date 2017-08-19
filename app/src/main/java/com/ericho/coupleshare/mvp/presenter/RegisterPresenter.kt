@@ -8,7 +8,6 @@ import android.widget.EditText
 import com.ericho.coupleshare.mvp.RegisterContract
 import com.ericho.coupleshare.mvp.data.LoginDataSource
 import com.ericho.coupleshare.mvp.data.LoginRepository
-import io.reactivex.Observable
 import io.reactivex.disposables.Disposable
 
 /**
