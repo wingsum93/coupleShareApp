@@ -142,16 +142,18 @@ dependencies {
 
     compile "com.android.support:appcompat-v7:$project.ext.supportLibraryVersion"
     compile "com.android.support:support-v4:$project.ext.supportLibraryVersion"
+    compile "com.android.support:preference-v14:$project.ext.supportLibraryVersion"
     compile "com.android.support:design:$project.ext.supportLibraryVersion"
     compile "com.android.support:support-vector-drawable:$project.ext.supportLibraryVersion"
     compile "com.android.support.test.espresso:espresso-idling-resource:$project.ext.espressoVersion"
-    //    compile 'io.reactivex.rxjava2:rxjava:2.0.8'
-//    compile 'io.reactivex.rxjava2:rxandroid:2.0.1'
+    compile 'io.reactivex.rxjava2:rxkotlin:2.1.0'
+    compile 'io.reactivex.rxjava2:rxandroid:2.0.1'
 //    compile 'com.trello.rxlifecycle2:rxlifecycle:2.0.1'
 //    compile 'com.trello.rxlifecycle2:rxlifecycle-android:2.0.1'
-//    compile 'com.jakewharton.rxbinding2:rxbinding:2.0.0'
+    compile 'com.jakewharton.rxbinding2:rxbinding:2.0.0'
+    compile 'com.jakewharton.rxbinding2:rxbinding-recyclerview-v7:2.0.0'
     //    compile 'com.afollestad.material-dialogs:core:0.9.4.4'
-
+    compile 'com.gyf.barlibrary:barlibrary:2.2.5'
     //loading view animation
     //for recyclerview adapter
     compile 'org.jetbrains.kotlinx:kotlinx-coroutines-core:0.16'
@@ -189,7 +191,6 @@ dependencies {
     compile "org.jetbrains.anko:anko-commons:$project.ext.ankoLibVersion"
 
     testCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5.1'
-    testCompile 'com.netflix.rxjava:rxjava-core:0.16.0'
     testCompile 'junit:junit:4.12'
     androidTestCompile 'com.google.code.findbugs:jsr305:2.0.1'
     debugCompile 'com.squareup.leakcanary:leakcanary-android:1.5.1'

@@ -37,7 +37,7 @@ public class OkHttpImpl implements OkHttp{
     }
     private OkHttpImpl (){
         if(okHttpClient ==null){
-            synchronized (OkHttpImpl.class){
+            synchronized(OkHttpImpl.class){
                 okHttpClient = new OkHttpClient.Builder()
                         .readTimeout(10, TimeUnit.SECONDS)
                         .writeTimeout(10,TimeUnit.SECONDS)

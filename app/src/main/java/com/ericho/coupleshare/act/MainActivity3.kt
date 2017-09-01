@@ -22,6 +22,8 @@ import com.ericho.coupleshare.interf.PermissionListener
 import com.ericho.coupleshare.mvp.data.LoginRepository
 import com.ericho.coupleshare.mvp.presenter.LocationsPresenter
 import com.ericho.coupleshare.service.LocationMonitorSer
+import com.ericho.coupleshare.ui.SettingsActivity
+import org.jetbrains.anko.intentFor
 import org.jetbrains.anko.toast
 import timber.log.Timber
 import java.util.Calendar
@@ -105,27 +107,27 @@ class MainActivity3 : BasePermissionActivity(), ViewPager.OnPageChangeListener {
   }
 
   override fun onCreateOptionsMenu(menu: Menu): Boolean {
-    menuInflater.inflate(R.menu.more, menu)
+    menuInflater.inflate(R.menu.setting, menu)
     menuInflater.inflate(R.menu.logout, menu)
     return true
   }
 
   override fun onOptionsItemSelected(item: MenuItem?): Boolean {
     when (item?.itemId) {
-      R.id.more -> openSettingAct()
       R.id.menu_logout -> {
         loginRepository?.logout(this)
         startActivity(Intent(this, LoginAct::class.java))
         this.finish()
       }
+      R.id.action_settings -> {
+        startActivity(intentFor<SettingsActivity>())
+        return true
+      }
     }
     return super.onOptionsItemSelected(item)
   }
 
-  private fun openSettingAct(): Boolean {
-    startActivity(Intent(this, SettingsActivity::class.java))
-    return true
-  }
+
 
   private fun getUserLogined(): Boolean {
     return loginRepository!!.isLogin(this)

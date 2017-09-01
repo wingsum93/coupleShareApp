@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory
+        android:title="@string/author_info">
+        <Preference
+            android:title="@string/license"
+            android:summary="Click to view">
+        </Preference>
+        <Preference
+            android:title="@string/sugguest_for_app"
+            android:summary="Click to view">
+        </Preference>
+    </PreferenceCategory>
+    <PreferenceCategory
+        android:title="@string/license">
+        <Preference
+            android:title="@string/license"
+            android:summary="Click to view">
+        </Preference>
+    </PreferenceCategory>
+</PreferenceScreen>

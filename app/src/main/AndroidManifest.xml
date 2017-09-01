@@ -27,11 +27,11 @@
             android:value="@string/google_maps_key"/>
 
         <activity
-            android:name=".act.LoginAct"
+            android:name=".act.SplashActivity"
+            android:theme="@style/AppTheme.NoActionBar"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
-
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
@@ -45,11 +45,15 @@
             </intent-filter>
         </activity>
         <activity
+            android:name=".act.LoginAct"
+            android:screenOrientation="portrait"/>
+        <activity
             android:name=".act.RegisterAct"
             android:screenOrientation="portrait"/>
         <activity
             android:name=".act.ChangeServerDialog"
             android:screenOrientation="portrait"/>
+
         <activity
             android:name=".act.TestMainAct"
             android:label="@string/title_act_test_home">
@@ -72,7 +76,7 @@
             android:label="@string/title_act_test_home"
             android:theme="@style/AppTheme.NoActionBar"/>
         <activity
-            android:name=".act.SettingsActivity"
+            android:name=".ui.SettingsActivity"
             android:label="@string/title_activity_settings"
             android:parentActivityName=".act.MainActivity3">
             <meta-data

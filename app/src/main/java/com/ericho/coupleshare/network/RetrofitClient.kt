@@ -4,19 +4,16 @@ import android.content.Context
 import android.util.Log
 import java.io.File
 import okhttp3.Cache
-import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.Retrofit
 import okhttp3.logging.HttpLoggingInterceptor
 import okhttp3.OkHttpClient
 import java.util.concurrent.TimeUnit
-import io.reactivex.android.schedulers.AndroidSchedulers
-import okhttp3.internal.cache.CacheInterceptor
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 
 
 /**
- * Created by lvruheng on 2017/7/4.
+ * Created by Eric ho on 2017/7/4.
  */
 class RetrofitClient private constructor(context: Context,baseUrl:String){
     var httpCacheDirectory : File? = null
@@ -82,8 +79,5 @@ class RetrofitClient private constructor(context: Context,baseUrl:String){
         }
         return retrofit?.create(service)
     }
-    inline fun <reified T> create():T?{
-      return retrofit?.create(T::class.java)
-    }
-
+    inline fun <reified T> create():T? = retrofit?.create(T::class.java)
 }

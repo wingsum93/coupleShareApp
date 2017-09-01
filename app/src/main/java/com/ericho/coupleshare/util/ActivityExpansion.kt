@@ -1,5 +1,7 @@
 package com.ericho.coupleshare.util
 
+import android.support.v4.app.FragmentManager
+import android.support.v4.app.FragmentTransaction
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
 import com.google.android.gms.ads.AdRequest
@@ -23,4 +25,9 @@ fun AppCompatActivity.loadRewardedVideoAd(  ads_id:String,mAd:RewardedVideoAd):U
 //            .addTestDevice("54464B6ADF6F4418B70974F9BC194FC0")
             .build()
     mAd.loadAd(ads_id, req)
+}
+inline fun FragmentManager.action(action:FragmentTransaction.()->Unit){
+  val z = this.beginTransaction()
+  action(z)
+  z.commit()
 }

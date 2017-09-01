@@ -1,5 +1,6 @@
 package com.ericho.coupleshare.frag
 
+import android.graphics.Color
 import android.os.Bundle
 import android.support.annotation.ColorRes
 import android.support.v4.app.Fragment
@@ -27,7 +28,8 @@ class DummyFrag :BaseFrag(){
     companion object {
         private val K_COLOR = "K_COLOR"
         @JvmStatic
-        fun newInstance(@ColorRes color: Int): Fragment {
+        @JvmOverloads
+        fun newInstance(@ColorRes color: Int = Color.BLACK): Fragment {
             val frag = DummyFrag()
             val bundle = Bundle()
             bundle.putInt(K_COLOR, color)
