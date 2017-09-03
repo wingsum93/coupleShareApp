@@ -125,5 +125,6 @@
     <string name="refresh">Refresh</string>
     <string name="license">License</string>
     <string name="author_info">Author Info</string>
-    <string name="sugguest_for_app">Suggest For App</string>
+    <string name="feedback">Feedback</string>
+    <string name="open_source_licenses">Open Source Licenses</string>
 </resources>

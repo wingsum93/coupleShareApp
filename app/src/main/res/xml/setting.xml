@@ -7,7 +7,7 @@
             android:summary="Click to view">
         </Preference>
         <Preference
-            android:title="@string/sugguest_for_app"
+            android:title="@string/feedback"
             android:summary="Click to view">
         </Preference>
     </PreferenceCategory>

@@ -21,13 +21,12 @@ import okhttp3.Response;
  * package name com.ericho.coupleshare.http
  */
 
-public class OkHttpImpl implements OkHttp{
+public class OkHttpImpl{
     private static final String tag = "OkHttpImpl";
     private static OkHttpClient okHttpClient;
-    private static OkHttp okHttp;
+    private static OkHttpImpl okHttp;
 
-
-    public static OkHttp getInstance(){
+    public static OkHttpImpl getInstance(){
         if(okHttp ==null){
             synchronized (OkHttpImpl.class){
                 okHttp = new OkHttpImpl();
@@ -55,7 +54,6 @@ public class OkHttpImpl implements OkHttp{
     }
 
     //----------------------------------------------------------
-    @Override
     public String registerUser(Context context,String username, String password) throws IOException{
 
         RequestBody body = new FormBody.Builder()

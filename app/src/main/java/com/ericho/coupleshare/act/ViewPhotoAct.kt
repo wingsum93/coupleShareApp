@@ -8,6 +8,7 @@ import android.support.design.widget.FloatingActionButton
 import android.support.v7.app.AppCompatActivity
 import android.view.Window
 import android.view.WindowManager
+import android.widget.ImageButton
 import android.widget.ImageView
 import com.bumptech.glide.Glide
 import com.ericho.coupleshare.R
@@ -15,8 +16,8 @@ import com.ericho.coupleshare.R
 class ViewPhotoAct : AppCompatActivity() {
 
     var img:ImageView? = null
-    var btn_left:FloatingActionButton? = null
-    var btn_right:FloatingActionButton? = null
+    var btn_left:ImageButton? = null
+    var btn_right:ImageButton? = null
 
     var items:Array<String>? = null
     var position:Int = 0
@@ -33,8 +34,8 @@ class ViewPhotoAct : AppCompatActivity() {
     private fun init() {
 
         img = findViewById(R.id.imageView) as ImageView
-        btn_left = findViewById(R.id.left) as FloatingActionButton
-        btn_right = findViewById(R.id.right) as FloatingActionButton
+        btn_left = findViewById(R.id.left) as ImageButton
+        btn_right = findViewById(R.id.right) as ImageButton
 
         val i = intent
 

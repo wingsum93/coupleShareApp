@@ -2,6 +2,7 @@ package com.ericho.coupleshare.util
 
 import android.content.Context
 import com.ericho.coupleshare.App
+import com.ericho.coupleshare.constant.Constant
 import com.ericho.coupleshare.contant.WebAddress
 import com.ericho.coupleshare.network.LoggingInterceptor
 import com.ericho.coupleshare.network.UserInfoInterceptor
@@ -32,7 +33,7 @@ object NetworkUtil {
   @Volatile
   private var okhttpClient: OkHttpClient? = null
 
-  private var cache = Cache(File(App.context!!.cacheDir,"http_cache"),1024*1024*30)
+  private var cache = Cache(File(App.context!!.cacheDir,Constant.HTTP_CACHE_FOLDER_NAME),1024*1024*30)
 
   private val json = MediaType.parse("application/json; charset=utf-8")
   private val MediaType_Image = MediaType.parse("image/jpg")
