@@ -6,5 +6,5 @@ package com.ericho.coupleshare.mvp
  * package name com.ericho.coupleshare.mvp
  */
 interface BaseView<T> {
-    fun setPresenter(presenter:T );
+    fun setPresenter(presenter:T )
 }

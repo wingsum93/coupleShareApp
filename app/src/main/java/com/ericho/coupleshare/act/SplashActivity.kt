@@ -58,8 +58,8 @@ class SplashActivity : AppCompatActivity() {
     mAnimatorSet = generateAnimatorSet()
     mAnimatorSet?.start()
     circle_layout.setOnClickListener {
-      mAnimatorSet?.cancel()
-      mAnimatorSet?.start()
+//      mAnimatorSet?.cancel()
+//      mAnimatorSet?.start()
     }
 
   }
@@ -73,7 +73,7 @@ class SplashActivity : AppCompatActivity() {
       override fun onAnimationEnd(animation: Animator?) {
 //        toast("animation end!")
         startActivity(intentFor<LoginAct>())
-
+        finish()
       }
 
       override fun onAnimationStart(animation: Animator?) {

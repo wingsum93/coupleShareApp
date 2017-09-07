@@ -37,8 +37,8 @@ class ServerUrlAdapter constructor(context: Context ,items:List<ServerBean>?):Ba
     }
 
     class ViewHolder(v: View) {
-        var imageView: ImageView = v.findViewById(R.id.image) as ImageView
-        var text1: TextView = v.findViewById(R.id.text1) as TextView
+        var imageView: ImageView = v.findViewById<ImageView>(R.id.image) as ImageView
+        var text1: TextView = v.findViewById<ImageView>(R.id.text1) as TextView
 
     }
 }

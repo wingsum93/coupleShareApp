@@ -39,8 +39,8 @@ class TestMainRecyclerAdapter constructor(context: Context,items:List<AppTestBo>
 
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        var textView = view.findViewById(R.id.text1) as TextView
-        var imageView = view.findViewById(R.id.image) as ImageView
+        var textView = view.findViewById<TextView>(R.id.text1)
+        var imageView = view.findViewById<ImageView>(R.id.image)
 
     }
 

@@ -10,6 +10,7 @@ import android.widget.AdapterView
 import android.widget.ImageView
 import com.bumptech.glide.Glide
 import com.ericho.coupleshare.R
+import com.ericho.coupleshare.network.GlideApp
 
 
 /**
@@ -31,7 +32,7 @@ class UploadPhotoAdapter constructor(context:Context, items:List<Uri>):BaseRecyc
 //        val bitmap = MediaStore.Images.Media.getBitmap(getContext().contentResolver, item)
 //        holder!!.img.setImageBitmap(bitmap)
 
-        Glide.with(getContext())
+        GlideApp.with(getContext())
                 .load(item)
                 .into(holder!!.img)
 
@@ -54,6 +55,6 @@ class UploadPhotoAdapter constructor(context:Context, items:List<Uri>):BaseRecyc
     }
 
     class ViewHolder constructor(view:View):RecyclerView.ViewHolder(view){
-        val img:ImageView = view.findViewById(R.id.imageView) as ImageView
+        val img:ImageView = view.findViewById<ImageView>(R.id.imageView)
     }
 }

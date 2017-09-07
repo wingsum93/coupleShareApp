@@ -33,7 +33,7 @@ class LocationDetailAct:AppCompatActivity(), OnMapReadyCallback {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.act_location_detail)
-        mapView = findViewById(R.id.mapView) as MapView
+        mapView = findViewById(R.id.mapView)
         mapView?.onCreate(savedInstanceState)
         initView()
     }
@@ -44,7 +44,7 @@ class LocationDetailAct:AppCompatActivity(), OnMapReadyCallback {
 //        val b  = i.getParcelableExtra("")
         val items:ArrayList<LocationTo> = i.getParcelableArrayListExtra("example")
         Timber.d(App.gson.toJson(items))
-        recyclerView = findViewById(R.id.recyclerView) as RecyclerView
+        recyclerView = findViewById(R.id.recyclerView)
 
 
         mLayoutManager = GridLayoutManager(this,2)

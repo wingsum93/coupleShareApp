@@ -14,7 +14,7 @@ import org.greenrobot.eventbus.EventBus
 import timber.log.Timber
 import java.io.File
 import java.io.IOException
-import java.util.Timer
+import java.util.*
 
 /**
  * Created by steve_000 on 24/7/2017.
@@ -46,7 +46,6 @@ class UploadPhotoService :Service() {
         mTimer.cancel()
         super.onDestroy()
     }
-
     fun uploadImage( files:List<File>){
         val task = UploadPhotoAsyncTask()
         task.fileList = files

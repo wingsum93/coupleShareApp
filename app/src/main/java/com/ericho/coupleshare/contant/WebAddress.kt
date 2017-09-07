@@ -23,9 +23,9 @@ object WebAddress {
     val API_RELATION_VIEW = "api/viewRelation"
     val API_RELATION_DEL = "api/deleteRelation"
     //
-    val API_STATUS_CREATE = "api/createStatus"
-    val API_STATUS_VIEW = "api/viewStatus"
-    val API_STATUS_DEL = "api/deleteStatus"
+    val API_STATUS_CREATE = "api/status"
+    val API_STATUS_VIEW = "api/status"
+    val API_STATUS_DEL = "api/status"
     //LOC
     val API_LOC_GET = "api/getLocationList"
     val API_LOC_UPLOAD = "api/uploadLocation"

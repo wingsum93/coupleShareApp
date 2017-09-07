@@ -20,6 +20,9 @@ android {
         vectorDrawables.useSupportLibrary = true
         // Enabling multidex support.
         multiDexEnabled true
+
+        resValue "string", "author_email", "wingsum.develoepr@gmail.com"
+
     }
     signingConfigs {
         beta {
@@ -80,6 +83,7 @@ android {
 ////    defaultMethods false
 ////    incremental true
 //}
+
 ext {
     // Sdk and tools
     minSdkVersion = 10
@@ -88,7 +92,7 @@ ext {
     buildToolsVersion = '25.0.0'
 
     // App dependencies
-    supportLibraryVersion = '25.3.1'
+    supportLibraryVersion = '26.0.2'
     ankoLibVersion = "0.10.1"
     guavaVersion = '18.0'
     junitVersion = '4.12'
@@ -98,8 +102,9 @@ ext {
     runnerVersion = '0.5'
     rulesVersion = '0.5'
     espressoVersion = '2.2.2'
-    glideVersion = '4.0.0-RC1'
+    glideVersion = '4.1.1'
 }
+
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])

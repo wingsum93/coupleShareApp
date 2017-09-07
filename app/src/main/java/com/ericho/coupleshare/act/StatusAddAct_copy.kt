@@ -19,6 +19,7 @@ import com.ericho.coupleshare.eventbus.StatusEvent
 import com.ericho.coupleshare.network.StatusNoticeManager
 import com.ericho.coupleshare.network.model.BaseSingleResponse
 import com.ericho.coupleshare.model.StatusTO
+import com.ericho.coupleshare.network.GlideApp
 import com.ericho.coupleshare.util.AHttpHelper
 import com.ericho.coupleshare.util.FileHelper
 import com.ericho.coupleshare.util.NetworkUtil
@@ -33,19 +34,19 @@ import java.io.File
 
 class StatusAddAct_copy : BasePermissionActivity() {
 
-    val imageView:ImageView by bindView(R.id.imageView)
-    val progressBar:ProgressBar by bindView(R.id.progressBar)
-    val edt_title:EditText by bindView(R.id.edt_title)
-    val edt_content:EditText by bindView(R.id.edt_content)
-    val btn_ok:Button by bindView(R.id.btn_ok)
-    val btn_cancel:Button by bindView(R.id.btn_cancel)
+    val imageView: ImageView by bindView(R.id.imageView)
+    val progressBar: ProgressBar by bindView(R.id.progressBar)
+    val edt_title: EditText by bindView(R.id.edt_title)
+    val edt_content: EditText by bindView(R.id.edt_content)
+    val btn_ok: Button by bindView(R.id.btn_ok)
+    val btn_cancel: Button by bindView(R.id.btn_cancel)
 
     var item: StatusTO = StatusTO()
 
-    val manager:StatusNoticeManager = StatusNoticeManager()
+    val manager: StatusNoticeManager = StatusNoticeManager()
 
-    lateinit var zoomHelper:ZoomImageHelper
-    lateinit var fileHelper:FileHelper
+    lateinit var zoomHelper: ZoomImageHelper
+    lateinit var fileHelper: FileHelper
     lateinit var httpHelper: AHttpHelper<BaseSingleResponse<Unit>>
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -55,11 +56,11 @@ class StatusAddAct_copy : BasePermissionActivity() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.upload,menu)
+        menuInflater.inflate(R.menu.upload, menu)
         return super.onCreateOptionsMenu(menu)
     }
 
-    private fun init(bundle:Bundle?) {
+    private fun init(bundle: Bundle?) {
 
         zoomHelper = ZoomImageHelper.Builder(this)
                 .setRootId(R.id.container)
@@ -69,7 +70,7 @@ class StatusAddAct_copy : BasePermissionActivity() {
         fileHelper = FileHelper(this)
         httpHelper = AHttpHelper.Builder<BaseSingleResponse<Unit>>()
                 .setSuccessMethod(this::success)
-                .setTransformMethod { string -> App.gson.fromJson(string,object :TypeToken<BaseSingleResponse<Unit>>(){}.type)  }
+                .setTransformMethod { string -> App.gson.fromJson(string, object : TypeToken<BaseSingleResponse<Unit>>() {}.type) }
                 .setFail { _call, e ->
                     Timber.w(e)
                     toast("${e.message}")
@@ -84,17 +85,17 @@ class StatusAddAct_copy : BasePermissionActivity() {
                 val file = fileHelper.convertUri(item.uri!!)
                 file.lastModified()
                 uploadStatueNotice(file)
-            }catch (e:Exception){
+            } catch (e: Exception) {
                 toast("${e.message}")
                 Timber.w(e)
             }
 
         }
-        btn_cancel.setOnClickListener { _ ->  finish()}
-        imageView.setOnClickListener { _ ->  showImageGallery()}
+        btn_cancel.setOnClickListener { _ -> finish() }
+        imageView.setOnClickListener { _ -> showImageGallery() }
         imageView.setOnLongClickListener { _ ->
-            if(item.uri!=null){
-                zoomHelper.zoomImageFromThumb(imageView,item.uri!!)
+            if (item.uri != null) {
+                zoomHelper.zoomImageFromThumb(imageView, item.uri!!)
             }
             return@setOnLongClickListener true
 
@@ -103,16 +104,15 @@ class StatusAddAct_copy : BasePermissionActivity() {
     }
 
 
-
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
 
-        when(requestCode){
-            //select image gallery
+        when (requestCode) {
+        //select image gallery
             REQ_PICK_IMAGE -> {
-                if(resultCode == Activity.RESULT_OK){
+                if (resultCode == Activity.RESULT_OK) {
                     val uri = data!!.data
                     replacePhotoUri(uri)
-                }else{
+                } else {
                     toast("pick photo was cancelled!")
                 }
             }
@@ -125,15 +125,18 @@ class StatusAddAct_copy : BasePermissionActivity() {
         item.uri = uri
         loadImageBitmapFromUri()
     }
-    fun loadImageBitmapFromUri(){
-        Glide.with(this)
+
+    fun loadImageBitmapFromUri() {
+        GlideApp.with(this)
                 .load(item.uri)
                 .into(imageView)
     }
-    fun showProgress( active:Boolean){
+
+    fun showProgress(active: Boolean) {
         progressBar.visibility = if (active) View.VISIBLE else View.GONE
     }
-    fun lockUi(release:Boolean){
+
+    fun lockUi(release: Boolean) {
         val lock = !release
         edt_title.isEnabled = lock
         edt_content.isEnabled = lock
@@ -141,7 +144,7 @@ class StatusAddAct_copy : BasePermissionActivity() {
         btn_cancel.isEnabled = lock
     }
 
-    fun uploadStatueNotice(file: File){
+    fun uploadStatueNotice(file: File) {
 
         //change state to
         lockUi(true)
@@ -150,19 +153,19 @@ class StatusAddAct_copy : BasePermissionActivity() {
         //do upload
 
         val request =
-        NetworkUtil.status_add(edt_title.text.toString(),edt_content.text.toString(),file)
+                NetworkUtil.status_add(edt_title.text.toString(), edt_content.text.toString(), file)
 
 
         httpHelper.run(request)
     }
 
     private fun success(call: Call, res: BaseSingleResponse<Unit>) {
-            //success
-            toast(getString(R.string.upload_success))
-            showProgress(false)
-            lockUi(false)
-            EventBus.getDefault().post(StatusEvent())
-            this.finish()
+        //success
+        toast(getString(R.string.upload_success))
+        showProgress(false)
+        lockUi(false)
+        EventBus.getDefault().post(StatusEvent())
+        this.finish()
     }
 
     fun showImageGallery() {
@@ -173,6 +176,7 @@ class StatusAddAct_copy : BasePermissionActivity() {
         val str = getString(R.string.select_picture)
         startActivityForResult(Intent.createChooser(intent, str), REQ_PICK_IMAGE)
     }
+
     fun _showImageGallery() {
         val intent = Intent()
         intent.type = "image/*"

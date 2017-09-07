@@ -2,20 +2,33 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
     <PreferenceCategory
         android:title="@string/author_info">
+
         <Preference
-            android:title="@string/license"
-            android:summary="Click to view">
-        </Preference>
-        <Preference
+            android:key="pref_author_email"
             android:title="@string/feedback"
-            android:summary="Click to view">
+            android:summary="@string/feedback_desc">
         </Preference>
     </PreferenceCategory>
     <PreferenceCategory
-        android:title="@string/license">
+        android:title="@string/cache">
         <Preference
-            android:title="@string/license"
-            android:summary="Click to view">
+            android:key="pref_okhttp_cache"
+            android:title="@string/okhttp_cache">
+        </Preference>
+        <Preference
+            android:key="pref_glide_cache"
+            android:title="@string/glide_cache">
+        </Preference>
+    </PreferenceCategory>
+    <PreferenceCategory
+        android:title="@string/about">
+        <Preference
+            android:key="pref_license"
+            android:title="@string/open_source_licenses">
+        </Preference>
+        <Preference
+            android:key="pref_version"
+            android:title="@string/version">
         </Preference>
     </PreferenceCategory>
 </PreferenceScreen>

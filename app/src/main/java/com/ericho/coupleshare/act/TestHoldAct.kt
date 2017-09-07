@@ -22,7 +22,7 @@ class TestHoldAct:AppCompatActivity() {
                 .beginTransaction()
                 .add(R.id.frag, PhotoFrag.newInstance())
                 .commit()
-        val fab = findViewById(R.id.fab) as FloatingActionButton
+        val fab :FloatingActionButton = findViewById(R.id.fab)
         fab.setOnClickListener {
             supportFragmentManager
                     .beginTransaction()

@@ -38,8 +38,8 @@ class LocationDetailAdapter: BaseRecyclerAdapter<LocationTo, LocationDetailAdapt
         var txt_date :TextView
 
         constructor(view:View ) : super(view) {
-            txt_id = view.findViewById(R.id.id) as TextView
-            txt_date = view.findViewById(R.id.date_hint) as TextView
+            txt_id = view.findViewById<TextView>(R.id.id)
+            txt_date = view.findViewById<TextView>(R.id.date_hint)
         }
     }
 }

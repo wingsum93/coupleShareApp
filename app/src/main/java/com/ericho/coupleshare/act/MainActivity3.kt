@@ -37,153 +37,154 @@ import java.util.Calendar
 class MainActivity3 : BasePermissionActivity(), ViewPager.OnPageChangeListener {
 
 
-  val toolbar: Toolbar by bindView(R.id.toolbar)
-  val tabLayout: TabLayout by bindView(R.id.tabLayout)
-  val viewPager: ViewPager by bindView(R.id.viewPager)
+    val toolbar: Toolbar by bindView(R.id.toolbar)
+    val tabLayout: TabLayout by bindView(R.id.tabLayout)
+    val viewPager: ViewPager by bindView(R.id.viewPager)
 
-  var loginRepository: LoginRepository? = null
+    var loginRepository: LoginRepository? = null
 
-  var mLocationPresenter: LocationsPresenter? = null
-  var alarmManager: AlarmManager? = null
-  var alarmLocationIntent: PendingIntent? = null
-  private var homePageAdapter: HomePageAdapter? = null
-
-
-  override fun onCreate(savedInstanceState: Bundle?) {
-    super.onCreate(savedInstanceState)
-    setContentView(R.layout.activity_main)
-    init()
-
-    doNormalWork()
-
-  }
-
-  private fun doNormalWork() {
-    this.checkSelfPermission(REQ_LOCATION_UPDATE, android.Manifest.permission.ACCESS_COARSE_LOCATION.toList(),
-            listener = object : PermissionListener {
-              override fun onGranted() {
-                toast("granted ")
-                startService(Intent(this@MainActivity3, LocationMonitorSer::class.java))
-              }
-
-              override fun onDenied(deniedPermission: List<String>) {
-                val dialog = com.ericho.coupleshare.frag.AlertDialogFrag.newInstance("Error", "the following permission deny:\n" + "$deniedPermission")
-                dialog.show(supportFragmentManager, "error")
-              }
-            })
+    var mLocationPresenter: LocationsPresenter? = null
+    var alarmManager: AlarmManager? = null
+    var alarmLocationIntent: PendingIntent? = null
+    private var homePageAdapter: HomePageAdapter? = null
 
 
-  }
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
+        init()
 
-  private fun init() {
+        doNormalWork()
 
-    setSupportActionBar(toolbar)
-    homePageAdapter = HomePageAdapter(supportFragmentManager, this)
-    viewPager.adapter = homePageAdapter
-    tabLayout.setupWithViewPager(viewPager)
-    viewPager.addOnPageChangeListener(this)
-    this.onPageSelected(0)
+    }
+
+    private fun doNormalWork() {
+        this.checkSelfPermission(REQ_LOCATION_UPDATE, android.Manifest.permission.ACCESS_COARSE_LOCATION.toList(),
+                listener = object : PermissionListener {
+                    override fun onGranted() {
+                        toast("granted ")
+                        startService(Intent(this@MainActivity3, LocationMonitorSer::class.java))
+                    }
+
+                    override fun onDenied(deniedPermission: List<String>) {
+                        val dialog = com.ericho.coupleshare.frag.AlertDialogFrag.newInstance("Error", "the following permission deny:\n" + "$deniedPermission")
+                        dialog.show(supportFragmentManager, "error")
+                    }
+                })
 
 
-    //for presneter
-    mLocationPresenter = LocationsPresenter(
-            homePageAdapter!!.getItem(2) as LocationShowFrag2,
-            Injection.provideLocationsRepository(context = this))
-    mLocationPresenter!!.start()
+    }
 
-    loginRepository = Injection.provideLoginRepository(this.applicationContext)
+    private fun init() {
+
+        setSupportActionBar(toolbar)
+        toolbar.setNavigationIcon(R.drawable.ic_apple_happy)
+
+        homePageAdapter = HomePageAdapter(supportFragmentManager, this)
+        viewPager.adapter = homePageAdapter
+        tabLayout.setupWithViewPager(viewPager)
+        viewPager.addOnPageChangeListener(this)
+        this.onPageSelected(0)
 
 
-    alarmManager = this.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-    val intent = Intent()
-    intent.action = BroadcastConstant.REQ_LOC_MONITOR
-    alarmLocationIntent = PendingIntent.getBroadcast(App.context, 0, intent, 0)
+        //for presneter
+        mLocationPresenter = LocationsPresenter(
+                homePageAdapter!!.getItem(2) as LocationShowFrag2,
+                Injection.provideLocationsRepository(context = this))
+        mLocationPresenter!!.start()
 
-    alarmManager!!.setInexactRepeating(
-            AlarmManager.ELAPSED_REALTIME,
-            Calendar.getInstance().timeInMillis,
-            10 * 60 * 1000,
-            alarmLocationIntent)
-  }
+        loginRepository = Injection.provideLoginRepository(this.applicationContext)
 
-  override fun onCreateOptionsMenu(menu: Menu): Boolean {
-    menuInflater.inflate(R.menu.setting, menu)
-    menuInflater.inflate(R.menu.logout, menu)
-    return true
-  }
 
-  override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-    when (item?.itemId) {
-      R.id.menu_logout -> {
-        loginRepository?.logout(this)
-        startActivity(Intent(this, LoginAct::class.java))
-        this.finish()
-      }
-      R.id.action_settings -> {
-        startActivity(intentFor<SettingsActivity>())
+        alarmManager = this.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+        val intent = Intent()
+        intent.action = BroadcastConstant.REQ_LOC_MONITOR
+        alarmLocationIntent = PendingIntent.getBroadcast(App.context, 0, intent, 0)
+
+        alarmManager!!.setInexactRepeating(
+                AlarmManager.ELAPSED_REALTIME,
+                Calendar.getInstance().timeInMillis,
+                10 * 60 * 1000,
+                alarmLocationIntent)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menuInflater.inflate(R.menu.setting, menu)
+        menuInflater.inflate(R.menu.logout, menu)
         return true
-      }
     }
-    return super.onOptionsItemSelected(item)
-  }
 
-
-
-  private fun getUserLogined(): Boolean {
-    return loginRepository!!.isLogin(this)
-  }
-
-
-  override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-    when (requestCode) {
-      REQ_LOGIN -> if (resultCode == Activity.RESULT_CANCELED) {
-        toast("Login canceled")
-      } else {
-        loadUserData()
-      }
-      else -> super.onActivityResult(requestCode, resultCode, data)
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        when (item?.itemId) {
+            R.id.menu_logout -> {
+                loginRepository?.logout(this)
+                startActivity(Intent(this, LoginAct::class.java))
+                this.finish()
+            }
+            R.id.action_settings -> {
+                startActivity(intentFor<SettingsActivity>())
+                return true
+            }
+        }
+        return super.onOptionsItemSelected(item)
     }
-  }
 
-  private fun loadUserData() {
-    //load user name and server photo's in background....
-  }
 
-  override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
+    private fun getUserLogined(): Boolean {
+        return loginRepository!!.isLogin(this)
+    }
 
-  }
 
-  override fun onPageSelected(position: Int) {
-    invalidateOptionsMenu()
-    Timber.d("onPageSelected pos $position")
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        when (requestCode) {
+            REQ_LOGIN -> if (resultCode == Activity.RESULT_CANCELED) {
+                toast("Login canceled")
+            } else {
+                loadUserData()
+            }
+            else -> super.onActivityResult(requestCode, resultCode, data)
+        }
+    }
+
+    private fun loadUserData() {
+        //load user name and server photo's in background....
+    }
+
+    override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
+
+    }
+
+    override fun onPageSelected(position: Int) {
+        invalidateOptionsMenu()
+        Timber.d("onPageSelected pos $position")
 //        val fragment = homePageAdapter?.getItem(position)
 
-  }
+    }
 
-  override fun onResume() {
-    super.onResume()
-
-
-  }
-
-  override fun onPause() {
-    super.onPause()
-  }
-
-  override fun onDestroy() {
-    super.onDestroy()
-  }
+    override fun onResume() {
+        super.onResume()
 
 
-  override fun onPageScrollStateChanged(state: Int) {
+    }
 
-  }
+    override fun onPause() {
+        super.onPause()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+    }
 
 
-  companion object {
-    private val REQ_LOGIN = 111
-    private val REQ_LOCATION_UPDATE = 3333
+    override fun onPageScrollStateChanged(state: Int) {
 
-  }
+    }
+
+
+    companion object {
+        private val REQ_LOGIN = 111
+        private val REQ_LOCATION_UPDATE = 3333
+
+    }
 }
 

@@ -71,9 +71,9 @@ class StatusFrag:BaseFrag(), StatusContract.View, FabListener {
 
     private fun init() {
 
-        fab = view?.findViewById(R.id.fab) as FloatingActionButton
-        swipeRefreshLayout = view?.findViewById(R.id.swipeRefreshLayout) as SwipeRefreshLayout
-        recyclerView = view?.findViewById(R.id.recyclerView) as RecyclerView
+        fab = view?.findViewById(R.id.fab)
+        swipeRefreshLayout = view?.findViewById(R.id.swipeRefreshLayout)
+        recyclerView = view?.findViewById(R.id.recyclerView)
 
 
         //listener

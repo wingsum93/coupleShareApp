@@ -127,4 +127,13 @@
     <string name="author_info">Author Info</string>
     <string name="feedback">Feedback</string>
     <string name="open_source_licenses">Open Source Licenses</string>
+    <string name="author_email_desc">Author Email</string>
+    <string name="version">Version</string>
+    <string name="cache">Cache</string>
+    <string name="glide_cache">Glide Cache</string>
+    <string name="okhttp_cache">Okhttp Cache</string>
+    <string name="clear_cache_desc">Cache size: %1$d MB</string>
+    <string name="feedback_desc">Help me make App better</string>
+    <string name="contributors">Contributors</string>
+    <string name="contributors_desc" translatable="false">https://github.com/wingsum93/coupleShareApp/graphs/contributors</string>
 </resources>

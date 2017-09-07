@@ -21,6 +21,7 @@ import com.bumptech.glide.Glide
 import com.ericho.coupleshare.R
 import com.ericho.coupleshare.network.StatusNoticeManager
 import com.ericho.coupleshare.model.StatusTO
+import com.ericho.coupleshare.network.GlideApp
 import com.ericho.coupleshare.util.float
 import kotlinx.android.synthetic.main.act_status_notice_add.*
 import org.jetbrains.anko.toast
@@ -99,7 +100,7 @@ class StatusAddAct_origin : BasePermissionActivity() {
     }
     fun loadImageBitmapFromUri(){
         val bitmap = contentResolver.openInputStream(item.uri)
-        Glide.with(this)
+        GlideApp.with(this)
                 .load(item.uri)
                 .into(imageView)
     }
@@ -137,9 +138,9 @@ class StatusAddAct_origin : BasePermissionActivity() {
         }
 
         // Load the high-resolution "zoomed-in" image.
-        val expandedImageView = findViewById(
-                R.id.expanded_image) as ImageView
-        Glide.with(this)
+        val expandedImageView :ImageView = findViewById(
+                R.id.expanded_image)
+        GlideApp.with(this)
                 .load(imageUri)
                 .into(expandedImageView)
 
@@ -155,7 +156,7 @@ class StatusAddAct_origin : BasePermissionActivity() {
         // bounds, since that's the origin for the positioning animation
         // properties (X, Y).
         thumbView.getGlobalVisibleRect(startBounds)
-        findViewById(R.id.container)
+        findViewById<View>(R.id.container)
                 .getGlobalVisibleRect(finalBounds, globalOffset)
         startBounds.offset(-globalOffset.x, -globalOffset.y)
         finalBounds.offset(-globalOffset.x, -globalOffset.y)

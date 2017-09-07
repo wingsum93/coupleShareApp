@@ -14,44 +14,47 @@ import com.ericho.coupleshare.util.action
  * for project coupleShareApp
  * package name com.ericho.coupleshare.ui
  */
-class SettingsActivity:AppCompatActivity() {
+class SettingsActivity : AppCompatActivity() {
 
-  private val fragId = R.id.frameLayout
+    private val fragId = R.id.frameLayout
 
-  var frag :Fragment? = null
-
-
-  override fun onCreate(savedInstanceState: Bundle?) {
-    super.onCreate(savedInstanceState)
-    setContentView(R.layout.act_settings)
-
-    initView()
-  }
-
-  private fun initView() {
-    supportActionBar?.setDefaultDisplayHomeAsUpEnabled(true)
+    var frag: SettingFrag? = null
 
 
-    supportFragmentManager.action {
-      add(fragId, SettingFrag.newInstance())
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.act_settings)
+
+        supportActionBar?.setDefaultDisplayHomeAsUpEnabled(true)
+
+
+        savedInstanceState?.let {
+            frag = supportFragmentManager.getFragment(it,SettingFrag::class.simpleName) as SettingFrag
+        } ?: kotlin.run {
+            frag = SettingFrag.newInstance()
+        }
+        if(!frag!!.isAdded){
+            supportFragmentManager.action {
+                add(fragId, frag)
+            }
+        }
+
+        SettingPresenter(frag!!)
     }
-//    supportFragmentManager.beginTransaction()
-//            .add(R.id.frameLayout,DummyFrag.newInstance())
-//            .commit()
-  }
 
-  override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-    when(item!!.itemId){
-      android.R.id.home-> {
-        finish()
-        return true
-      }
-      else -> return super.onOptionsItemSelected(item)
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        when (item!!.itemId) {
+            android.R.id.home -> {
+                finish()
+                return true
+            }
+            else -> return super.onOptionsItemSelected(item)
+        }
     }
-  }
 
-  override fun onSaveInstanceState(outState: Bundle?) {
-
-    super.onSaveInstanceState(outState)
-  }
+    override fun onSaveInstanceState(outState: Bundle?) {
+        supportFragmentManager.putFragment(outState,"pref",frag)
+        super.onSaveInstanceState(outState)
+    }
 }

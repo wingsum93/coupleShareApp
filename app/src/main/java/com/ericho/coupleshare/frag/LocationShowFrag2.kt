@@ -57,7 +57,7 @@ class LocationShowFrag2 : BaseFrag(), OnMapReadyCallback, LocationsContract.View
 
   override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
     val v = inflater!!.inflate(R.layout.frag_loc, container, false)
-    mapView = v.findViewById(R.id.mapView) as MapView
+    mapView = v.findViewById<MapView>(R.id.mapView)
     mapView?.onCreate(savedInstanceState)
     mapView?.getMapAsync(this)
     mPresenter = LocationsPresenter(this, Injection.provideLocationsRepository(activity))

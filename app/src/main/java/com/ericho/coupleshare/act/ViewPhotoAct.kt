@@ -12,6 +12,8 @@ import android.widget.ImageButton
 import android.widget.ImageView
 import com.bumptech.glide.Glide
 import com.ericho.coupleshare.R
+import com.ericho.coupleshare.network.GlideApp
+import com.ericho.coupleshare.network.GlideLoader
 
 class ViewPhotoAct : AppCompatActivity() {
 
@@ -33,9 +35,9 @@ class ViewPhotoAct : AppCompatActivity() {
 
     private fun init() {
 
-        img = findViewById(R.id.imageView) as ImageView
-        btn_left = findViewById(R.id.left) as ImageButton
-        btn_right = findViewById(R.id.right) as ImageButton
+        img = findViewById(R.id.imageView)
+        btn_left = findViewById(R.id.left)
+        btn_right = findViewById(R.id.right)
 
         val i = intent
 
@@ -54,9 +56,8 @@ class ViewPhotoAct : AppCompatActivity() {
 
     fun loadImage(pos:Int){
 
-        Glide.with(this)
-                .load(items!![pos])
-                .into(img)
+        GlideLoader.loadWithHighPriority(this,img!!,items!![pos])
+
         val i=Intent()
         i.putExtra("RESULT",pos)
         setResult(Activity.RESULT_OK,i)

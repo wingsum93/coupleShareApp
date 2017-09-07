@@ -12,6 +12,7 @@ import android.view.View
 import android.view.animation.DecelerateInterpolator
 import android.widget.ImageView
 import com.bumptech.glide.Glide
+import com.ericho.coupleshare.network.GlideApp
 import timber.log.Timber
 
 /**
@@ -102,7 +103,7 @@ class ZoomImageHelper {
 
         // Load the high-resolution "zoomed-in" image.
         val expandedImageView = findViewById( expendViewId) as ImageView
-        Glide.with(mActivity)
+        GlideApp.with(mActivity)
                 .load(imageUri)
                 .into(expandedImageView)
 
@@ -232,7 +233,7 @@ class ZoomImageHelper {
 
         // Load the high-resolution "zoomed-in" image.
         val expandedImageView = findViewById( expendViewId) as ImageView
-        Glide.with(mActivity)
+        GlideApp.with(mActivity)
                 .load(urlPath)
                 .into(expandedImageView)
 

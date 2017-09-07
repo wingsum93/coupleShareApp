@@ -1,18 +1,15 @@
 package com.ericho.coupleshare
 
-import android.app.Application
 import android.content.Context
+import android.support.multidex.MultiDexApplication
+import com.ericho.coupleshare.network.GlideApp
 import com.facebook.stetho.Stetho
-import com.google.gson.Gson
-import com.google.gson.GsonBuilder
-import com.google.gson.JsonDeserializer
-import com.google.gson.JsonPrimitive
-import com.google.gson.JsonSerializer
+import com.google.gson.*
 import com.squareup.leakcanary.LeakCanary
 import com.squareup.leakcanary.RefWatcher
 import org.xutils.x
 import timber.log.Timber
-import java.util.Date
+import java.util.*
 
 
 /**
@@ -20,7 +17,7 @@ import java.util.Date
  * for project CoupleShare
  * package name com.ericho.coupleshare
  */
-class App :Application() {
+class App :MultiDexApplication() {
 
     var refWatcher:RefWatcher? = null
 
@@ -41,6 +38,16 @@ class App :Application() {
         }else{
             refWatcher = RefWatcher.DISABLED
         }
+    }
+
+    override fun onLowMemory() {
+        GlideApp.with(this).onLowMemory();
+        super.onLowMemory()
+    }
+
+    override fun onTrimMemory(level: Int) {
+        GlideApp.with(this).onTrimMemory(level);
+        super.onTrimMemory(level)
     }
 
     override fun onTerminate() {

@@ -39,7 +39,7 @@ class LoadingAct : AppCompatActivity() {
             this.finish()
 
         },mLoadingTimeMill)
-        mLvGhost = findViewById(R.id.lvGhost) as LVGhost
+        mLvGhost = findViewById(R.id.lvGhost)
         mLvGhost!!.setHandColor(Color.BLACK)
         mLvGhost!!.setViewColor(Color.WHITE)
         mLvGhost!!.startAnim()
